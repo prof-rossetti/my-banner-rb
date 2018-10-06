@@ -1,8 +1,8 @@
 module MyBanner
   RSpec.describe Section do
-    include_context "section metadata"
+    include_context "mock sections"
 
-    let(:section) { described_class.new(section_metadata) }
+    let(:section) { described_class.new(mock_section_metadata) }
 
     describe '#abbreviation' do
       it "combines course abbreviation with section" do
@@ -24,7 +24,7 @@ module MyBanner
 
     describe '#weekdays' do
       it "lists the days of the week on which the class meets" do
-        expect(section.weekdays).to match_array(["M", "W"])
+        expect(section.weekdays).to match_array(["T", "R"])
       end
     end
 
