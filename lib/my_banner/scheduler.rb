@@ -35,8 +35,7 @@ module MyBanner
     end
 
     def client
-      #@client ||= GoogleCalendarClient.new #> undefined method `list_events' for #<MyBanner::GoogleCalendarClient:0x007feda8996b30>
-      @client ||= GoogleCalendarAPI.new.client #> undefined method `list_events' for #<MyBanner::GoogleCalendarClient:0x007feda8996b30>
+      @client ||= GoogleCalendarAPI.new.client
     end
 
     #def page

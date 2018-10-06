@@ -6,6 +6,13 @@ require "fileutils"
 module MyBanner
   class GoogleCalendarAPI
 
+    def client
+      api_client = Google::Apis::CalendarV3::CalendarService.new
+      api_client.client_options.application_name = "MyBanner Google Calendar API Client"
+      api_client.authorization = authorize
+      api_client
+    end
+
     AUTH_SCOPE = Google::Apis::CalendarV3::AUTH_CALENDAR_READONLY # CHANGE ME
     REDIRECT_URL_BASE = "urn:ietf:wg:oauth:2.0:oob" # returns authorization code in browser title bar and promps user to copy the code, see: https://developers.google.com/api-client-library/python/auth/installed-app#choosingredirecturi
 
@@ -24,23 +31,6 @@ module MyBanner
       end
       creds
     end
-
-
-
-
-
-    # try to move this into GooogleCalendarClient class:
-    def client
-      api_client = Google::Apis::CalendarV3::CalendarService.new
-      api_client.client_options.application_name = "MyBanner Google Calendar API Client"
-      api_client.authorization = GoogleCalendarAPI.new.authorize
-      api_client
-    end
-
-
-
-
-
 
   end
 end
