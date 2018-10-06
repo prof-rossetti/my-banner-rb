@@ -5,5 +5,9 @@ module MyBanner
       true
     end
 
+    #def page
+    #  @page ||= Page.new
+    #end
+
   end
 end
