@@ -25,7 +25,13 @@ module MyBanner
     end
 
     def calendars
-      binding.pry
+      response = client.list_calendar_lists
+      cals = response.items
+      puts "CALENDARS (#{cals.count}):"
+      cals.sort_by { |cal| cal.summary }.each do |cal|
+        puts " + #{ {name: cal.summary, id: cal.id} }"
+      end
+      cals
     end
 
     def client
