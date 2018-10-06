@@ -1,6 +1,6 @@
 # MyBanner
 
-Parses banner's faculty schedule page and generates google calendar events to answer the question, "when are my classes this semester?"
+What classes am I teaching this semester, and can I have a google calendar events please?
 
 ## Installation
 
@@ -29,10 +29,10 @@ bin/setup
 
 2. Once you have accessed your schedule, use your browser to save the HTML page in this repository as: **pages/faculty-detailed-schedule.html**.
 
-3. Finally, execute the scheduling program:
+3. Finally, execute the scheduling program from the command line: `ruby script/scheduler.rb`, or from inside a development console:
 
 ```rb
-ruby script/scheduler.rb
+MyBanner::Scheduler.new.execute
 ```
 
 ## [Contributing](/CONTRIBUTING.md)
