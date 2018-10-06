@@ -14,7 +14,7 @@ module MyBanner
     #  end
     #end
 
-        #describe "#find_or_create_calendar" do
+    #describe "#find_or_create_calendar" do
     #  let(:calendar_name) { "My Section" }
 #
     #  it "looks up existing calendar by name, or creates a new one with that name" do
@@ -23,8 +23,11 @@ module MyBanner
     #end
 
     describe "#calendars" do
-      it "lists my calendars" do
-        service.calendars
+      let(:calendars) { service.calendars }
+
+      it "lists and sorts my calendars" do
+        expect(calendars.map(&:class).uniq ).to eql( [Google::Apis::CalendarV3::CalendarListEntry] )
+        expect(calendars.first.summary).to eql("Contacts")
       end
     end
 

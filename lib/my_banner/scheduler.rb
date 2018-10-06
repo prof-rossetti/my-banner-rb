@@ -1,5 +1,11 @@
 module MyBanner
   class Scheduler
+    attr_reader :client, :page
+
+    def initialize
+      @client = GoogleCalendarAPI.new.client
+      @page = Page.new
+    end
 
     def execute
       scheduled_sections = [{name: "INFO 101-20"}, {name: "INFO 101-40"}, {name: "INFO 101-41"}]
@@ -28,19 +34,12 @@ module MyBanner
       response = client.list_calendar_lists
       cals = response.items
       puts "CALENDARS (#{cals.count}):"
-      cals.sort_by { |cal| cal.summary }.each do |cal|
+      cals.sort_by! { |cal| cal.summary }
+      cals.each do |cal|
         puts " + #{ {name: cal.summary, id: cal.id} }"
       end
       cals
     end
-
-    def client
-      @client ||= GoogleCalendarAPI.new.client
-    end
-
-    #def page
-    #  @page ||= Page.new
-    #end
 
   end
 end
