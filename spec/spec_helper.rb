@@ -1,6 +1,8 @@
 require "bundler/setup"
 require "my_banner"
 
+require_relative "support/shared_contexts/section_metadata" # todo: load all files in all directories in
+
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure
   config.example_status_persistence_file_path = ".rspec_status"
