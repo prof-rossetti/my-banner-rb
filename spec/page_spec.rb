@@ -11,8 +11,11 @@ module MyBanner
     end
 
     describe '#scheduled_sections' do
+      #let(:sections) { [ Section.new(section_metadata) ] }
+      let(:sections) { [ section_metadata ] }
+
       it "is a machine-readable version of what is visible on the page" do
-        expect(page.scheduled_sections).to eql([section_metadata])
+        expect(page.scheduled_sections).to eql(sections)
       end
     end
 

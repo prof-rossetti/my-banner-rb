@@ -32,7 +32,7 @@ module MyBanner
             instructors: ["Polly Professor"]
           }
         }
-      ].map { |section_metadata| Section.new(section_metadata) }
+      ] #.map { |section_metadata| Section.new(section_metadata) }
     end
 
   end

@@ -1,6 +1,4 @@
-#RSpec.shared_context "section metadata", :shared_context => :metadata do
 shared_context "section metadata" do
-
   let(:section_metadata) { {
     title: "Intro to Programming",
     crn: 123456,
@@ -26,9 +24,4 @@ shared_context "section metadata" do
       instructors: ["Polly Professor"]
     }
   } }
-
-end
-
-RSpec.configure do |rspec|
-  rspec.include_context "section metadata", :include_shared => true
 end
