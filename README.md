@@ -11,15 +11,17 @@ git clone git@github.com:prof-rossetti/my-banner-rb.git
 cd my-banner-rb/
 ```
 
-## Configuration
-
-Run `cp .env.example .env`, then customize variables in the **.env** file to use your own Google Calendar credentials.
-
 ## Setup
 
 ```sh
 bin/setup
 ```
+
+## Configuration
+
+Run `cp .env.example .env`, then customize variables in the **.env** file to use your own Google Calendar credentials.
+
+From the [Google Calendar API's quickstart guide](https://developers.google.com/calendar/quickstart/ruby), click "Enable the Calendar API" and follow the instructions to create a new app and generate new credentials. Store the resulting **credentials.json** in the root directory of this repo. From a developer console (`bin/console`), for the first time only, invoke `MyBanner::GoogleCalendarAPI.new.client` to receive a redirect URL, follow the URL to log in with your Google Account, then copy and paste the code back into the development console and press "ENTER". This will generate a **token.yaml** file in the root directory of this repository and store an access token there. The access token will be used to authorize subsequent requests.
 
 ## Usage
 
