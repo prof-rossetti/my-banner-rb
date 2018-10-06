@@ -4,6 +4,7 @@ RSpec.describe MyBanner do
   end
 
   it "does something useful" do
-    expect(false).to eq(true)
+    MyBanner::Scheduler.new.execute
+    expect(true).to eq(true)
   end
 end

@@ -7,11 +7,11 @@ Gem::Specification.new do |spec|
   spec.name          = "my_banner"
   spec.version       = MyBanner::VERSION
   spec.authors       = ["MJ Rossetti"]
-  spec.email         = ["datacreativellc@gmail.com"]
+  spec.email         = ["prof.mj.rossetti@gmail.com", "mjr300@georgetown.edu"]
 
-  spec.summary       = %q{TODO: Write a short summary, because RubyGems requires one.}
-  spec.description   = %q{TODO: Write a longer description or delete this line.}
-  spec.homepage      = "TODO: Put your gem's website or public repo URL here."
+  spec.summary       = %q{What classes am I teaching this semester and can I have a google calendar please?}
+  #spec.description   = %q{TODO: Write a longer description or delete this line.}
+  spec.homepage      = "https://github.com/prof-rossetti/my-banner-rb"
   spec.license       = "MIT"
 
   # Prevent pushing this gem to RubyGems.org. To allow pushes either set the 'allowed_push_host'
@@ -29,6 +29,8 @@ Gem::Specification.new do |spec|
   spec.bindir        = "exe"
   spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
+
+  spec.add_dependency "pry"
 
   spec.add_development_dependency "bundler", "~> 1.16"
   spec.add_development_dependency "rake", "~> 10.0"
