@@ -23,8 +23,13 @@ module MyBanner
     end
 
     def calendars
-      @calendars ||= client.list_calendar_lists.items.sort_by { |cal| cal.summary }
+      @calendars ||= response.items.sort_by { |cal| cal.summary }
     end
+
+    def response
+      @response ||= client.list_calendar_lists
+    end
+
 
     #def upcoming_events(calendar_id="primary")
     #  response = client.list_events(calendar_id, {max_results: 10, single_events: true, order_by: "startTime", time_min: Time.now.iso8601})

@@ -1,9 +1,9 @@
 module MyBanner
   RSpec.describe Scheduler do
-    include_context "mock sections"
+    include_context "sections"
+    include_context "google calendar lists"
 
-    let(:sections) { mock_sections }
-    let(:service) { MyBanner::Scheduler.new }
+    let(:service) { described_class.new }
 
     describe "#execute" do
       before(:each) do
@@ -27,11 +27,32 @@ module MyBanner
     end
 
     describe "#calendars" do
-      let(:calendars) { service.calendars }
+      before(:each) do
+        allow(service).to receive(:response).and_return(calendar_list)
+      end
 
       it "lists and sorts my calendars" do
-        expect(calendars.map(&:class).uniq ).to eql( [Google::Apis::CalendarV3::CalendarListEntry] )
-        expect(calendars.first.summary).to eql("Contacts")
+        expect(service.calendars.map(&:class).uniq ).to eql( [Google::Apis::CalendarV3::CalendarListEntry] )
+        expect(service.calendars.first.summary).to eql("Contacts")
+      end
+    end
+
+    describe "#response" do
+      it "issues an api request" do
+        expect(service.client).to receive(:list_calendar_lists)
+        service.response
+      end
+
+      context "when successful" do
+        before(:each) do
+          allow(service).to receive(:response).and_return(calendar_list)
+        end
+
+        it "returns a calendar list" do
+          expect(service.response.class).to eql(Google::Apis::CalendarV3::CalendarList)
+          expect(service.response.items.any?).to be true
+          expect(service.response.items.first.class).to eql(Google::Apis::CalendarV3::CalendarListEntry)
+        end
       end
     end
 

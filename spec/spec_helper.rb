@@ -1,7 +1,9 @@
 require "bundler/setup"
 require "my_banner"
 
-require_relative "support/shared_contexts/mock_sections" # todo: load all files in all directories in
+Dir[File.expand_path('support/shared_contexts/*.rb', File.dirname(__FILE__))].each do |file|
+  require file
+end # h/t: https://stackoverflow.com/a/21851294/670433
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure
