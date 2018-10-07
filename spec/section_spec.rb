@@ -1,8 +1,8 @@
 module MyBanner
   RSpec.describe Section do
-    include_context "mock sections"
+    include_context "sections"
 
-    let(:section) { described_class.new(mock_section_metadata) }
+    let(:section) { described_class.new(section_metadata) }
 
     describe '#abbreviation' do
       it "combines course abbreviation with section" do

@@ -1,6 +1,6 @@
 module MyBanner
   RSpec.describe Page do
-    include_context "mock sections"
+    include_context "sections"
 
     let(:page) { described_class.new }
 
@@ -11,8 +11,6 @@ module MyBanner
     end
 
     describe '#scheduled_sections' do
-      let(:sections) { mock_sections }
-
       before(:each) do
         allow(page).to receive(:scheduled_sections).and_return(sections)
       end
