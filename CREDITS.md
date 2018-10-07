@@ -23,3 +23,6 @@
   + https://developers.google.com/calendar/auth
   + [Auth scope constants](https://github.com/googleapis/google-api-ruby-client/blob/6773823e78266830a9a8a651d5fd52e307b63e97/generated/google/apis/calendar_v3.rb#L31-L43)
 
+### Webmock
+
+  + https://github.com/bblimke/webmock/wiki/Enabling-and-Disabling-WebMock

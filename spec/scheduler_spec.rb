@@ -151,15 +151,23 @@ module MyBanner
 
 
 
-    #describe "go-live" do
-    #  before(:each) do
-    #    allow(service).to receive(:sections).and_return(sections)
-    #  end
-#
-    #  it "lets me issue real requests with mock sections" do
-    #    service.execute
-    #  end
-    #end
+     # todo: use an rspec flag and configure rspec to not run that kind of test by default unless you pass a flag
+     GO_LIVE = ENV.fetch('GO_LIVE', 'false') == 'true'
+
+     if GO_LIVE
+       describe "go-live" do
+         before(:all) do ; WebMock.disable! ; end
+         after(:all) do ; WebMock.enable! ; end
+
+         before(:each) do
+           allow(service).to receive(:sections).and_return(sections)
+         end
+
+         it "lets me issue real requests with mock sections" do
+           service.execute
+         end
+       end
+     end
 
   end
 end
