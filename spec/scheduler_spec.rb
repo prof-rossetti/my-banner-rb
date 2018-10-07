@@ -105,7 +105,8 @@ module MyBanner
 
         before(:each) do
           allow(service).to receive(:new_calendar).with(calendar_name).and_return(new_calendar)
-          allow(service.client).to receive(:insert_calendar).with(new_calendar).and_return(insertion_response)
+          allow(client).to receive(:insert_calendar).with(new_calendar).and_return(insertion_response)
+          allow(service).to receive(:client).and_return(client)
         end
 
         it "creates a calendar with the given name" do
