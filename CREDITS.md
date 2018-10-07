@@ -28,8 +28,13 @@
   + https://github.com/bblimke/webmock/wiki/Enabling-and-Disabling-WebMock
   + https://docs.travis-ci.com/user/environment-variables/#default-environment-variables
   + https://relishapp.com/rspec/rspec-core/v/2-4/docs/command-line/tag-option
+
+### Code Climate
   + https://docs.codeclimate.com/docs/approve-code-climate-as-a-third-party-application-in-github-1
   + https://docs.codeclimate.com/docs/my-repository-isnt-listed-when-i-try-to-add-it-to-code-climate
+  + https://docs.codeclimate.com/docs/finding-your-test-coverage-token#section-regenerating-a-repos-test-reporter-id
+  + https://docs.codeclimate.com/docs/configuring-test-coverage
+  + https://docs.codeclimate.com/docs/travis-ci-test-coverage
 
 ## Rake Tasks
 
