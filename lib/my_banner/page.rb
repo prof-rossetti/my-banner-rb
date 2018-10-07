@@ -6,7 +6,7 @@ module MyBanner
     end
 
     def scheduled_sections
-      [] # _____.map { |section_metadata| Section.new(section_metadata) }
+      [].map { |section_metadata| Section.new(section_metadata) } # todo: parse the HTML page
     end
 
   end
