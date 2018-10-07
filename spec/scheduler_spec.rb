@@ -5,13 +5,14 @@ module MyBanner
 
     let(:service) { described_class.new }
 
-    let(:client) { instance_double(Google::Apis::CalendarV3::CalendarService, list_calendar_lists: nil)}
+    let(:client) { instance_double(Google::Apis::CalendarV3::CalendarService, list_calendar_lists: nil, insert_calendar: nil)}
 
     describe "#execute" do
       before(:each) do
-        #allow(service).to receive(:client).and_return(client)
+        allow(service).to receive(:client).and_return(client)
         allow(service).to receive(:calendars).and_return([])
         allow(service).to receive(:sections).and_return(sections)
+        allow(service).to receive(:find_or_create_calendar_by_name)
       end
 
       it "parses the page for scheduled sections" do
