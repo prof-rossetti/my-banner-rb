@@ -2,17 +2,32 @@ module MyBanner
   RSpec.describe Scheduler do
     include_context "sections"
     include_context "google calendar lists"
+    include_context "google calendar events"
 
     let(:service) { described_class.new }
 
-    let(:client) { instance_double(Google::Apis::CalendarV3::CalendarService, list_calendar_lists: nil, insert_calendar: nil)}
+    let(:client) { instance_double(Google::Apis::CalendarV3::CalendarService,
+      list_calendar_lists: nil,
+      insert_calendar: nil,
+      list_events: nil
+    ) }
 
     describe "#execute" do
+      let(:calendar) { Google::Apis::CalendarV3::Calendar.new(
+        summary: "My Class 123",
+        time_zone: "America/New_York",
+        etag: "\"abc123\"",
+        id: "abc123@group.calendar.google.com",
+        kind: "calendar#calendar"
+      ) }
+
       before(:each) do
+        allow(client).to receive(:list_events).and_return([])
+        allow(client).to receive(:insert_calendar).and_return(calendar)
         allow(service).to receive(:client).and_return(client)
-        allow(service).to receive(:calendars).and_return([])
         allow(service).to receive(:sections).and_return(sections)
-        allow(service).to receive(:find_or_create_calendar_by_name)
+        allow(service).to receive(:calendars).and_return([])
+        allow(service).to receive(:upcoming_events).with(calendar.id).and_return(calendar_events)
       end
 
       it "parses the page for scheduled sections" do

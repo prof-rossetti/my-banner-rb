@@ -22,6 +22,8 @@ require_relative "../my_banner"
         end_at = event.end.date || event.end.date_time
         puts "   ... + #{event.summary} (#{start_at} to #{end_at})"
       end
+
+      #binding.pry
     end
 
   end

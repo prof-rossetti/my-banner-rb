@@ -31,7 +31,7 @@ module MyBanner
 
     def find_or_create_calendar_by_name(calendar_name)
       calendar = calendars.find{|cal| cal.summary == calendar_name }
-      calendar = client.insert_calendar(new_calendar(calendar_name)) if calendar.nil?
+      calendar = client.insert_calendar(new_calendar(calendar_name)) unless calendar
       calendar
     end
 
@@ -46,14 +46,13 @@ module MyBanner
     end
 
     def upcoming_events(calendar_id="primary")
-      upcoming_events_response = client.list_events(calendar_id, {
-        max_results: 10,
-        single_events: true,
-        order_by: "startTime",
-        time_min: Time.now.iso8601
-      } )
+      #upcoming_events_response(calendar_id).items
+      upcoming_events_response = client.list_events(calendar_id, { max_results: 10, single_events: true, order_by: "startTime", time_min: Time.now.iso8601 } )
       upcoming_events_response.items
     end
 
+    #def upcoming_events_response(calendar_id)
+    #  client.list_events(calendar_id, { max_results: 10, single_events: true, order_by: "startTime", time_min: Time.now.iso8601 } )
+    #end
   end
 end
