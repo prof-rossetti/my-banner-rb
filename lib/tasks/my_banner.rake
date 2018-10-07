@@ -3,28 +3,26 @@ require_relative "../my_banner"
 # namespace :my_banner do
 
   task :schedule do
-    puts "---------------------------------"
-    puts "SCHEDULING..."
-
     service = MyBanner::Scheduler.new
     sections = service.sections
-    calendars = service.calendars
 
     puts "---------------------------------"
     puts "SCHEDULED SECTIONS (#{sections.count}):"
     sections.each do |section|
       puts " + #{section.abbreviation}"
-    end
 
-    puts "---------------------------------"
-    puts "CALENDARS (#{calendars.count}):"
-    calendars.each do |calendar|
-      puts " + #{calendar.id} (#{calendar.summary})"
-    end
+      calendar = service.find_or_create_calendar_by_name(section.calendar_name)
+      puts "   ... CALENDAR: #{calendar.id} (#{calendar.summary})"
 
-    puts "---------------------------------"
-    puts "FINDING OR CREATING CALENDARS:"
-    #service.execute
+      events = service.upcoming_events(calendar.id)
+      puts "   ... UPCOMING EVENTS (#{events.count}): "
+      events.each do |event|
+        #binding.pry
+        start_at = event.start.date || event.start.date_time
+        end_at = event.end.date || event.end.date_time
+        puts "   ... + #{event.summary} (#{start_at} to #{end_at})"
+      end
+    end
 
   end
 

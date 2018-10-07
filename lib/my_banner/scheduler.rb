@@ -4,6 +4,7 @@ module MyBanner
     def execute
       sections.each do |section|
         calendar = find_or_create_calendar_by_name(section.calendar_name)
+        events = upcoming_events(calendar.id)
         #binding.pry
       end
     end
@@ -24,20 +25,13 @@ module MyBanner
       @calendars ||= response.items.sort_by { |cal| cal.summary }
     end
 
-    def response
+    def response # calendars_response
       @response ||= client.list_calendar_lists
     end
 
     def find_or_create_calendar_by_name(calendar_name)
       calendar = calendars.find{|cal| cal.summary == calendar_name }
-
-      if calendar
-        puts " + FOUND CALENDAR #{calendar.summary}"
-      else
-        calendar = client.insert_calendar(new_calendar(calendar_name))
-        puts " + CREATED CALENDAR #{calendar.summary}"
-      end
-
+      calendar = client.insert_calendar(new_calendar(calendar_name)) if calendar.nil?
       calendar
     end
 
@@ -51,18 +45,15 @@ module MyBanner
       )
     end
 
-    #def upcoming_events(calendar_id="primary")
-    #  response = client.list_events(calendar_id, {max_results: 10, single_events: true, order_by: "startTime", time_min: Time.now.iso8601})
-    #  events = response.items
-    #  #puts "CALENDAR: #{}"
-    #  puts "UPCOMING EVENTS (#{events.count}): "
-    #  events.each do |event|
-    #    start_at = event.start.date || event.start.date_time
-    #    end_at = event.end.date || event.end.date_time
-    #    puts " + #{event.summary} (#{start_at} to #{end_at})"
-    #  end
-    #  events
-    #end
+    def upcoming_events(calendar_id="primary")
+      upcoming_events_response = client.list_events(calendar_id, {
+        max_results: 10,
+        single_events: true,
+        order_by: "startTime",
+        time_min: Time.now.iso8601
+      } )
+      upcoming_events_response.items
+    end
 
   end
 end
