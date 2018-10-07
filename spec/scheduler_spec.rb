@@ -5,8 +5,11 @@ module MyBanner
 
     let(:service) { described_class.new }
 
+    let(:client) { instance_double(Google::Apis::CalendarV3::CalendarService, list_calendar_lists: nil)}
+
     describe "#execute" do
       before(:each) do
+        #allow(service).to receive(:client).and_return(client)
         allow(service).to receive(:calendars).and_return([])
         allow(service).to receive(:sections).and_return(sections)
       end
@@ -18,6 +21,11 @@ module MyBanner
 
       it "fetches all google calendars" do
         expect(service).to receive(:calendars)
+        service.execute
+      end
+
+      it "finds or creates calendars for each section" do
+        expect(service).to receive(:find_or_create_calendar_by_name).exactly(3).times
         service.execute
       end
 
@@ -38,6 +46,10 @@ module MyBanner
     end
 
     describe "#response" do
+      before(:each) do
+        allow(service).to receive(:client).and_return(client)
+      end
+
       it "issues an api request" do
         expect(service.client).to receive(:list_calendar_lists)
         service.response
@@ -53,6 +65,19 @@ module MyBanner
           expect(service.response.items.any?).to be true
           expect(service.response.items.first.class).to eql(Google::Apis::CalendarV3::CalendarListEntry)
         end
+      end
+    end
+
+    describe "#find_or_create_calendar_by_name" do
+      let(:calendar_name) { "Class XYZ" }
+
+      before(:each) do
+        allow(service).to receive(:response).and_return(calendar_list)
+      end
+
+      it "finds or creates calendars named after each section" do
+        expect(service.calendars.map(&:summary).include?(calendar_name)).to be false
+        expect(service.find_or_create_calendar_by_name(calendar_name)).to be_kind_of(Google::Apis::CalendarV3::Calendar)
       end
     end
 

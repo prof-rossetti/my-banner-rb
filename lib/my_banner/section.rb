@@ -7,6 +7,10 @@ module MyBanner
       @metadata = metadata
     end
 
+    def calendar_name
+      "GU #{abbreviation}"
+    end
+
     def abbreviation
       "#{metadata[:course]}-#{metadata[:section]}"
     end

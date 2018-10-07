@@ -19,4 +19,5 @@
   + https://github.com/northworld/google_calendar
   + https://developers.google.com/api-client-library/ruby/auth/installed-app#choosingredirecturi
   + https://developers.google.com/calendar/v3/reference/calendarList/list#examples
+  + https://developers.google.com/calendar/v3/reference/calendars/insert
 

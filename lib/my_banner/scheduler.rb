@@ -1,12 +1,5 @@
 module MyBanner
   class Scheduler
-    attr_reader :client, :page, :sections
-
-    def initialize
-      @client = GoogleCalendarAPI.new.client
-      @page = Page.new
-      @sections = page.scheduled_sections
-    end
 
     def execute
       puts "---------------------------------"
@@ -20,6 +13,24 @@ module MyBanner
       calendars.each do |calendar|
         puts " + #{calendar.id} (#{calendar.summary})"
       end
+
+      puts "---------------------------------"
+      puts "SECTION CALENDARS (#{calendars.count}):"
+      sections.each do |section|
+        calendar = find_or_create_calendar_by_name(section.calendar_name)
+      end
+    end
+
+    def sections
+      @sections ||= page.scheduled_sections
+    end
+
+    def page
+      @page ||= Page.new
+    end
+
+    def client
+      @client ||= GoogleCalendarAPI.new.client
     end
 
     def calendars
@@ -30,6 +41,20 @@ module MyBanner
       @response ||= client.list_calendar_lists
     end
 
+    def find_or_create_calendar_by_name(calendar_name)
+      calendar = calendars.find{|cal| cal.summary == calendar_name }
+
+      if calendar
+        #puts " + FOUND CALENDAR #{calendar.summary}"
+      else
+        calendar = Google::Apis::CalendarV3::Calendar.new(summary: calendar_name, time_zone: 'America/New_York')
+        #result = client.insert_calendar(calendar) #> insufficientPermissions: Insufficient Permission
+        #puts result.ok?
+        #puts " + CREATED CALENDAR #{calendar.summary}"
+      end
+
+      calendar
+    end
 
     #def upcoming_events(calendar_id="primary")
     #  response = client.list_events(calendar_id, {max_results: 10, single_events: true, order_by: "startTime", time_min: Time.now.iso8601})

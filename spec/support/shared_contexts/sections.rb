@@ -7,14 +7,14 @@ shared_context "sections" do
     section_metadata.merge({
       title: "Advanced Programming",
       crn: 23456,
-      course: "INFO 202",
+      course: "INFO 220",
       section: 40,
       scheduled_meeting_times: meeting_times.merge(days: "MW")
     }),
     section_metadata.merge({
       title: "Advanced Programming",
       crn: 345678,
-      course: "INFO 202",
+      course: "INFO 220",
       section: 41,
       scheduled_meeting_times: meeting_times.merge(time: "6:30 pm - 9:20 pm", days: "M")
     })
