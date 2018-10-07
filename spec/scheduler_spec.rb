@@ -20,11 +20,6 @@ module MyBanner
         service.execute
       end
 
-      it "fetches all google calendars" do
-        expect(service).to receive(:calendars)
-        service.execute
-      end
-
       it "finds or creates calendars for each section" do
         expect(service).to receive(:find_or_create_calendar_by_name).exactly(3).times
         service.execute
@@ -151,15 +146,23 @@ module MyBanner
 
 
 
-    #describe "go-live" do
-    #  before(:each) do
-    #    allow(service).to receive(:sections).and_return(sections)
-    #  end
-#
-    #  it "lets me issue real requests with mock sections" do
-    #    service.execute
-    #  end
-    #end
+     # todo: use an rspec flag and configure rspec to not run that kind of test by default unless you pass a flag
+     GO_LIVE = ENV.fetch('GO_LIVE', 'false') == 'true'
+
+     if GO_LIVE
+       describe "go-live" do
+         before(:all) do ; WebMock.disable! ; end
+         after(:all) do ; WebMock.enable! ; end
+
+         before(:each) do
+           allow(service).to receive(:sections).and_return(sections)
+         end
+
+         it "lets me issue real requests with mock sections" do
+           service.execute
+         end
+       end
+     end
 
   end
 end

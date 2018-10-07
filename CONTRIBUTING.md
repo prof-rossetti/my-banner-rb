@@ -12,3 +12,6 @@ bin/console
 bundle exec rspec spec/
 ```
 
+```sh
+GO_LIVE=true bundle exec rspec spec/scheduler_spec.rb -e "go-live"
+```

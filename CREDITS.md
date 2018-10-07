@@ -23,3 +23,20 @@
   + https://developers.google.com/calendar/auth
   + [Auth scope constants](https://github.com/googleapis/google-api-ruby-client/blob/6773823e78266830a9a8a651d5fd52e307b63e97/generated/google/apis/calendar_v3.rb#L31-L43)
 
+## Testing and Quality Control
+
+  + https://github.com/bblimke/webmock/wiki/Enabling-and-Disabling-WebMock
+  + https://docs.travis-ci.com/user/environment-variables/#default-environment-variables
+  + https://relishapp.com/rspec/rspec-core/v/2-4/docs/command-line/tag-option
+
+### Code Climate
+  + https://docs.codeclimate.com/docs/approve-code-climate-as-a-third-party-application-in-github-1
+  + https://docs.codeclimate.com/docs/my-repository-isnt-listed-when-i-try-to-add-it-to-code-climate
+  + https://docs.codeclimate.com/docs/finding-your-test-coverage-token#section-regenerating-a-repos-test-reporter-id
+  + https://docs.codeclimate.com/docs/configuring-test-coverage
+  + https://docs.codeclimate.com/docs/travis-ci-test-coverage
+
+## Rake Tasks
+
+  + http://andyatkinson.com/blog/2014/06/23/sharing-rake-tasks-in-gems
+  + https://github.com/ruby/rake

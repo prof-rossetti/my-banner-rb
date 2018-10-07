@@ -2,22 +2,9 @@ module MyBanner
   class Scheduler
 
     def execute
-      puts "---------------------------------"
-      puts "SCHEDULED SECTIONS (#{sections.count}):"
-      sections.each do |section|
-        puts " + #{section.abbreviation}"
-      end
-
-      puts "---------------------------------"
-      puts "CALENDARS (#{calendars.count}):"
-      calendars.each do |calendar|
-        puts " + #{calendar.id} (#{calendar.summary})"
-      end
-
-      puts "---------------------------------"
-      puts "FINDING OR CREATING CALENDARS:"
       sections.each do |section|
         calendar = find_or_create_calendar_by_name(section.calendar_name)
+        #binding.pry
       end
     end
 
@@ -55,7 +42,13 @@ module MyBanner
     end
 
     def new_calendar(calendar_name)
-      Google::Apis::CalendarV3::Calendar.new(summary: calendar_name, time_zone: 'America/New_York')
+      Google::Apis::CalendarV3::Calendar.new(
+        summary: calendar_name,
+        time_zone: "America/New_York" #,
+        #color_id: "...",
+        #foreground_color: "",
+        #background_color: ""
+      )
     end
 
     #def upcoming_events(calendar_id="primary")
