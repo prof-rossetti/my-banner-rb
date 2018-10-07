@@ -13,6 +13,8 @@ cd my-banner-rb/
 
 ## Setup
 
+Install package dependencies:
+
 ```sh
 bin/setup
 ```
