@@ -10,5 +10,10 @@
 # rspec failure tracking
 .rspec_status
 
-.env
+# roster reports with PII
 *.html
+
+# google calendar credentials
+.env
+credentials.json
+token.yaml
