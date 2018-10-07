@@ -42,7 +42,13 @@ module MyBanner
     end
 
     def new_calendar(calendar_name)
-      Google::Apis::CalendarV3::Calendar.new(summary: calendar_name, time_zone: 'America/New_York')
+      Google::Apis::CalendarV3::Calendar.new(
+        summary: calendar_name,
+        time_zone: "America/New_York" #,
+        #color_id: "...",
+        #foreground_color: "",
+        #background_color: ""
+      )
     end
 
     #def upcoming_events(calendar_id="primary")
