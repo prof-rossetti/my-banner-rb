@@ -15,7 +15,7 @@ module MyBanner
       end
 
       puts "---------------------------------"
-      puts "SECTION CALENDARS (#{calendars.count}):"
+      puts "FINDING OR CREATING CALENDARS:"
       sections.each do |section|
         calendar = find_or_create_calendar_by_name(section.calendar_name)
       end
@@ -45,12 +45,11 @@ module MyBanner
       calendar = calendars.find{|cal| cal.summary == calendar_name }
 
       if calendar
-        #puts " + FOUND CALENDAR #{calendar.summary}"
+        puts " + FOUND CALENDAR #{calendar.summary}"
       else
         calendar = Google::Apis::CalendarV3::Calendar.new(summary: calendar_name, time_zone: 'America/New_York')
-        #result = client.insert_calendar(calendar) #> insufficientPermissions: Insufficient Permission
-        #puts result.ok?
-        #puts " + CREATED CALENDAR #{calendar.summary}"
+        result = client.insert_calendar(calendar)
+        puts " + CREATED CALENDAR #{calendar.summary}"
       end
 
       calendar

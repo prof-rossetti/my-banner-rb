@@ -8,7 +8,7 @@ module MyBanner
     end
 
     def calendar_name
-      "GU #{abbreviation}"
+      abbreviation # "GU #{abbreviation}"
     end
 
     def abbreviation

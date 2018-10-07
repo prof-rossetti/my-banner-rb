@@ -13,7 +13,7 @@ module MyBanner
       api_client
     end
 
-    AUTH_SCOPE = Google::Apis::CalendarV3::AUTH_CALENDAR_READONLY # CHANGE ME
+    AUTH_SCOPE = Google::Apis::CalendarV3::AUTH_CALENDAR # permission to read and write, see: https://github.com/googleapis/google-api-ruby-client/blob/6773823e78266830a9a8a651d5fd52e307b63e97/generated/google/apis/calendar_v3.rb#L31-L43
     REDIRECT_URL_BASE = "urn:ietf:wg:oauth:2.0:oob" # returns authorization code in browser title bar and promps user to copy the code, see: https://developers.google.com/api-client-library/python/auth/installed-app#choosingredirecturi
 
     # @return [Google::Auth::UserRefreshCredentials] OAuth2 credentials
@@ -25,7 +25,7 @@ module MyBanner
       creds = authorizer.get_credentials(user_id)
       if creds.nil?
         auth_url = authorizer.get_authorization_url(base_url: REDIRECT_URL_BASE)
-        puts "Please visit the following url #{auth_url} to login to your google account, then paste the resulting code here and press enter... "
+        puts "Please visit the following url: \n\n #{auth_url} \n\n to login to your google account, then paste the resulting code here and press enter... "
         auth_code = gets
         creds = authorizer.get_and_store_credentials_from_code(user_id: user_id, code: auth_code, base_url: REDIRECT_URL_BASE)
       end

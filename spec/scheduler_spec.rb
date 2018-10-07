@@ -69,16 +69,48 @@ module MyBanner
     end
 
     describe "#find_or_create_calendar_by_name" do
-      let(:calendar_name) { "Class XYZ" }
+      let(:calendar_names) { service.calendars.map(&:summary) }
 
       before(:each) do
         allow(service).to receive(:response).and_return(calendar_list)
       end
 
-      it "finds or creates calendars named after each section" do
-        expect(service.calendars.map(&:summary).include?(calendar_name)).to be false
-        expect(service.find_or_create_calendar_by_name(calendar_name)).to be_kind_of(Google::Apis::CalendarV3::Calendar)
+      context "calendar exists" do
+        let(:calendar_name) { "Contacts" }
+
+        it "finds a calendar with the given name" do
+          expect(calendar_names.include?(calendar_name)).to be true
+          result = service.find_or_create_calendar_by_name(calendar_name)
+          expect(result).to be_kind_of(Google::Apis::CalendarV3::CalendarListEntry)
+          expect(result.id).to be_kind_of(String)
+          expect(result.etag).to be_kind_of(String)
+          expect(result.kind).to eql("calendar#calendarListEntry")
+          expect(result.summary).to eql(calendar_name)
+          expect(result.time_zone).to eql("America/New_York")
+        end
       end
+
+      context "calendar doesn't exist" do
+        let(:calendar_name) { "Class XYZ" }
+        let(:new_calendar) { Google::Apis::CalendarV3::Calendar.new(summary: calendar_name, time_zone: 'America/New_York') }
+        let(:insertion_response) { }
+
+        before(:each) do
+          allow(service.client).to receive(:insert_calendar).with(new_calendar).and_return(insertion_response)
+        end
+
+        it "creates a calendar with the given name" do
+          expect(calendar_names.include?(calendar_name)).to be false
+          result = service.find_or_create_calendar_by_name(calendar_name)
+          expect(result).to be_kind_of(Google::Apis::CalendarV3::Calendar)
+          expect(result.id).to be_kind_of(String)
+          expect(result.etag).to be_kind_of(String)
+          expect(result.kind).to eql("calendar#calendar")
+          expect(result.summary).to eql(calendar_name)
+          expect(result.time_zone).to eql("America/New_York")
+        end
+      end
+
     end
 
     #describe "#upcoming_events" do
@@ -87,11 +119,21 @@ module MyBanner
     #  end
     #end
 
-    #describe "#find_or_create_calendar" do
-    #  let(:calendar_name) { "My Section" }
+
+
+
+
+
+
+
+
+    #describe "go-live" do
+    #  before(:each) do
+    #    allow(service).to receive(:sections).and_return(sections)
+    #  end
 #
-    #  it "looks up existing calendar by name, or creates a new one with that name" do
-    #    service.find_or_create_calendar(calendar_name)
+    #  it "lets me issue real requests with mock sections" do
+    #    service.execute
     #  end
     #end
 
