@@ -92,10 +92,18 @@ module MyBanner
 
       context "calendar doesn't exist" do
         let(:calendar_name) { "Class XYZ" }
-        let(:new_calendar) { Google::Apis::CalendarV3::Calendar.new(summary: calendar_name, time_zone: 'America/New_York') }
-        let(:insertion_response) { }
+        let(:time_zone) { "America/New_York" }
+        let(:new_calendar) { Google::Apis::CalendarV3::Calendar.new(summary: calendar_name, time_zone: time_zone) }
+        let(:insertion_response) { Google::Apis::CalendarV3::Calendar.new(
+          summary: calendar_name,
+          time_zone: time_zone,
+          etag: "\"abc123\"",
+          id: "abc123@group.calendar.google.com",
+          kind: "calendar#calendar")
+        }
 
         before(:each) do
+          allow(service).to receive(:new_calendar).with(calendar_name).and_return(new_calendar)
           allow(service.client).to receive(:insert_calendar).with(new_calendar).and_return(insertion_response)
         end
 
@@ -111,6 +119,20 @@ module MyBanner
         end
       end
 
+    end
+
+    describe "#new_calendar" do
+      let(:calendar_name) { "POP 111-03" }
+      let(:result) { service.new_calendar(calendar_name) }
+
+      it "initializes a new calendar to be created" do
+        expect(result).to be_kind_of(Google::Apis::CalendarV3::Calendar)
+        expect(result.id).to be nil
+        expect(result.etag).to be nil
+        expect(result.kind).to be nil
+        expect(result.summary).to eql(calendar_name)
+        expect(result.time_zone).to eql("America/New_York")
+      end
     end
 
     #describe "#upcoming_events" do

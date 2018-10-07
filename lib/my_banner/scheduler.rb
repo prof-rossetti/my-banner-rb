@@ -47,12 +47,15 @@ module MyBanner
       if calendar
         puts " + FOUND CALENDAR #{calendar.summary}"
       else
-        calendar = Google::Apis::CalendarV3::Calendar.new(summary: calendar_name, time_zone: 'America/New_York')
-        result = client.insert_calendar(calendar)
+        calendar = client.insert_calendar(new_calendar(calendar_name))
         puts " + CREATED CALENDAR #{calendar.summary}"
       end
 
       calendar
+    end
+
+    def new_calendar(calendar_name)
+      Google::Apis::CalendarV3::Calendar.new(summary: calendar_name, time_zone: 'America/New_York')
     end
 
     #def upcoming_events(calendar_id="primary")
