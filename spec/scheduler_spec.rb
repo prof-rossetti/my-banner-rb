@@ -20,11 +20,6 @@ module MyBanner
         service.execute
       end
 
-      it "fetches all google calendars" do
-        expect(service).to receive(:calendars)
-        service.execute
-      end
-
       it "finds or creates calendars for each section" do
         expect(service).to receive(:find_or_create_calendar_by_name).exactly(3).times
         service.execute

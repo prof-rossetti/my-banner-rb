@@ -2,22 +2,9 @@ module MyBanner
   class Scheduler
 
     def execute
-      puts "---------------------------------"
-      puts "SCHEDULED SECTIONS (#{sections.count}):"
-      sections.each do |section|
-        puts " + #{section.abbreviation}"
-      end
-
-      puts "---------------------------------"
-      puts "CALENDARS (#{calendars.count}):"
-      calendars.each do |calendar|
-        puts " + #{calendar.id} (#{calendar.summary})"
-      end
-
-      puts "---------------------------------"
-      puts "FINDING OR CREATING CALENDARS:"
       sections.each do |section|
         calendar = find_or_create_calendar_by_name(section.calendar_name)
+        #binding.pry
       end
     end
 
