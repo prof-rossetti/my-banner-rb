@@ -1,8 +1,14 @@
 # Credits, Notes, and Reference
 
-## Rubygems
+## Ruby and Rubygems
 
   + http://data-creative.info/reference-docs/2015/07/03/how-to-make-a-ruby-gem/
+  + https://apidock.com/rails/String/to_datetime
+
+### Rake Tasks
+
+  + http://andyatkinson.com/blog/2014/06/23/sharing-rake-tasks-in-gems
+  + https://github.com/ruby/rake
 
 ## Banner
 
@@ -21,6 +27,7 @@
   + https://developers.google.com/calendar/v3/reference/calendarList/list#examples
   + https://developers.google.com/calendar/v3/reference/calendars/insert
   + https://developers.google.com/calendar/auth
+  + https://developers.google.com/calendar/v3/reference/calendars/delete
   + [Auth scope constants](https://github.com/googleapis/google-api-ruby-client/blob/6773823e78266830a9a8a651d5fd52e307b63e97/generated/google/apis/calendar_v3.rb#L31-L43)
 
 ## Testing and Quality Control
@@ -36,7 +43,3 @@
   + https://docs.codeclimate.com/docs/configuring-test-coverage
   + https://docs.codeclimate.com/docs/travis-ci-test-coverage
 
-## Rake Tasks
-
-  + http://andyatkinson.com/blog/2014/06/23/sharing-rake-tasks-in-gems
-  + https://github.com/ruby/rake

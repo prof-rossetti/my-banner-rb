@@ -1,0 +1,8 @@
+plugins:
+  rubocop:
+    enabled: true
+    checks:
+        #Rubocop/Metrics/ClassLength:
+        #  enabled: false
+        Rubocop/Style/StringLiterals:
+          enabled: false
