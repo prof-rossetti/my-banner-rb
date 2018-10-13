@@ -2,7 +2,9 @@ require "active_support/core_ext/string/conversions"
 
 shared_context "google calendar events" do
 
-  let(:calendar_events) { Google::Apis::CalendarV3::Events.new(items: [ all_day_event, lunch_event ] ) }
+  let(:events_response) { Google::Apis::CalendarV3::Events.new(items: events) }
+
+  let(:events) { [ all_day_event, lunch_event ] }
 
   let(:all_day_event) { Google::Apis::CalendarV3::Event.new(all_day_event_attrs) }
 
@@ -28,7 +30,7 @@ shared_context "google calendar events" do
     #:updated=>#<DateTime: 2018-10-07T20:16:23+00:00 ((2458399j,72983s,814000000n),+0s,2299161j)>}
   } }
 
-  let(:lunch_event) { {
+  let(:lunch_event_attrs) { {
     #:created=>#<DateTime: 2018-10-07T20:15:09+00:00 ((2458399j,72909s,0n),+0s,2299161j)>,
     #:creator=>{:email=>"polly.prof@gmail.com"},
 

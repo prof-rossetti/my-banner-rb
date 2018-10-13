@@ -12,7 +12,7 @@ require_relative "../my_banner"
       calendar = service.find_or_create_calendar_by_name(section.calendar_name)
       puts "   ... CALENDAR: #{calendar.id} (#{calendar.summary})"
 
-      events = service.upcoming_events(calendar.id)
+      events = service.fetch_upcoming_events(calendar.id)
       puts "   ... UPCOMING EVENTS (#{events.count}): "
       events.each do |event|
         start_at = event.start.date || event.start.date_time #> Google::Apis::CalendarV3::EventDateTime

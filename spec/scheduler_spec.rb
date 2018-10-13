@@ -12,65 +12,79 @@ module MyBanner
       list_events: nil
     ) }
 
-    describe "#execute" do
-      let(:calendar) { Google::Apis::CalendarV3::Calendar.new(
-        summary: section.calendar_name,
-        time_zone: "America/New_York",
-        etag: "\"...\"",
-        id: "myclass1@group.calendar.google.com",
-        kind: "calendar#calendar"
-      ) }
+    before(:each) do
+      allow(service).to receive(:client).and_return(client) # mock the client, because it makes an auth request
+    end
 
+    let(:calendar) { Google::Apis::CalendarV3::Calendar.new(
+      summary: section.calendar_name,
+      time_zone: "America/New_York",
+      etag: "\"...\"",
+      id: "myclass1@group.calendar.google.com",
+      kind: "calendar#calendar"
+    ) }
+
+    #describe "#execute" do
+    #  before(:each) do
+    #    allow(client).to receive(:insert_calendar).and_return(calendar)
+    #    allow(client).to receive(:list_events).and_return([]) # calendar_events
+    #    allow(service).to receive(:client).and_return(client)
+    #    allow(service).to receive(:calendars).and_return([])
+    #    allow(service).to receive(:fetch_upcoming_events).with(calendar.id).and_return(calendar_events)
+    #  end
+#
+    #  it "finds or creates a calendar" do
+    #    expect(service).to receive(:find_or_create_calendar_by_name).and_return(calendar)
+    #    service.execute
+    #  end
+#
+    #  it "finds or creates calendar events" do
+    #    expect(service).to receive(:fetch_upcoming_events).with(calendar.id).and_return(calendar_events)
+    #    service.execute
+    #  end
+    #end
+
+    describe "#events" do
       before(:each) do
-        allow(client).to receive(:insert_calendar).and_return(calendar)
-        allow(client).to receive(:list_events).and_return([]) # calendar_events
-        allow(service).to receive(:client).and_return(client)
-        allow(service).to receive(:calendars).and_return([])
-        allow(service).to receive(:upcoming_events).with(calendar.id).and_return(calendar_events)
+        allow(service).to receive(:calendar).and_return(calendar)
+        allow(service).to receive(:events_response).and_return(events_response)
       end
 
-      it "finds or creates a calendar" do
-        expect(service).to receive(:find_or_create_calendar_by_name).and_return(calendar)
-        service.execute
-      end
-
-      it "finds or creates calendar events" do
-        expect(service).to receive(:upcoming_events).with(calendar.id).and_return(calendar_events)
-        service.execute
+      it "returns a list of google calendar events" do
+        expect(service.events.map(&:class).uniq ).to eql( [Google::Apis::CalendarV3::Event] )
+        expect(service.events.map(&:summary)).to match_array(["My Day-long Event", "My Lunch Event"])
       end
     end
 
-    describe "#calendars" do
+    describe "#events_response" do
       before(:each) do
-        allow(service).to receive(:calendars_response).and_return(calendar_list)
+        allow(service).to receive(:calendar).and_return(calendar)
+        allow(client).to receive(:list_events).and_return(events_response)
       end
 
-      it "lists and sorts my calendars" do
-        expect(service.calendars.map(&:class).uniq ).to eql( [Google::Apis::CalendarV3::CalendarListEntry] )
-        expect(service.calendars.first.summary).to eql("Contacts")
+      it "issues a request" do
+        expect(client).to receive(:list_events).and_return(events_response)
+        service.events_response
+      end
+
+      it "returns a response" do
+        expect(service.events_response).to eql(events_response)
+        expect(service.events_response).to be_kind_of(Google::Apis::CalendarV3::Events)
       end
     end
 
-    describe "#calendars_response" do
+    describe "#calendar" do
       before(:each) do
-        allow(service).to receive(:client).and_return(client)
+        allow(service).to receive(:find_or_create_calendar_by_name).with(section.calendar_name).and_return(calendar)
       end
 
-      it "issues an api request" do
-        expect(service.client).to receive(:list_calendar_lists)
-        service.calendars_response
+      it "finds or creates a calendar for the given section" do
+        expect(service).to receive(:find_or_create_calendar_by_name).with(section.calendar_name).and_return(calendar)
+        service.calendar
       end
 
-      context "when successful" do
-        before(:each) do
-          allow(service).to receive(:calendars_response).and_return(calendar_list)
-        end
-
-        it "returns a calendar list" do
-          expect(service.calendars_response.class).to eql(Google::Apis::CalendarV3::CalendarList)
-          expect(service.calendars_response.items.any?).to be true
-          expect(service.calendars_response.items.first.class).to eql(Google::Apis::CalendarV3::CalendarListEntry)
-        end
+      it "returns a google calendar matching the given section" do
+        expect(service.calendar.summary).to eql(section.calendar_name)
       end
     end
 
@@ -125,7 +139,40 @@ module MyBanner
           expect(result.time_zone).to eql("America/New_York")
         end
       end
+    end
 
+    describe "#calendars" do
+      before(:each) do
+        allow(service).to receive(:calendars_response).and_return(calendar_list)
+      end
+
+      it "lists and sorts all my calendars" do
+        expect(service.calendars.map(&:class).uniq ).to eql( [Google::Apis::CalendarV3::CalendarListEntry] )
+        expect(service.calendars.first.summary).to eql("Contacts")
+      end
+    end
+
+    describe "#calendars_response" do
+      before(:each) do
+        allow(service).to receive(:client).and_return(client)
+      end
+
+      it "issues an api request" do
+        expect(service.client).to receive(:list_calendar_lists)
+        service.calendars_response
+      end
+
+      context "when successful" do
+        before(:each) do
+          allow(service).to receive(:calendars_response).and_return(calendar_list)
+        end
+
+        it "returns a calendar list" do
+          expect(service.calendars_response.class).to eql(Google::Apis::CalendarV3::CalendarList)
+          expect(service.calendars_response.items.any?).to be true
+          expect(service.calendars_response.items.first.class).to eql(Google::Apis::CalendarV3::CalendarListEntry)
+        end
+      end
     end
 
     describe "#new_calendar" do
@@ -141,12 +188,6 @@ module MyBanner
         expect(new_calendar.time_zone).to eql("America/New_York")
       end
     end
-
-    #describe "#upcoming_events" do
-    #  it "lists upcoming google calendar events on a given calendar" do
-    #    service.upcoming_events
-    #  end
-    #end
 
   end
 end
