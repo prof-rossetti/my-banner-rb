@@ -61,7 +61,7 @@ module MyBanner
 
     describe "#calendars" do
       before(:each) do
-        allow(service).to receive(:response).and_return(calendar_list)
+        allow(service).to receive(:calendars_response).and_return(calendar_list)
       end
 
       it "lists and sorts my calendars" do
@@ -70,25 +70,25 @@ module MyBanner
       end
     end
 
-    describe "#response" do
+    describe "#calendars_response" do
       before(:each) do
         allow(service).to receive(:client).and_return(client)
       end
 
       it "issues an api request" do
         expect(service.client).to receive(:list_calendar_lists)
-        service.response
+        service.calendars_response
       end
 
       context "when successful" do
         before(:each) do
-          allow(service).to receive(:response).and_return(calendar_list)
+          allow(service).to receive(:calendars_response).and_return(calendar_list)
         end
 
         it "returns a calendar list" do
-          expect(service.response.class).to eql(Google::Apis::CalendarV3::CalendarList)
-          expect(service.response.items.any?).to be true
-          expect(service.response.items.first.class).to eql(Google::Apis::CalendarV3::CalendarListEntry)
+          expect(service.calendars_response.class).to eql(Google::Apis::CalendarV3::CalendarList)
+          expect(service.calendars_response.items.any?).to be true
+          expect(service.calendars_response.items.first.class).to eql(Google::Apis::CalendarV3::CalendarListEntry)
         end
       end
     end
@@ -97,7 +97,7 @@ module MyBanner
       let(:calendar_names) { service.calendars.map(&:summary) }
 
       before(:each) do
-        allow(service).to receive(:response).and_return(calendar_list)
+        allow(service).to receive(:calendars_response).and_return(calendar_list)
       end
 
       context "calendar exists" do
@@ -148,16 +148,16 @@ module MyBanner
     end
 
     describe "#new_calendar" do
-      let(:calendar_name) { "POP 111-03" }
-      let(:result) { service.new_calendar(calendar_name) }
+      let(:calendar_name) { "CSC 111-03" }
+      let(:new_calendar) { service.new_calendar(calendar_name) }
 
       it "initializes a new calendar to be created" do
-        expect(result).to be_kind_of(Google::Apis::CalendarV3::Calendar)
-        expect(result.id).to be nil
-        expect(result.etag).to be nil
-        expect(result.kind).to be nil
-        expect(result.summary).to eql(calendar_name)
-        expect(result.time_zone).to eql("America/New_York")
+        expect(new_calendar).to be_kind_of(Google::Apis::CalendarV3::Calendar)
+        expect(new_calendar.id).to be nil
+        expect(new_calendar.etag).to be nil
+        expect(new_calendar.kind).to be nil
+        expect(new_calendar.summary).to eql(calendar_name)
+        expect(new_calendar.time_zone).to eql("America/New_York")
       end
     end
 
@@ -188,7 +188,7 @@ module MyBanner
          end
 
          it "lets me issue real requests with mock sections" do
-           service.execute
+           results = service.execute
          end
        end
      end
