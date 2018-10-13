@@ -8,12 +8,14 @@ module MyBanner
     def execute
       sections.map do |section|
         calendar = find_or_create_calendar_by_name(section.calendar_name)
+        #puts calendar.id
         events = upcoming_events(calendar.id)
-        events.each do |event|
-          start_at = event.start.date || event.start.date_time # consider initializing via GoogleCalendarEvent wrapper class
-          end_at = event.end.date || event.end.date_time # consider initializing via GoogleCalendarEvent wrapper class
-          puts " + #{event.summary} [#{start_at.to_s} ... #{end_at.to_s}]"
-        end
+        #events.each do |event|
+        #  binding.pry
+        #  start_at = event.start.date || event.start.date_time # consider initializing via GoogleCalendarEvent wrapper class
+        #  end_at = event.end.date || event.end.date_time # consider initializing via GoogleCalendarEvent wrapper class
+        #  puts " + #{event.summary} [#{start_at.to_s} ... #{end_at.to_s}]"
+        #end
       end
     end
 

@@ -36,12 +36,14 @@ module MyBanner
       ) }
 
       before(:each) do
-        allow(client).to receive(:list_events).and_return([])
+        allow(client).to receive(:list_events).and_return([]) # calendar_events
         allow(client).to receive(:insert_calendar).and_return(calendar) # , calendar2, calendar3
         allow(service).to receive(:client).and_return(client)
         allow(service).to receive(:sections).and_return(sections)
         allow(service).to receive(:calendars).and_return([])
         allow(service).to receive(:upcoming_events).with(calendar.id).and_return(calendar_events)
+        #allow(service).to receive(:upcoming_events).with(calendar2.id).and_return([])
+        #allow(service).to receive(:upcoming_events).with(calendar3.id).and_return([])
       end
 
       it "fetches sections" do
