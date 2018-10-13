@@ -14,29 +14,43 @@ module MyBanner
 
     describe "#execute" do
       let(:calendar) { Google::Apis::CalendarV3::Calendar.new(
-        summary: "My Class 123",
+        summary: "My Class 1",
         time_zone: "America/New_York",
-        etag: "\"abc123\"",
-        id: "abc123@group.calendar.google.com",
+        etag: "\"...\"",
+        id: "myclass1@group.calendar.google.com",
+        kind: "calendar#calendar"
+      ) }
+      let(:calendar2) { Google::Apis::CalendarV3::Calendar.new(
+        summary: "My Class 2",
+        time_zone: "America/New_York",
+        etag: "\"...\"",
+        id: "myclass2@group.calendar.google.com",
+        kind: "calendar#calendar"
+      ) }
+      let(:calendar3) { Google::Apis::CalendarV3::Calendar.new(
+        summary: "My Class 3",
+        time_zone: "America/New_York",
+        etag: "\"...\"",
+        id: "myclass3@group.calendar.google.com",
         kind: "calendar#calendar"
       ) }
 
       before(:each) do
         allow(client).to receive(:list_events).and_return([])
-        allow(client).to receive(:insert_calendar).and_return(calendar)
+        allow(client).to receive(:insert_calendar).and_return(calendar) # , calendar2, calendar3
         allow(service).to receive(:client).and_return(client)
         allow(service).to receive(:sections).and_return(sections)
         allow(service).to receive(:calendars).and_return([])
         allow(service).to receive(:upcoming_events).with(calendar.id).and_return(calendar_events)
       end
 
-      it "parses the page for scheduled sections" do
+      it "fetches sections" do
         expect(service).to receive(:sections).and_return(sections).at_least(:once)
         service.execute
       end
 
-      it "finds or creates calendars for each section" do
-        expect(service).to receive(:find_or_create_calendar_by_name).exactly(3).times
+      it "finds or creates section calendars" do
+        expect(service).to receive(:find_or_create_calendar_by_name).exactly(3).times.and_return(calendar, calendar, calendar) # , calendar2, calendar3
         service.execute
       end
 

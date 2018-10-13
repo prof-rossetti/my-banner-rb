@@ -1,20 +1,17 @@
 module MyBanner
   class Scheduler
 
+    def initialize
+      @sections ||= Page.new.scheduled_sections
+    end
+
     def execute
       sections.each do |section|
         calendar = find_or_create_calendar_by_name(section.calendar_name)
+        #binding.pry unless calendar
         events = upcoming_events(calendar.id)
         #binding.pry
       end
-    end
-
-    def sections
-      @sections ||= page.scheduled_sections
-    end
-
-    def page
-      @page ||= Page.new
     end
 
     def client
@@ -36,19 +33,12 @@ module MyBanner
     end
 
     def new_calendar(calendar_name)
-      Google::Apis::CalendarV3::Calendar.new(
-        summary: calendar_name,
-        time_zone: "America/New_York" #,
-        #color_id: "...",
-        #foreground_color: "",
-        #background_color: ""
-      )
+      Google::Apis::CalendarV3::Calendar.new(summary: calendar_name, time_zone: "America/New_York", color_id: 6) #  background_color: "", foreground_color: ""
     end
 
     def upcoming_events(calendar_id="primary")
-      #upcoming_events_response(calendar_id).items
       upcoming_events_response = client.list_events(calendar_id, { max_results: 10, single_events: true, order_by: "startTime", time_min: Time.now.iso8601 } )
-      upcoming_events_response.items
+      upcoming_events_response.items # upcoming_events_response(calendar_id).items
     end
 
     #def upcoming_events_response(calendar_id)
