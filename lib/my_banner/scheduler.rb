@@ -1,22 +1,22 @@
 module MyBanner
   class Scheduler
 
-    def initialize # (section)
-      @sections ||= Page.new.scheduled_sections # consider only operating on one section at a time
+    attr_accessor :section
+
+    def initialize(section)
+      @section = section
     end
 
     def execute
-      sections.map do |section|
-        calendar = find_or_create_calendar_by_name(section.calendar_name)
-        #puts calendar.id
-        events = upcoming_events(calendar.id)
-        #events.each do |event|
-        #  binding.pry
-        #  start_at = event.start.date || event.start.date_time # consider initializing via GoogleCalendarEvent wrapper class
-        #  end_at = event.end.date || event.end.date_time # consider initializing via GoogleCalendarEvent wrapper class
-        #  puts " + #{event.summary} [#{start_at.to_s} ... #{end_at.to_s}]"
-        #end
-      end
+      calendar = find_or_create_calendar_by_name(section.calendar_name)
+      #puts calendar.id
+      events = upcoming_events(calendar.id)
+      #events.each do |event|
+      #  binding.pry
+      #  start_at = event.start.date || event.start.date_time # consider initializing via GoogleCalendarEvent wrapper class
+      #  end_at = event.end.date || event.end.date_time # consider initializing via GoogleCalendarEvent wrapper class
+      #  puts " + #{event.summary} [#{start_at.to_s} ... #{end_at.to_s}]"
+      #end
     end
 
     def find_or_create_calendar_by_name(calendar_name)

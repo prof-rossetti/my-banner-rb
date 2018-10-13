@@ -4,7 +4,7 @@ module MyBanner
     include_context "google calendar lists"
     include_context "google calendar events"
 
-    let(:service) { described_class.new }
+    let(:service) { described_class.new(section) }
 
     let(:client) { instance_double(Google::Apis::CalendarV3::CalendarService,
       list_calendar_lists: nil,
@@ -14,51 +14,30 @@ module MyBanner
 
     describe "#execute" do
       let(:calendar) { Google::Apis::CalendarV3::Calendar.new(
-        summary: "My Class 1",
+        summary: section.calendar_name,
         time_zone: "America/New_York",
         etag: "\"...\"",
         id: "myclass1@group.calendar.google.com",
         kind: "calendar#calendar"
       ) }
-      let(:calendar2) { Google::Apis::CalendarV3::Calendar.new(
-        summary: "My Class 2",
-        time_zone: "America/New_York",
-        etag: "\"...\"",
-        id: "myclass2@group.calendar.google.com",
-        kind: "calendar#calendar"
-      ) }
-      let(:calendar3) { Google::Apis::CalendarV3::Calendar.new(
-        summary: "My Class 3",
-        time_zone: "America/New_York",
-        etag: "\"...\"",
-        id: "myclass3@group.calendar.google.com",
-        kind: "calendar#calendar"
-      ) }
 
       before(:each) do
+        allow(client).to receive(:insert_calendar).and_return(calendar)
         allow(client).to receive(:list_events).and_return([]) # calendar_events
-        allow(client).to receive(:insert_calendar).and_return(calendar) # , calendar2, calendar3
         allow(service).to receive(:client).and_return(client)
-        allow(service).to receive(:sections).and_return(sections)
         allow(service).to receive(:calendars).and_return([])
         allow(service).to receive(:upcoming_events).with(calendar.id).and_return(calendar_events)
-        #allow(service).to receive(:upcoming_events).with(calendar2.id).and_return([])
-        #allow(service).to receive(:upcoming_events).with(calendar3.id).and_return([])
       end
 
-      it "fetches sections" do
-        expect(service).to receive(:sections).and_return(sections).at_least(:once)
+      it "finds or creates a calendar" do
+        expect(service).to receive(:find_or_create_calendar_by_name).and_return(calendar)
         service.execute
       end
 
-      it "finds or creates section calendars" do
-        expect(service).to receive(:find_or_create_calendar_by_name).exactly(3).times.and_return(calendar, calendar, calendar) # , calendar2, calendar3
+      it "finds or creates calendar events" do
+        expect(service).to receive(:upcoming_events).with(calendar.id).and_return(calendar_events)
         service.execute
       end
-
-      #it "creates google calendar events" do
-      #  expect(service.execute).to eql(true)
-      #end
     end
 
     describe "#calendars" do
@@ -168,32 +147,6 @@ module MyBanner
     #    service.upcoming_events
     #  end
     #end
-
-
-
-
-
-
-
-
-
-     # todo: use an rspec flag and configure rspec to not run that kind of test by default unless you pass a flag
-     GO_LIVE = ENV.fetch('GO_LIVE', 'false') == 'true'
-
-     if GO_LIVE
-       describe "go-live" do
-         before(:all) do ; WebMock.disable! ; end
-         after(:all) do ; WebMock.enable! ; end
-
-         before(:each) do
-           allow(service).to receive(:sections).and_return(sections)
-         end
-
-         it "lets me issue real requests with mock sections" do
-           results = service.execute
-         end
-       end
-     end
 
   end
 end

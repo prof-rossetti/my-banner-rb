@@ -20,6 +20,7 @@ shared_context "sections" do
     })
   ] }
 
+  let(:section) { MyBanner::Section.new(section_metadata) }
   let(:section_metadata) { {
     title: "Intro to Programming",
     crn: 123456,

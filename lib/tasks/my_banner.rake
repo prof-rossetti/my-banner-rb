@@ -3,14 +3,12 @@ require_relative "../my_banner"
 # namespace :my_banner do
 
   task :schedule do
-    service = MyBanner::Scheduler.new
-    sections = service.sections
-
+    sections = Page.new.scheduled_sections
     puts "---------------------------------"
     puts "SCHEDULED SECTIONS (#{sections.count}):"
     sections.each do |section|
       puts " + #{section.abbreviation}"
-
+      service = MyBanner::Scheduler.new(section)
       calendar = service.find_or_create_calendar_by_name(section.calendar_name)
       puts "   ... CALENDAR: #{calendar.id} (#{calendar.summary})"
 
