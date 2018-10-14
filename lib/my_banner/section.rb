@@ -24,12 +24,17 @@ module MyBanner
       abbreviation
     end
 
-    #def meetings
-    #  meeting_dates #
-    #end
+    def meetings
+      meeting_dates.map do |date|
+        {
+          start_at: DateTime.parse("#{date} #{start_time}"),
+          end_at:  DateTime.parse("#{date} #{end_time}")
+        }
+      end
+    end
 
     def meeting_dates
-      term_date_range.select{|date| weekday_numbers.include?(date.wday) }
+      term_date_range.select{ |date| weekday_numbers.include?(date.wday) }
     end
 
     def term_date_range
