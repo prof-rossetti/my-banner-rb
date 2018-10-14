@@ -9,6 +9,18 @@ module MyBanner
       [ section_attributes, section2_attributes, section3_attributes ].map { |h| MyBanner::Section.new(h) }
     end # todo: parse the HTML page
 
+    def meeting_times
+      {
+        type: "Lecture",
+        time: "11:00 am - 12:20 pm",
+        days: "TR",
+        where: "Science Building 111",
+        date_range: "Oct 29, 2018 - Dec 18, 2018",
+        schedule_type: "Lecture",
+        instructors: ["Polly Professor"]
+      }
+    end
+
     def section_attributes
       {
         title: "Intro to Programming",
@@ -25,15 +37,7 @@ module MyBanner
         campus: "Main Campus",
         override: "No",
         enrollment_counts: {maximum: 50, actual: 45, remaining: 5},
-        scheduled_meeting_times: {
-          type: "Lecture",
-          time: "11:00 am - 12:20 pm",
-          days: "TR",
-          where: "Science Building 111",
-          date_range: "Oct 29, 2018 - Dec 18, 2018",
-          schedule_type: "Lecture",
-          instructors: ["Polly Professor"]
-        }
+        scheduled_meeting_times: meeting_times
       }
     end
 
