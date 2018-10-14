@@ -11,9 +11,10 @@ module MyBanner
       allow(service).to receive(:client).and_return(client) # mock the client, because it makes an auth request
     end
 
+    let(:calendar_name) { service.calendar_name }
     let(:calendar) {
       Google::Apis::CalendarV3::Calendar.new(
-        summary: section.calendar_name,
+        summary: calendar_name,
         time_zone: "America/New_York",
         etag: "\"...\"",
         id: "myclass1@group.calendar.google.com",
@@ -36,48 +37,44 @@ module MyBanner
       end
     end
 
-    describe "#calendar" do
-      let(:calendar_names) { service.calendars.map(&:summary) }
-
+    describe "#calendar " do
       before(:each) do
         allow(service).to receive(:list_calendars).and_return(calendar_list)
       end
 
-      context "calendar exists" do
-        let(:calendar_name) { "Contacts" }
+      let(:calendar_names) { service.calendars.map(&:summary) }
+      let(:cal) { service.calendar }
 
+      context "calendar exists" do
         it "finds a calendar with the given name" do
-          expect(service.calendar.include?(calendar_name)).to be true
-          expect(service.calendar).to be_kind_of(Google::Apis::CalendarV3::CalendarListEntry)
-          expect(service.calendar.id).to be_kind_of(String)
-          expect(service.calendar.etag).to be_kind_of(String)
-          expect(service.calendar.kind).to eql("calendar#calendarListEntry")
-          expect(service.calendar.summary).to eql(calendar_name)
-          expect(service.calendar.time_zone).to eql("America/New_York")
+          expect(calendar_names).to include(calendar_name)
+          expect(cal).to be_kind_of(Google::Apis::CalendarV3::CalendarListEntry)
+          expect(cal.id).to be_kind_of(String)
+          expect(cal.etag).to be_kind_of(String)
+          expect(cal.kind).to eql("calendar#calendarListEntry")
+          expect(cal.summary).to eql(calendar_name)
+          expect(cal.time_zone).to eql("America/New_York")
         end
       end
 
       context "calendar doesn't exist" do
-        let(:calendar_name) { "Class XYZ" }
-        let(:time_zone) { "America/New_York" }
-        let(:new_calendar) { Google::Apis::CalendarV3::Calendar.new(summary: calendar_name, time_zone: time_zone) }
+        let(:new_calendar) { Google::Apis::CalendarV3::Calendar.new(summary: calendar_name, time_zone: "America/New_York") }
         let(:insertion_response) { calendar }
 
         before(:each) do
-          allow(service).to receive(:new_calendar).with(calendar_name).and_return(new_calendar)
+          allow(service).to receive(:new_calendar).and_return(new_calendar)
           allow(client).to receive(:insert_calendar).with(new_calendar).and_return(insertion_response)
           allow(service).to receive(:client).and_return(client)
         end
 
         it "creates a calendar with the given name" do
-          expect(calendar_names.include?(calendar_name)).to be false
-          result = service.find_or_create_calendar_by_name(calendar_name)
-          expect(result).to be_kind_of(Google::Apis::CalendarV3::Calendar)
-          expect(result.id).to be_kind_of(String)
-          expect(result.etag).to be_kind_of(String)
-          expect(result.kind).to eql("calendar#calendar")
-          expect(result.summary).to eql(calendar_name)
-          expect(result.time_zone).to eql("America/New_York")
+          expect(calendar_names).to_not include(calendar_name)
+          expect(cal).to be_kind_of(Google::Apis::CalendarV3::Calendar)
+          expect(cal.id).to be_kind_of(String)
+          expect(cal.etag).to be_kind_of(String)
+          expect(cal.kind).to eql("calendar#calendar")
+          expect(cal.summary).to eql(calendar_name)
+          expect(cal.time_zone).to eql("America/New_York")
         end
       end
     end
@@ -110,14 +107,16 @@ module MyBanner
       end
     end
 
-        describe "#list_calendars" do
+    describe "#list_calendars" do
+      let(:results) { service.send(:list_calendars) }
+
       before(:each) do
         allow(service).to receive(:client).and_return(client)
       end
 
       it "issues an api request" do
         expect(service.client).to receive(:list_calendar_lists)
-        service.list_calendars
+        results
       end
 
       context "when successful" do
@@ -126,26 +125,26 @@ module MyBanner
         end
 
         it "returns a calendar list" do
-          expect(service.list_calendars.class).to eql(Google::Apis::CalendarV3::CalendarList)
-          expect(service.list_calendars.items.any?).to be true
-          expect(service.list_calendars.items.first.class).to eql(Google::Apis::CalendarV3::CalendarListEntry)
+          expect(results.class).to eql(Google::Apis::CalendarV3::CalendarList)
+          expect(results.items.any?).to be true
+          expect(results.items.first.class).to eql(Google::Apis::CalendarV3::CalendarListEntry)
         end
       end
     end
 
-    describe "#new_calendar" do
-      let(:calendar_name) { "CSC 111-03" }
-      let(:new_calendar) { service.new_calendar(calendar_name) }
-
-      it "initializes a new calendar to be created" do
-        expect(new_calendar).to be_kind_of(Google::Apis::CalendarV3::Calendar)
-        expect(new_calendar.id).to be nil
-        expect(new_calendar.etag).to be nil
-        expect(new_calendar.kind).to be nil
-        expect(new_calendar.summary).to eql(calendar_name)
-        expect(new_calendar.time_zone).to eql("America/New_York")
-      end
-    end
+    #describe "#new_calendar" do
+    #  let(:calendar_name) { "CSC 111-03" }
+    #  let(:new_calendar) { service.send(:new_calendar) }
+#
+    #  it "initializes a new calendar to be created" do
+    #    expect(new_calendar).to be_kind_of(Google::Apis::CalendarV3::Calendar)
+    #    expect(new_calendar.id).to be nil
+    #    expect(new_calendar.etag).to be nil
+    #    expect(new_calendar.kind).to be nil
+    #    expect(new_calendar.summary).to eql(calendar_name)
+    #    expect(new_calendar.time_zone).to eql("America/New_York")
+    #  end
+    #end
 
   end
 end
