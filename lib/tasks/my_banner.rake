@@ -7,23 +7,30 @@ require_relative "../my_banner"
 
     sections = MyBanner::Page.new.scheduled_sections
     puts "-----------------------"
-    puts "FETCHING CALENDARS FOR #{sections.count} SECTIONS..."
+    puts "SECTIONS: #{sections.count}"
     puts "-----------------------"
 
     sections.each do |section|
+      puts "SECTION: #{section.abbreviation} / #{section.title}"
+
       service = MyBanner::ScheduleService.new(section)
       calendar = service.calendar
+      puts "CALENDAR: #{calendar.summary} / #{calendar.id}"
+
       events = service.events
-      puts "---"
-      puts "ID: '#{calendar.id}'"
-      puts "NAME: '#{calendar.summary}'"
       puts "EVENTS: #{events.count}"
       events.each do |event|
         start_at = event.start.date || event.start.date_time #> Google::Apis::CalendarV3::EventDateTime
         end_at = event.end.date || event.end.date_time #> Google::Apis::CalendarV3::EventDateTime
-        puts "  + '#{event.summary}' [#{start_at.to_s} ... #{end_at.to_s}]"
+        puts "  + #{event.summary} [#{start_at.to_s} ... #{end_at.to_s}]"
       end
-      puts "---"
+
+      meetings = section.meetings
+      puts "MEETINGS: #{meetings.count}"
+      meetings.each do |meeting|
+        puts "  + #{meeting[:start_at].to_date.to_s} [#{meeting[:start_at].strftime("%H:%M")} ... #{meeting[:end_at].strftime("%H:%M")}]"
+      end
+      puts "-----------------------"
     end
   end
 
