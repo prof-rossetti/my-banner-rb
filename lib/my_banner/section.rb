@@ -2,7 +2,7 @@ module MyBanner
   class Section
 
     attr_accessor :metadata, :abbreviation, :title, :instructor, :location,
-      :weekdays, :term_start, :term_end, :start_time, :end_time
+      :time_zone, :weekdays, :term_start, :term_end, :start_time, :end_time
 
     def initialize(metadata={})
       @metadata = metadata
@@ -12,6 +12,7 @@ module MyBanner
       @instructor = schedule_info[:instructors].first
       @weekdays = schedule_info[:days].each_char.to_a
       @location = schedule_info[:where]
+      @time_zone = "America/New_York" #todo: lookup or customize
       term_info = schedule_info[:date_range] #todo: validate string splits into two-member array
       @term_start = Date.parse(term_info.split(" - ").first)
       @term_end = Date.parse(term_info.split(" - ").last)
@@ -35,10 +36,6 @@ module MyBanner
 
     def meeting_dates
       term_date_range.select{ |date| weekday_numbers.include?(date.wday) }
-    end
-
-    def term_date_range
-      term_start..term_end
     end
 
     def term_date_range
