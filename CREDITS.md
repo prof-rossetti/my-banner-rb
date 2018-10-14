@@ -3,6 +3,7 @@
 ## Ruby
 
   + https://apidock.com/rails/String/to_datetime
+  + https://stackoverflow.com/a/5905875/670433
 
 ## Rubygems
 

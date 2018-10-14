@@ -8,15 +8,17 @@ module MyBanner
       end
     end
 
-    describe "#start_date" do
+    describe "#term_start" do
       it "is the date before which there are no classes scheduled" do
-        expect(section.start_date).to eql("Oct 29, 2018")
+        expect(section.term_start).to be_kind_of(Date)
+        expect(section.term_start.to_s).to eql("2018-10-29")
       end
     end
 
-    describe "#end_date" do
+    describe "#term_end" do
       it "is the date after which there are no classes scheduled" do
-        expect(section.end_date).to eql("Dec 18, 2018")
+        expect(section.term_end).to be_kind_of(Date)
+        expect(section.term_end.to_s).to eql("2018-12-18")
       end
     end
 
@@ -44,11 +46,24 @@ module MyBanner
       end
     end
 
+    describe "#instructor" do
+      it "refers to the primary instructor" do
+        expect(section.instructor).to eql("Polly Professor")
+      end
+    end
+
     #describe "#meetings" do
-    #  it "enumerates meetings between term start and end" do
-    #    expect(section.meetings.count).to eql(12)
+    #  it "enumerates meeting datetimes between term start and end" do
+    #    expect(section.meetings.count).to eql(15)
     #  end
     #end
+
+    describe "#meeting_dates" do
+      it "enumerates meeting dates between term start and end" do
+        expect(section.meeting_dates.count).to eql(15)
+        expect(section.meeting_dates.map(&:class).uniq).to eql([Date])
+      end
+    end
 
   end
 end

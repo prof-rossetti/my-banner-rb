@@ -1,53 +1,50 @@
 module MyBanner
   class Section
 
-    attr_accessor :metadata
+    attr_accessor :metadata, :abbreviation, :title, :instructor, :location,
+      :weekdays, :term_start, :term_end, :start_time, :end_time
 
     def initialize(metadata={})
       @metadata = metadata
+      @abbreviation = "#{metadata[:course]}-#{metadata[:section]}"
+      @title = metadata[:title]
+      schedule_info = metadata[:scheduled_meeting_times]
+      @instructor = schedule_info[:instructors].first
+      @weekdays = schedule_info[:days].each_char.to_a
+      @location = schedule_info[:where]
+      term_info = schedule_info[:date_range] #todo: validate string splits into two-member array
+      @term_start = Date.parse(term_info.split(" - ").first)
+      @term_end = Date.parse(term_info.split(" - ").last)
+      time_info = schedule_info[:time] #todo: validate string splits into two-member array
+      @start_time = time_info.split(" - ").first
+      @end_time = time_info.split(" - ").last
     end
 
     def calendar_name
-      abbreviation # "GU #{abbreviation}"
+      abbreviation
     end
 
-    def abbreviation
-      "#{metadata[:course]}-#{metadata[:section]}"
+    #def meetings
+    #  meeting_dates #
+    #end
+
+    def meeting_dates
+      term_date_range.select{|date| weekday_numbers.include?(date.wday) }
     end
 
-    def start_date
-      meeting_dates_range.first
+    def term_date_range
+      term_start..term_end
     end
 
-    def end_date
-      meeting_dates_range.last
+    def term_date_range
+      term_start..term_end
     end
 
-    def weekdays
-      metadata[:scheduled_meeting_times][:days].each_char.to_a
+    def weekday_numbers
+      weekdays.map{|char| WEEKDAYS_MAP[char.to_sym] }
     end
 
-    def start_time
-      meeting_time_range.first
-    end
-
-    def end_time
-      meeting_time_range.last
-    end
-
-    def location
-      metadata[:scheduled_meeting_times][:where]
-    end
-
-    private
-
-    def meeting_dates_range
-      metadata[:scheduled_meeting_times][:date_range].split(" - ")
-    end
-
-    def meeting_time_range
-      metadata[:scheduled_meeting_times][:time].split(" - ")
-    end
+    WEEKDAYS_MAP = { M: 1, T: 2, W: 3, R: 4, F: 5, S: 6, N: 0 } # S and N not yet verified
 
   end
 end
