@@ -18,10 +18,7 @@ module MyBanner
       #end
 
       section.meetings.map do |meeting|
-        #find_event(meeting) || create_event(meeting)
-        #binding.pry
-        event = create_event(meeting)
-        pp event
+        create_event(meeting) # update_event(meeting) || create_event(meeting)
       end
     end
 
@@ -39,6 +36,12 @@ module MyBanner
 
     private
 
+    #def clear_calendar # warning: this can be destructive. for use primarily during development.
+    #  events.each do |event|
+    #    event.delete
+    #  end
+    #end
+
     def list_events
       client.list_events(calendar.id, {
         max_results: 10,
@@ -48,6 +51,22 @@ module MyBanner
       } )
     end
 
+    #def update_event(meeting)
+    #  event = find_event(meeting)
+    #  if event
+    #    edit_attrs = event_attributes(meeting)
+    #    # consider metaprogramming these
+    #    # don't update start and end times, because those comprise a composite key used for uniquely identifying the meeting's event
+    #    event.summary = edit_attrs[:summary]
+    #    event.location = edit_attrs[:location]
+    #    event.description = edit_attrs[:description]
+#
+    #    result = client.update_event('primary', event.id, event)
+    #    puts result.updated
+    #    binding.pry
+    #  end
+    #end
+
     def find_event(meeting)
       events.find do |e|
         (e.start.date_time == meeting[:start_at].to_s && e.end.date_time == meeting[:end_at].to_s) ||
@@ -56,12 +75,11 @@ module MyBanner
     end
 
     def create_event(meeting)
-      binding.pry
       client.insert_event(calendar.id, new_event(meeting))
     end
 
     def new_event(meeting)
-      Google::Apis::CalendarV3::Calendar.new(event_attributes(meeting))
+      Google::Apis::CalendarV3::Event.new(event_attributes(meeting))
     end
 
     # @see https://developers.google.com/calendar/v3/reference/events/insert
@@ -70,12 +88,13 @@ module MyBanner
     # @param meeting [Hash] end_at [DateTime]
     def event_attributes(meeting)
       {
-        title: "Unit 1A", # todo: variable / units counter
+        summary: "Unit 1A", # todo: variable / units counter
         location: section.location,
         start: { date_time: meeting[:start_at].to_s, time_zone: time_zone },
-        "end": { date_time: meeting[:end_at].to_s, time_zone: time_zone },
-        notes: "Agenda: https://.../units/1 \n \n Objectives: \n 1: ....  \n 2: ....  \n 3: ....", # todo
-        #attendees: ["hello@gmail.com", "prof@my-school.edu", "student@my-school.edu"]
+        end: { date_time: meeting[:end_at].to_s, time_zone: time_zone },
+        description: "Agenda: https://.../units/1 \n \n Objectives: \n 1: ....  \n 2: ....  \n 3: ....", # todo
+        #attendees: ["hello@gmail.com", "prof@my-school.edu", "student@my-school.edu"],
+        # source: {title: "External link", url: "https://.../units/1"}
       } # example '2015-05-28T09:00:00-07:00' ... '2015-05-28T17:00:00-07:00'
     end
 
