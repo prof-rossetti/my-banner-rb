@@ -18,7 +18,7 @@ module MyBanner
     end
 
     def events
-      @events ||= list_events.items # .map { |item| GoogleCalendarEvent.new(item) }
+      @events ||= list_events.items # .map { |item| Event.new(item) }
     end
 
     def calendar
@@ -26,7 +26,7 @@ module MyBanner
     end
 
     def calendars
-      @calendars ||= list_calendars.items.sort_by { |cal| cal.summary }
+      @calendars ||= list_calendars.items.sort_by { |cal| cal.summary } # .map { |item| Calendar.new(item) }
     end
 
     private
