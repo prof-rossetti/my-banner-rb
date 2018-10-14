@@ -1,6 +1,5 @@
 module MyBanner
   RSpec.describe ScheduleService do
-    include_context "google calendar events"
 
     let(:section) { create(:section) }
     let(:calendar_list) {
@@ -20,6 +19,8 @@ module MyBanner
         } )
       ] )
     }
+    let(:events) { [ create(:event), create(:all_day_event) ] }
+    let(:event_list) { Google::Apis::CalendarV3::Events.new(items: events) }
     let(:client) { instance_double(Google::Apis::CalendarV3::CalendarService, list_calendar_lists: nil, insert_calendar: nil, list_events: nil) }
     let(:service) { described_class.new(section) }
 
@@ -36,12 +37,12 @@ module MyBanner
     describe "#events" do
       before(:each) do
         allow(service).to receive(:calendar).and_return(calendar)
-        allow(client).to receive(:list_events).and_return(events_response)
+        allow(client).to receive(:list_events).and_return(event_list)
       end
 
       it "returns a list of google calendar events" do
         expect(service.events.map(&:class).uniq).to eql( [Google::Apis::CalendarV3::Event] )
-        expect(service.events.map(&:summary)).to match_array(["My Day-long Event", "My Lunch Event"])
+        expect(service.events.map(&:summary)).to match_array(["My All-day Event", "My Lunch Event"])
       end
     end
 
@@ -101,16 +102,16 @@ module MyBanner
     describe "#list_events" do
       before(:each) do
         allow(service).to receive(:calendar).and_return(calendar)
-        allow(client).to receive(:list_events).and_return(events_response)
+        allow(client).to receive(:list_events).and_return(event_list)
       end
 
       it "issues a request" do
-        expect(client).to receive(:list_events).and_return(events_response)
+        expect(client).to receive(:list_events).and_return(event_list)
         service.send(:list_events)
       end
 
       it "returns a response" do
-        expect(service.send(:list_events)).to eql(events_response)
+        expect(service.send(:list_events)).to eql(event_list)
         expect(service.send(:list_events)).to be_kind_of(Google::Apis::CalendarV3::Events)
       end
     end

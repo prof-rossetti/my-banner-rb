@@ -1,5 +1,6 @@
 
 require "active_support/core_ext/object/try"
+require "active_support/core_ext/string/conversions"
 require "pry"
 
 require "my_banner/version"

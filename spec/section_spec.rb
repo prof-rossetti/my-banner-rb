@@ -44,5 +44,11 @@ module MyBanner
       end
     end
 
+    #describe "#meetings" do
+    #  it "enumerates meetings between term start and end" do
+    #    expect(section.meetings.count).to eql(12)
+    #  end
+    #end
+
   end
 end

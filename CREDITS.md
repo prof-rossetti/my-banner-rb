@@ -40,6 +40,7 @@
   + https://github.com/bblimke/webmock/wiki/Enabling-and-Disabling-WebMock
   + https://docs.travis-ci.com/user/environment-variables/#default-environment-variables
   + https://relishapp.com/rspec/rspec-core/v/2-4/docs/command-line/tag-option
+  + [factory attributes for reserved words](https://github.com/thoughtbot/factory_bot/blob/master/GETTING_STARTED.md#method-name--reserved-word-attributes)
 
 ### Code Climate
   + https://docs.codeclimate.com/docs/approve-code-climate-as-a-third-party-application-in-github-1
