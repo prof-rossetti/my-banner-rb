@@ -34,7 +34,7 @@ From the [Google Calendar API's quickstart guide](https://developers.google.com/
 3. Finally, execute the scheduling program:
 
 ```rb
-rake schedule
+bin/rake schedule_service
 ```
 
 ## [Contributing](/CONTRIBUTING.md)

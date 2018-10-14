@@ -1,9 +1,13 @@
 # Credits, Notes, and Reference
 
-## Ruby and Rubygems
+## Ruby
+
+  + https://apidock.com/rails/String/to_datetime
+
+## Rubygems
 
   + http://data-creative.info/reference-docs/2015/07/03/how-to-make-a-ruby-gem/
-  + https://apidock.com/rails/String/to_datetime
+  + https://guides.rubygems.org/make-your-own-gem/#adding-an-executable
 
 ### Rake Tasks
 
@@ -42,4 +46,3 @@
   + https://docs.codeclimate.com/docs/finding-your-test-coverage-token#section-regenerating-a-repos-test-reporter-id
   + https://docs.codeclimate.com/docs/configuring-test-coverage
   + https://docs.codeclimate.com/docs/travis-ci-test-coverage
-
