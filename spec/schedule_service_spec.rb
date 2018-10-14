@@ -1,48 +1,28 @@
 module MyBanner
-  RSpec.describe Scheduler do
+  RSpec.describe ScheduleService do
     include_context "sections"
     include_context "google calendar lists"
     include_context "google calendar events"
 
+    let(:client) { instance_double(Google::Apis::CalendarV3::CalendarService, list_calendar_lists: nil, insert_calendar: nil, list_events: nil) }
     let(:service) { described_class.new(section) }
-
-    let(:client) { instance_double(Google::Apis::CalendarV3::CalendarService,
-      list_calendar_lists: nil,
-      insert_calendar: nil,
-      list_events: nil
-    ) }
 
     before(:each) do
       allow(service).to receive(:client).and_return(client) # mock the client, because it makes an auth request
     end
 
-    let(:calendar) { Google::Apis::CalendarV3::Calendar.new(
-      summary: section.calendar_name,
-      time_zone: "America/New_York",
-      etag: "\"...\"",
-      id: "myclass1@group.calendar.google.com",
-      kind: "calendar#calendar"
-    ) }
+    let(:calendar) {
+      Google::Apis::CalendarV3::Calendar.new(
+        summary: section.calendar_name,
+        time_zone: "America/New_York",
+        etag: "\"...\"",
+        id: "myclass1@group.calendar.google.com",
+        kind: "calendar#calendar"
+      )
+    }
 
-    #describe "#execute" do
-    #  before(:each) do
-    #    allow(client).to receive(:insert_calendar).and_return(calendar)
-    #    allow(client).to receive(:list_events).and_return([]) # calendar_events
-    #    allow(service).to receive(:client).and_return(client)
-    #    allow(service).to receive(:calendars).and_return([])
-    #    allow(service).to receive(:fetch_upcoming_events).with(calendar.id).and_return(calendar_events)
-    #  end
-#
-    #  it "finds or creates a calendar" do
-    #    expect(service).to receive(:find_or_create_calendar_by_name).and_return(calendar)
-    #    service.execute
-    #  end
-#
-    #  it "finds or creates calendar events" do
-    #    expect(service).to receive(:fetch_upcoming_events).with(calendar.id).and_return(calendar_events)
-    #    service.execute
-    #  end
-    #end
+    # describe "#execute" do
+    # end
 
     describe "#events" do
       before(:each) do

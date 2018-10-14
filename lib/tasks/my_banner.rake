@@ -8,7 +8,7 @@ require_relative "../my_banner"
     puts "SCHEDULED SECTIONS (#{sections.count}):"
     sections.each do |section|
       puts " + #{section.abbreviation}"
-      service = MyBanner::Scheduler.new(section)
+      service = MyBanner::ScheduleService.new(section)
       calendar = service.find_or_create_calendar_by_name(section.calendar_name)
       puts "   ... CALENDAR: #{calendar.id} (#{calendar.summary})"
 

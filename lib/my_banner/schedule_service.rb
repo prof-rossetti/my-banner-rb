@@ -1,11 +1,11 @@
 module MyBanner
-  class Scheduler
+  class ScheduleService
 
     attr_accessor :section, :client
 
     def initialize(section)
       @section = section
-      @client ||= GoogleCalendarAPI.new.client
+      @client = GoogleCalendarAPI.new.client
     end
 
     def execute
