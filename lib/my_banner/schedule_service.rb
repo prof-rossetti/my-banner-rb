@@ -1,10 +1,11 @@
 module MyBanner
   class ScheduleService
 
-    attr_accessor :section, :client
+    attr_accessor :section, :calendar_name, :client
 
     def initialize(section)
       @section = section
+      @calendar_name = section.try(:calendar_name)
       @client = GoogleCalendarAPI.new.client
     end
 
@@ -17,11 +18,21 @@ module MyBanner
     end
 
     def events
-      @events ||= events_response.items # .map { |item| GoogleCalendarEvent.new(item) }
+      @events ||= list_events.items # .map { |item| GoogleCalendarEvent.new(item) }
     end
 
-    def events_response
-      @events_response ||= client.list_events(calendar.id, {
+    def calendar
+      @calendar ||= (find_calendar || create_calendar)
+    end
+
+    def calendars
+      @calendars ||= list_calendars.items.sort_by { |cal| cal.summary }
+    end
+
+    private
+
+    def list_events
+      client.list_events(calendar.id, {
         max_results: 10,
         single_events: true,
         order_by: "startTime",
@@ -29,33 +40,25 @@ module MyBanner
       } )
     end
 
-    def calendar
-      @calendar ||= find_or_create_calendar_by_name(section.calendar_name)
+    def list_calendars
+      client.list_calendar_lists
     end
 
-    def find_or_create_calendar_by_name(calendar_name)
-      find_calendar_by_name(calendar_name) || create_calendar_by_name(calendar_name)
-    end
-
-    def find_calendar_by_name(calendar_name)
+    def find_calendar
       calendars.find{ |cal| cal.summary == calendar_name }
     end
 
-    def calendars
-      @calendars ||= calendars_response.items.sort_by { |cal| cal.summary }
+    def create_calendar
+      client.insert_calendar(new_calendar)
     end
 
-    def calendars_response
-      @calendars_response ||= client.list_calendar_lists
+    def new_calendar
+      Google::Apis::CalendarV3::Calendar.new(calendar_attributes)
     end
 
-    def create_calendar_by_name(calendar_name)
-      client.insert_calendar(new_calendar(calendar_name))
-    end
-
-    def new_calendar(calendar_name)
-      cal_attrs = {summary: calendar_name, time_zone: "America/New_York"} # see: https://developers.google.com/calendar/v3/reference/calendars/insert
-      Google::Apis::CalendarV3::Calendar.new(cal_attrs)
+    # @see https://developers.google.com/calendar/v3/reference/calendars/insert
+    def calendar_attributes
+      {summary: calendar_name, time_zone: "America/New_York"}
     end
 
   end
