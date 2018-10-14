@@ -1,8 +1,8 @@
 module MyBanner
   RSpec.describe ScheduleService do
-    include_context "sections"
     include_context "google calendar events"
 
+    let(:section) { create(:section) }
     let(:calendar_list) {
       Google::Apis::CalendarV3::CalendarList.new(items: [
         Google::Apis::CalendarV3::CalendarListEntry.new( {

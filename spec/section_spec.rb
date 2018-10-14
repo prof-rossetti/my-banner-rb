@@ -1,8 +1,6 @@
 module MyBanner
   RSpec.describe Section do
-    include_context "sections"
-
-    let(:section) { described_class.new(section_metadata) }
+    let(:section) { create(:section) }
 
     describe '#abbreviation' do
       it "combines course abbreviation with section" do
@@ -48,4 +46,3 @@ module MyBanner
 
   end
 end
-
