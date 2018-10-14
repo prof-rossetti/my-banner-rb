@@ -18,7 +18,9 @@ module MyBanner
       #end
 
       section.meetings.map do |meeting|
-        create_event(meeting) # update_event(meeting) || create_event(meeting)
+        # event = find_event(meeting)
+        # event ? update_event(event, meeting) : create_event(meeting)
+        create_event(meeting)
       end
     end
 
@@ -34,17 +36,21 @@ module MyBanner
       @calendars ||= list_calendars.items.sort_by { |cal| cal.summary }
     end
 
+    def clear_calendar # warning: use with caution!
+      events.map do |event|
+        client.delete_event(calendar.id, event.id)
+      end
+    end
+
     private
 
-    #def clear_calendar # warning: this can be destructive. for use primarily during development.
-    #  events.each do |event|
-    #    event.delete
-    #  end
-    #end
+    #
+    # EVENT SERVICE
+    #
 
     def list_events
       client.list_events(calendar.id, {
-        max_results: 10,
+        max_results: 100,
         single_events: true,
         order_by: "startTime",
         time_min: Time.now.iso8601
@@ -67,12 +73,12 @@ module MyBanner
     #  end
     #end
 
-    def find_event(meeting)
-      events.find do |e|
-        (e.start.date_time == meeting[:start_at].to_s && e.end.date_time == meeting[:end_at].to_s) ||
-        (e.start.date == meeting[:start_at].to_s && e.end.date == meeting[:end_at].to_s)
-      end
-    end
+    #def find_event(meeting)
+    #  events.find do |e|
+    #    (e.start.date_time == meeting[:start_at].to_s && e.end.date_time == meeting[:end_at].to_s) ||
+    #    (e.start.date == meeting[:start_at].to_s && e.end.date == meeting[:end_at].to_s)
+    #  end
+    #end
 
     def create_event(meeting)
       client.insert_event(calendar.id, new_event(meeting))
@@ -97,6 +103,10 @@ module MyBanner
         # source: {title: "External link", url: "https://.../units/1"}
       } # example '2015-05-28T09:00:00-07:00' ... '2015-05-28T17:00:00-07:00'
     end
+
+    #
+    # CALENDAR SERVICE
+    #
 
     def list_calendars
       client.list_calendar_lists
