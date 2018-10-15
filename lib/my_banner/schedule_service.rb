@@ -59,6 +59,7 @@ module MyBanner
 
     def find_event(meeting)
       events.find do |e|
+        #binding.pry
         (e.start.date_time == meeting[:start_at].to_s && e.end.date_time == meeting[:end_at].to_s) ||
         (e.start.date == meeting[:start_at].to_s && e.end.date == meeting[:end_at].to_s)
       end
@@ -73,24 +74,21 @@ module MyBanner
     end
 
     def event_attributes(meeting)
-      puts meeting[:start_at].to_s
-      puts meeting[:end_at].to_s
-      #binding.pry
       {
         summary: calendar_name,
         location: location,
         start: {
-          date_time: meeting[:start_at].to_s,
+          date_time: meeting[:start_at].strftime("%Y-%m-%-dT%H:%M:%S"), # excludes offset, regardless of tz presence, to avoid maladjustment
           time_zone: time_zone
         },
         end: {
-          date_time: meeting[:end_at].to_s,
+          date_time: meeting[:end_at].strftime("%Y-%m-%-dT%H:%M:%S"), # excludes offset, regardless of tz presence, to avoid maladjustment
           time_zone: time_zone
         },
         # description: "Agenda: https://.../units/1 \n \n Objectives: \n 1: ....  \n 2: ....  \n 3: ....", # todo
         # attendees: ["hello@gmail.com", "prof@my-school.edu", "student@my-school.edu"],
         # source: {title: "External link", url: "https://.../units/1"}
-      } # example  ... '2015-05-28T17:00:00-07:00'
+      }
     end
 
     #

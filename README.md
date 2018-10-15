@@ -34,7 +34,7 @@ From the [Google Calendar API's quickstart guide](https://developers.google.com/
 3. Finally, execute the scheduling program:
 
 ```rb
-bundle exec rake schedule_service
+bundle exec rake schedule_events
 ```
 
 ## [Contributing](/CONTRIBUTING.md)
