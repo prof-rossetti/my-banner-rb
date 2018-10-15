@@ -32,7 +32,8 @@ require_relative "../my_banner"
       #  #binding.pry
       #end
 
-      service.execute
+      service.clear_calendar
+      #service.execute
 
       puts "-----------------------"
     end

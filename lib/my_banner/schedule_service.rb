@@ -25,7 +25,7 @@ module MyBanner
     end
 
     def events
-      @events ||= list_events.items #.sort_by { |e| e.start.date.to_i || e.start.date_time.to_i }
+      @events ||= list_events.items #.select{ |e| e.status != "cancelled" } #.sort_by { |e| e.start.date.to_i || e.start.date_time.to_i }
     end
 
     def calendar
@@ -53,7 +53,8 @@ module MyBanner
         max_results: 100,
         single_events: true,
         order_by: "startTime",
-        time_min: Time.now.iso8601
+        time_min: Time.now.iso8601,
+        show_deleted: false
       } )
     end
 
