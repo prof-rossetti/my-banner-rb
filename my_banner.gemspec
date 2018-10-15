@@ -30,7 +30,6 @@ Gem::Specification.new do |spec|
   spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
 
-  #spec.add_dependency "activemodel", '~> 5.2'
   spec.add_dependency "activesupport", '~> 5.2'
   spec.add_dependency "google-api-client", '~> 0.8'
   spec.add_dependency "pry"

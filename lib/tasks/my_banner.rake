@@ -38,4 +38,13 @@ require_relative "../my_banner"
     end
   end
 
+  # @example bundle exec rake clear_calendars
+  task :clear_calendars do
+    sections = MyBanner::Page.new.scheduled_sections
+    sections.each do |section|
+      service = MyBanner::ScheduleService.new(section)
+      service.clear_calendar
+    end
+  end
+
 #end

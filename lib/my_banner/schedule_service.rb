@@ -1,15 +1,13 @@
 module MyBanner
   class ScheduleService
-    #include ActiveModel::Validations
 
-    #validate :validate_section
-
-    attr_accessor :section, :calendar_name, :time_zone, :meetings, :client
+    attr_accessor :section, :calendar_name, :time_zone, :location, :meetings, :client
 
     def initialize(section)
       @section = section
       @calendar_name = section.calendar_name
       @time_zone = section.time_zone
+      @location = section.location
       @meetings = section.meetings # todo: exclude "Holidays in the United States"
       @client = GoogleCalendarAPI.new.client
     end
@@ -17,16 +15,12 @@ module MyBanner
     def execute
       meetings.map do |meeting|
         event = find_event(meeting)
-        if event
-          update_event(event, meeting)
-        else
-          create_event(meeting)
-        end
+        event ? update_event(event, meeting) : create_event(meeting)
       end
     end
 
     def events
-      @events ||= list_events.items #.select{ |e| e.status != "cancelled" } #.sort_by { |e| e.start.date.to_i || e.start.date_time.to_i }
+      @events ||= list_events.items
     end
 
     def calendar
@@ -45,10 +39,6 @@ module MyBanner
 
     private
 
-    #def validate_section
-    #  errors.add(:section, "should be a Section") unless section && section.kind_of?(Section)
-    #end
-
     #
     # EVENT SERVICE
     #
@@ -64,18 +54,7 @@ module MyBanner
     end
 
     def update_event(event, meeting)
-        #edit_attrs = event_attributes(meeting)
-        #event.summary = edit_attrs[:summary]
-        #event.location = edit_attrs[:location]
-        #event.description = edit_attrs[:description]
-        ## don't update start and end times, because those comprise a composite key used for uniquely identifying the meeting's event
-        ## consider metaprogramming these ...
-        ##edit_attrs.keys.reject_if?{ |k| [:start, :end].includes?(k) }.each do |k|
-        ##  event.send(k) = edit_attrs[k]
-        ##end
-        #result = client.update_event(calendar.id, event.id, event)
-
-        client.update_event(calendar.id, event.id, new_event(meeting))
+      client.update_event(calendar.id, event.id, new_event(meeting))
     end
 
     def find_event(meeting)
@@ -93,20 +72,25 @@ module MyBanner
       Google::Apis::CalendarV3::Event.new(event_attributes(meeting))
     end
 
-    # @see https://developers.google.com/calendar/v3/reference/events/insert
-    # @param meeting [Hash]
-    # @param meeting [Hash] start_at [DateTime]
-    # @param meeting [Hash] end_at [DateTime]
     def event_attributes(meeting)
+      puts meeting[:start_at].to_s
+      puts meeting[:end_at].to_s
+      #binding.pry
       {
-        summary: "Unit 1A", # todo: variable / units counter
-        location: section.location,
-        start: { date_time: meeting[:start_at].to_s, time_zone: time_zone },
-        end: { date_time: meeting[:end_at].to_s, time_zone: time_zone },
-        description: "Agenda: https://.../units/1 \n \n Objectives: \n 1: ....  \n 2: ....  \n 3: ....", # todo
-        #attendees: ["hello@gmail.com", "prof@my-school.edu", "student@my-school.edu"],
-        source: {title: "External link", url: "https://.../units/1"}
-      } # example '2015-05-28T09:00:00-07:00' ... '2015-05-28T17:00:00-07:00'
+        summary: calendar_name,
+        location: location,
+        start: {
+          date_time: meeting[:start_at].to_s,
+          time_zone: time_zone
+        },
+        end: {
+          date_time: meeting[:end_at].to_s,
+          time_zone: time_zone
+        },
+        # description: "Agenda: https://.../units/1 \n \n Objectives: \n 1: ....  \n 2: ....  \n 3: ....", # todo
+        # attendees: ["hello@gmail.com", "prof@my-school.edu", "student@my-school.edu"],
+        # source: {title: "External link", url: "https://.../units/1"}
+      } # example  ... '2015-05-28T17:00:00-07:00'
     end
 
     #
@@ -129,9 +113,8 @@ module MyBanner
       Google::Apis::CalendarV3::Calendar.new(calendar_attributes)
     end
 
-    # @see https://developers.google.com/calendar/v3/reference/calendars/insert
     def calendar_attributes
-      {summary: calendar_name, time_zone: "America/New_York"}
+      {summary: calendar_name, time_zone: time_zone}
     end
 
   end

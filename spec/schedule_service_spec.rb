@@ -31,8 +31,38 @@ module MyBanner
     let(:calendar_name) { service.calendar_name }
     let(:calendar) { create(:calendar, summary: calendar_name) }
 
-    # describe "#execute" do
-    # end
+    #describe "#execute" do
+    #  it "iterates through all meetings" do
+    #    expect(service).to receive(:meetings).and_return(section.meetings)
+    #    service.execute
+    #  end
+#
+    #  describe "for each meeting" do
+    #    let(:meeting) { service.meetings.first }
+#
+    #    #let(:event) { }
+    #    it "checks for an existing event" do
+    #      expect(service).to receive(:find_event).with(meeting) #.and_return(section.meetings)
+    #      service.execute
+    #    end
+#
+    #    context "event exists" do
+    #      let(:revised_event) { create(:event, start: event.start, end: event.end, summary: "OOPS") }
+#
+    #      it "overwrites the event with expected/original attributes" do
+    #        expect(service).to receive(:update_event).with(revised_event, meeting) #.and_return(event)
+    #        service.execute
+    #      end
+    #    end
+#
+    #    context "event doesn't exist" do
+    #      it "creates a new event" do
+    #        expect(service).to receive(:create_event).with(meeting) #.and_return(new_event)
+    #        service.execute
+    #      end
+    #    end
+    #  end
+    #end
 
     describe "#events" do
       before(:each) do

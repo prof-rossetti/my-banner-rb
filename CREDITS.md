@@ -38,6 +38,7 @@
   + https://developers.google.com/calendar/v3/reference/events/update
   + https://developers.google.com/calendar/v3/reference/events/delete
   + So many events. They don't get deleted, they go into "cancelled" [status](https://developers.google.com/calendar/v3/reference/events#status)
+  + https://developers.google.com/calendar/v3/reference/events/list
 
 ## Testing and Quality Control
 
