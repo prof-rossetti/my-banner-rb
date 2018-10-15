@@ -5,6 +5,7 @@
   + https://apidock.com/rails/String/to_datetime
   + https://stackoverflow.com/a/5905875/670433
   + https://apidock.com/ruby/DateTime/strftime
+  + [active model validation requirements too great?](https://stackoverflow.com/questions/37619583/how-to-load-only-activemodel-validations)
 
 ## Rubygems
 

@@ -1,26 +1,27 @@
 module MyBanner
   class ScheduleService
+    #include ActiveModel::Validations
 
-    attr_accessor :section, :calendar_name, :time_zone, :client
+    #validate :validate_section
+
+    attr_accessor :section, :calendar_name, :time_zone, :meetings, :client
 
     def initialize(section)
       @section = section
-      @calendar_name = section.try(:calendar_name)
-      @time_zone = section.try(:time_zone)
+      @calendar_name = section.calendar_name
+      @time_zone = section.time_zone
+      @meetings = section.meetings # todo: exclude "Holidays in the United States"
       @client = GoogleCalendarAPI.new.client
     end
 
     def execute
-      #events.each do |event|
-      #  start_at = event.start.date || event.start.date_time
-      #  end_at = event.end.date || event.end.date_time
-      #  puts " + #{event.summary} [#{start_at.to_s} ... #{end_at.to_s}]"
-      #end
-
-      section.meetings.map do |meeting|
-        # event = find_event(meeting)
-        # event ? update_event(event, meeting) : create_event(meeting)
-        create_event(meeting)
+      meetings.map do |meeting|
+        event = find_event(meeting)
+        if event
+          update_event(event, meeting)
+        else
+          create_event(meeting)
+        end
       end
     end
 
@@ -44,6 +45,10 @@ module MyBanner
 
     private
 
+    #def validate_section
+    #  errors.add(:section, "should be a Section") unless section && section.kind_of?(Section)
+    #end
+
     #
     # EVENT SERVICE
     #
@@ -58,28 +63,27 @@ module MyBanner
       } )
     end
 
-    #def update_event(meeting)
-    #  event = find_event(meeting)
-    #  if event
-    #    edit_attrs = event_attributes(meeting)
-    #    # consider metaprogramming these
-    #    # don't update start and end times, because those comprise a composite key used for uniquely identifying the meeting's event
-    #    event.summary = edit_attrs[:summary]
-    #    event.location = edit_attrs[:location]
-    #    event.description = edit_attrs[:description]
-#
-    #    result = client.update_event('primary', event.id, event)
-    #    puts result.updated
-    #    binding.pry
-    #  end
-    #end
+    def update_event(event, meeting)
+        #edit_attrs = event_attributes(meeting)
+        #event.summary = edit_attrs[:summary]
+        #event.location = edit_attrs[:location]
+        #event.description = edit_attrs[:description]
+        ## don't update start and end times, because those comprise a composite key used for uniquely identifying the meeting's event
+        ## consider metaprogramming these ...
+        ##edit_attrs.keys.reject_if?{ |k| [:start, :end].includes?(k) }.each do |k|
+        ##  event.send(k) = edit_attrs[k]
+        ##end
+        #result = client.update_event(calendar.id, event.id, event)
 
-    #def find_event(meeting)
-    #  events.find do |e|
-    #    (e.start.date_time == meeting[:start_at].to_s && e.end.date_time == meeting[:end_at].to_s) ||
-    #    (e.start.date == meeting[:start_at].to_s && e.end.date == meeting[:end_at].to_s)
-    #  end
-    #end
+        client.update_event(calendar.id, event.id, new_event(meeting))
+    end
+
+    def find_event(meeting)
+      events.find do |e|
+        (e.start.date_time == meeting[:start_at].to_s && e.end.date_time == meeting[:end_at].to_s) ||
+        (e.start.date == meeting[:start_at].to_s && e.end.date == meeting[:end_at].to_s)
+      end
+    end
 
     def create_event(meeting)
       client.insert_event(calendar.id, new_event(meeting))
@@ -101,7 +105,7 @@ module MyBanner
         end: { date_time: meeting[:end_at].to_s, time_zone: time_zone },
         description: "Agenda: https://.../units/1 \n \n Objectives: \n 1: ....  \n 2: ....  \n 3: ....", # todo
         #attendees: ["hello@gmail.com", "prof@my-school.edu", "student@my-school.edu"],
-        # source: {title: "External link", url: "https://.../units/1"}
+        source: {title: "External link", url: "https://.../units/1"}
       } # example '2015-05-28T09:00:00-07:00' ... '2015-05-28T17:00:00-07:00'
     end
 

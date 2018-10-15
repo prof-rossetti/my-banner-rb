@@ -29,11 +29,10 @@ require_relative "../my_banner"
       puts "MEETINGS: #{meetings.count}"
       #meetings.each do |meeting|
       #  puts "  + #{meeting[:start_at].to_date.to_s} [#{meeting[:start_at].strftime("%H:%M")} ... #{meeting[:end_at].strftime("%H:%M")}]"
-      #  #binding.pry
       #end
 
-      service.clear_calendar
-      #service.execute
+      #service.clear_calendar
+      service.execute
 
       puts "-----------------------"
     end
