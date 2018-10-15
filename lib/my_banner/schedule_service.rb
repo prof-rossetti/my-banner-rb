@@ -59,9 +59,14 @@ module MyBanner
 
     def find_event(meeting)
       events.find do |e|
-        #binding.pry
-        (e.start.date_time == meeting[:start_at].to_s && e.end.date_time == meeting[:end_at].to_s) ||
-        (e.start.date == meeting[:start_at].to_s && e.end.date == meeting[:end_at].to_s)
+        (
+          e.start.date_time.try(:strftime, "%Y-%m-%-dT%H:%M:%S") == meeting[:start_at].try(:strftime, "%Y-%m-%-dT%H:%M:%S") &&
+          e.end.date_time.try(:strftime, "%Y-%m-%-dT%H:%M:%S") == meeting[:end_at].try(:strftime, "%Y-%m-%-dT%H:%M:%S")
+        ) ||
+        (
+          e.start.date.try(:strftime, "%Y-%m-%-dT%H:%M:%S") == meeting[:start_at].try(:strftime, "%Y-%m-%-dT%H:%M:%S") &&
+          e.end.date.try(:strftime, "%Y-%m-%-dT%H:%M:%S") == meeting[:end_at].try(:strftime, "%Y-%m-%-dT%H:%M:%S")
+        )
       end
     end
 
