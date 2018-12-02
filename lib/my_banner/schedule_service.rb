@@ -37,7 +37,7 @@ module MyBanner
     end
 
     def client
-      @client = GoogleCalendarAPI.new.client
+      @client = GoogleCalendarAPI.new.client #TODO: GoogleCalendarClient.new
     end
 
     private

@@ -21,7 +21,11 @@ bin/setup
 
 ## Configuration
 
-From the [Google Calendar API's quickstart guide](https://developers.google.com/calendar/quickstart/ruby), click "Enable the Calendar API" and follow the instructions to create a new app and generate new credentials. Store the resulting **credentials.json** in the root directory of this repo. From a developer console (`bin/console`), for the first time only, invoke `MyBanner::GoogleCalendarAPI.new.client` to receive a redirect URL, follow the URL to log in with your Google Account, then copy and paste the code back into the development console and press "ENTER". This will generate a **token.yaml** file in the root directory of this repository and store an access token there. The access token will be used to authorize subsequent requests.
+From the [Google Calendar API's quickstart guide](https://developers.google.com/calendar/quickstart/ruby), click "Enable the Calendar API" and follow the instructions to create a new app and generate new credentials. Store the resulting **credentials.json** in the root directory of this repo.
+
+From a developer console (`bin/console`), for the first time only, invoke `MyBanner::GoogleCalendarAPI.new.client` to receive a redirect URL, follow the URL to log in with your Google Account, then copy and paste the code back into the development console and press "ENTER". This will generate a **token.yaml** file in the root directory of this repository and store an access token there. The access token will be used to authorize subsequent requests.
+
+Finally, move both the **credentials.json** and **token.yaml** files into the **google_auth** directory before proceeding.
 
 ## Usage
 
