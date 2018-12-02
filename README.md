@@ -29,12 +29,12 @@ From the [Google Calendar API's quickstart guide](https://developers.google.com/
 
 1. Login to https://myaccess.georgetown.edu/, then navigate to: **Home > Faculty Services > Faculty Detail Schedule** to access your schedule of classes. Note: you might need to select a term along the way.
 
-2. Once you have accessed your schedule, use your browser to save the HTML page in this repository as: **pages/faculty-detailed-schedule.html**.
+2. Once you have accessed your schedule, use your browser to save the HTML page in this repository as: **pages/faculty-detail-schedule.html**.
 
 3. Finally, execute the scheduling program:
 
 ```rb
-bundle exec rake schedule_events
+bundle exec rake create_calendars
 ```
 
 ## [Contributing](/CONTRIBUTING.md)

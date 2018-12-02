@@ -2,8 +2,8 @@ require_relative "../my_banner"
 
 # namespace :my_banner do
 
-  # @example bundle exec rake schedule_events
-  task :schedule_events do
+  # @example bundle exec rake create_calendars
+  task :create_calendars do
     sections = MyBanner::Page.new.scheduled_sections
     puts "-----------------------"
     puts "SECTIONS: #{sections.count}"
