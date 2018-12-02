@@ -1,7 +1,7 @@
 module MyBanner
   class ScheduleService
 
-    attr_accessor :section, :calendar_name, :time_zone, :location, :meetings, :client
+    attr_accessor :section, :calendar_name, :time_zone, :location, :meetings #, :client
 
     def initialize(section)
       @section = section
@@ -9,7 +9,6 @@ module MyBanner
       @time_zone = section.time_zone
       @location = section.location
       @meetings = section.meetings # todo: exclude "Holidays in the United States"
-      @client = GoogleCalendarAPI.new.client
     end
 
     def execute
@@ -35,6 +34,10 @@ module MyBanner
       events.map do |event|
         client.delete_event(calendar.id, event.id)
       end
+    end
+
+    def client
+      @client = GoogleCalendarAPI.new.client
     end
 
     private
