@@ -37,6 +37,8 @@ From the [Google Calendar API's quickstart guide](https://developers.google.com/
 bundle exec rake create_calendars
 ```
 
+> NOTE: this currently fetches and processes future events only, assuming the semester hasn't started yet, and safe-guarding against overwriting previous semester's calendars.
+
 ## [Contributing](/CONTRIBUTING.md)
 
 ## [License](/LICENSE.md)
