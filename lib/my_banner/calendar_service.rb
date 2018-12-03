@@ -1,5 +1,5 @@
 module MyBanner
-  class ScheduleService #TODO: GoogleCalendarService
+  class CalendarService
 
     attr_accessor :section, :calendar_name, :time_zone, :location, :meetings #, :client
 
@@ -37,7 +37,7 @@ module MyBanner
     end
 
     def client
-      @client = GoogleCalendarClient.new
+      @client = CalendarClient.new
     end
 
     private

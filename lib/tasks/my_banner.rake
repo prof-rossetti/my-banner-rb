@@ -10,7 +10,7 @@ require_relative "../my_banner"
     puts "-----------------------"
     sections.each do |section|
       puts "\nSECTION: #{section.abbreviation} (#{section.title})"
-      service = MyBanner::ScheduleService.new(section)
+      service = MyBanner::CalendarService.new(section)
 
       calendar = service.calendar
       puts "\nCALENDAR: #{calendar.summary} (#{calendar.id})"
@@ -38,7 +38,7 @@ require_relative "../my_banner"
   task :clear_calendars do
     sections = MyBanner::Page.new.scheduled_sections
     sections.each do |section|
-      service = MyBanner::ScheduleService.new(section)
+      service = MyBanner::CalendarService.new(section)
       service.clear_calendar
     end
   end

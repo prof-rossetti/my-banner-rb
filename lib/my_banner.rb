@@ -5,10 +5,10 @@ require "active_support/core_ext/string/conversions"
 require "pry"
 
 require "my_banner/version"
-require "my_banner/schedule_service"
+require "my_banner/calendar_client"
+require "my_banner/calendar_service"
 require "my_banner/page"
 require "my_banner/section"
-require "my_banner/google_calendar_client"
 
 module MyBanner
 end

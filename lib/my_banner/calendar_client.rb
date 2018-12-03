@@ -4,7 +4,7 @@ require "googleauth/stores/file_token_store"
 require "fileutils"
 
 module MyBanner
-  class GoogleCalendarClient < Google::Apis::CalendarV3::CalendarService
+  class CalendarClient < Google::Apis::CalendarV3::CalendarService
 
     def initialize
       super()

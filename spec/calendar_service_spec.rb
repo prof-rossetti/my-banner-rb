@@ -1,5 +1,5 @@
 module MyBanner
-  RSpec.describe ScheduleService do
+  RSpec.describe CalendarService do
 
     let(:section) { create(:section) }
     let(:calendar_list) {
