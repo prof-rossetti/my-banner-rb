@@ -48,8 +48,15 @@
   + [factory attributes for reserved words](https://github.com/thoughtbot/factory_bot/blob/master/GETTING_STARTED.md#method-name--reserved-word-attributes)
 
 ### Code Climate
+
   + https://docs.codeclimate.com/docs/approve-code-climate-as-a-third-party-application-in-github-1
   + https://docs.codeclimate.com/docs/my-repository-isnt-listed-when-i-try-to-add-it-to-code-climate
   + https://docs.codeclimate.com/docs/finding-your-test-coverage-token#section-regenerating-a-repos-test-reporter-id
   + https://docs.codeclimate.com/docs/configuring-test-coverage
   + https://docs.codeclimate.com/docs/travis-ci-test-coverage
+
+#### Test Coverage Reporting
+
+  + https://github.com/colszowka/simplecov
+  + https://github.com/chetan/simplecov-console/
+  + https://medium.com/the-code-review/display-your-ruby-test-coverage-using-simplecov-gem-and-codeclimate-6db6336fe409
