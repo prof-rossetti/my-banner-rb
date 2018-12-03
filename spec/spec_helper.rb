@@ -6,24 +6,14 @@ require "webmock/rspec"
 
 Dir[File.expand_path('support/*.rb', File.dirname(__FILE__))].each do |file|
   require file
-end # h/t: https://stackoverflow.com/a/21851294/670433
+end
 
 Dir[File.expand_path('support/shared_contexts/*.rb', File.dirname(__FILE__))].each do |file|
   require file
-end # h/t: https://stackoverflow.com/a/21851294/670433
-
-
-#required_files = Dir[File.expand_path('support/*.rb', File.dirname(__FILE__))]
-#required_files += Dir[File.expand_path('support/shared_contexts/*.rb', File.dirname(__FILE__))]
-#required_files.each do |file|
-#  require file
-#end # h/t: https://stackoverflow.com/a/21851294/670433
-
-
-
-
+end
 
 RSpec.configure do |config|
+
   # Enable flags like --only-failures and --next-failure
   config.example_status_persistence_file_path = ".rspec_status"
 
@@ -33,4 +23,5 @@ RSpec.configure do |config|
   config.expect_with :rspec do |c|
     c.syntax = :expect
   end
+
 end
