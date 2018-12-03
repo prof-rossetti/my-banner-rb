@@ -17,3 +17,4 @@
 .env
 credentials.json
 token.yaml
+coverage

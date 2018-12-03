@@ -1,4 +1,8 @@
+require "simplecov"
+SimpleCov.start
+
 require "bundler/setup"
+
 require "my_banner"
 
 require "factory_bot"
