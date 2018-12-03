@@ -1,5 +1,10 @@
-require "simplecov"
-SimpleCov.start
+
+if ENV.fetch("COVERAGE", nil) == 'true'
+  require "simplecov"
+  require "simplecov-console"
+  SimpleCov.formatter = SimpleCov::Formatter::Console
+  SimpleCov.start
+end
 
 require "bundler/setup"
 

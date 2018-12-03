@@ -11,3 +11,9 @@ bin/console
 ```sh
 bundle exec rspec spec/
 ```
+
+## Generating Code Coverage Reports
+
+```sh
+COVERAGE=true bundle exec rspec spec
+```
