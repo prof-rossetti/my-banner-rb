@@ -2,6 +2,10 @@
 
 Generates Google Calendar schedules and Google Sheet rosters for all your classes.
 
+[![Maintainability](https://api.codeclimate.com/v1/badges/41968ec227c9b165cd82/maintainability)](https://codeclimate.com/github/prof-rossetti/my-banner-rb/maintainability)
+
+[![Test Coverage](https://api.codeclimate.com/v1/badges/41968ec227c9b165cd82/test_coverage)](https://codeclimate.com/github/prof-rossetti/my-banner-rb/test_coverage)
+
 ## Installation
 
 Clone from source:

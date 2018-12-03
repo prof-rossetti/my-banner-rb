@@ -6,3 +6,7 @@ plugins:
         #  enabled: false
         Rubocop/Style/StringLiterals:
           enabled: false
+        Rubocop/Layout/LeadingCommentSpace:
+          enabled: false
+        Rubocop/Layout/EmptyLinesAroundClassBody:
+          enabled: false
