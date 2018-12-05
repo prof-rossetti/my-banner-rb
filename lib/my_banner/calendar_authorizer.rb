@@ -4,11 +4,14 @@ require "googleauth/stores/file_token_store"
 require "fileutils"
 
 module MyBanner
-  class CalendarAuthorizer # < Google::Auth::UserAuthorizer
+  class CalendarAuthorizer
+    # returns authorization code in browser title bar and promps user to copy the code
+    # @see https://developers.google.com/api-client-library/python/auth/installed-app#choosingredirecturi
+    BASE_URL = "urn:ietf:wg:oauth:2.0:oob"
+    USER_ID = "default"
 
     attr_reader :scope, :credentials_filepath, :token_filepath
 
-    # @param scope [String] an authorization scope like "https://www.googleapis.com/auth/calendar"
     def initialize(scope, credentials_filepath=nil, token_filepath=nil)
       @scope = scope || "https://www.googleapis.com/auth/calendar"
       @credentials_filepath = credentials_filepath || "google_auth/credentials.json"
@@ -26,17 +29,10 @@ module MyBanner
       stored_credentials || user_provided_credentials
     end
 
-    USER_ID = "default"
-
     def stored_credentials
       authorizer.get_credentials(USER_ID)
     end
 
-    # returns authorization code in browser title bar and promps user to copy the code
-    # @see https://developers.google.com/api-client-library/python/auth/installed-app#choosingredirecturi
-    BASE_URL = "urn:ietf:wg:oauth:2.0:oob"
-
-    # prompt user for results of redirected auth flow
     def user_provided_credentials
       authorizer.get_and_store_credentials_from_code(user_id: USER_ID, code: user_provided_code, base_url: BASE_URL)
     end
