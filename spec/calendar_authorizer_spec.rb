@@ -13,38 +13,14 @@ module MyBanner
     let(:redirect_uri) { "urn:ietf:wg:oauth:2.0:oob" }
 
     describe "#authorizer" do
-      #context "with stored token" do
-        it "manages credential files" do
-          expect(File.exist?(token_filepath)).to eql(true)
-          auth = calendar_authorizer.authorizer
-          expect(auth).to be_kind_of(Google::Auth::UserAuthorizer)
-          expect(auth).to respond_to(:get_credentials)
-          expect(auth).to respond_to(:get_and_store_credentials_from_code)
-          expect(auth).to respond_to(:get_authorization_url)
-        end
-      #end
-
-      #context "without stored token" do
-      #  let(:token_filepath) { "spec/mocks/calendar_auth/temp_token.yaml" }
-#
-      #  before(:each) do
-      #    FileUtils.rm_rf(token_filepath)
-      #    allow(calendar_authorizer).to receive(:user_provided_code).and_return(user_code)
-      #  end
-#
-      #  after(:each) do
-      #    FileUtils.rm_rf(token_filepath)
-      #  end
-#
-      #  it "manages credential files" do
-      #    expect(File.exist?(token_filepath)).to eql(false)
-      #    auth = calendar_authorizer.authorizer
-      #    expect(auth).to be_kind_of(Google::Auth::UserAuthorizer)
-      #    expect(auth).to respond_to(:get_credentials)
-      #    expect(auth).to respond_to(:get_and_store_credentials_from_code)
-      #    expect(auth).to respond_to(:get_authorization_url)
-      #  end
-      #end
+      it "manages credential files" do
+        expect(File.exist?(token_filepath)).to eql(true)
+        auth = calendar_authorizer.authorizer
+        expect(auth).to be_kind_of(Google::Auth::UserAuthorizer)
+        expect(auth).to respond_to(:get_credentials)
+        expect(auth).to respond_to(:get_and_store_credentials_from_code)
+        expect(auth).to respond_to(:get_authorization_url)
+      end
     end
 
     describe "#credentials" do
@@ -89,7 +65,6 @@ module MyBanner
           expect(creds.scope).to eql([scope])
         end
       end
-
     end
 
     describe "#stored_credentials" do
@@ -135,7 +110,7 @@ module MyBanner
         allow(Signet::OAuth2).to receive(:parse_credentials)
       end
 
-      after(:each) do ; FileUtils.rm_rf(token_filepath) ;  end
+      after(:each) { FileUtils.rm_rf(token_filepath) }
 
       it "makes a token request and returns google credentials" do
         expect(calendar_authorizer.user_provided_credentials).to be_kind_of(Google::Auth::UserRefreshCredentials)
