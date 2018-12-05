@@ -27,8 +27,11 @@ module MyBanner
 
     end
 
-    it "has options" do
-      expect(client.client_options).to be_kind_of(Struct)
+    it "has client options" do
+      opts = client.client_options
+      expect(opts).to be_kind_of(Struct)
+      expect(opts.application_name).to eql("MyBanner Calendar Service")
+      expect(opts.application_version).to eql("0.1.0")
     end
 
   end
