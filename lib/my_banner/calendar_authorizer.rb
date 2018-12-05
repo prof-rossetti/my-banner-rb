@@ -6,19 +6,18 @@ require "fileutils"
 module MyBanner
   class CalendarAuthorizer # < Google::Auth::UserAuthorizer
 
-    attr_reader :scope
+    attr_reader :scope, :credentials_filepath, :token_filepath
 
     # @param scope [String] an authorization scope like "https://www.googleapis.com/auth/calendar"
-    def initialize(scope)
-      @scope = scope
+    def initialize(scope, credentials_filepath=nil, token_filepath=nil)
+      @scope = scope || "https://www.googleapis.com/auth/calendar"
+      @credentials_filepath = credentials_filepath || "google_auth/credentials.json"
+      @token_filepath = token_filepath || "google_auth/token.yaml"
     end
 
-    CREDENTIALS_FILEPATH = "google_auth/credentials.json" # calendar_auth/credentials
-    TOKEN_FILEPATH = "google_auth/token.yaml" # calendar_auth/token.yaml
-
     def authorizer
-      client_id = Google::Auth::ClientId.from_file(CREDENTIALS_FILEPATH)
-      token_store = Google::Auth::Stores::FileTokenStore.new(file: TOKEN_FILEPATH)
+      client_id = Google::Auth::ClientId.from_file(credentials_filepath)
+      token_store = Google::Auth::Stores::FileTokenStore.new(file: token_filepath)
       Google::Auth::UserAuthorizer.new(client_id, scope, token_store)
     end
 
@@ -43,9 +42,12 @@ module MyBanner
     end
 
     def user_provided_code
-      auth_url = authorizer.get_authorization_url(base_url: BASE_URL)
-      puts "Please visit ... \n\n #{auth_url} \n\n ... login to your google account, get a code, paste it here, and press enter: "
+      puts "Please visit ... \n\n #{authorization_url} \n\n ... login to your google account, get a code, paste it here, and press enter: "
       gets
+    end
+
+    def authorization_url
+      authorizer.get_authorization_url(base_url: BASE_URL)
     end
 
   end

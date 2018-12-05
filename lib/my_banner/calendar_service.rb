@@ -1,5 +1,5 @@
 module MyBanner
-  class CalendarService #todo: CalendarClient
+  class CalendarService
 
     attr_accessor :section, :calendar_name, :time_zone, :location, :meetings #, :client
 
