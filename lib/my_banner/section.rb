@@ -27,10 +27,9 @@ module MyBanner
 
     def meetings
       meeting_dates.map do |date|
-        {
-          start_at: DateTime.parse("#{date} #{start_time}"),
-          end_at:  DateTime.parse("#{date} #{end_time}")
-        }
+        start_at = DateTime.parse("#{date} #{start_time}")
+        end_at = DateTime.parse("#{date} #{end_time}")
+        { start_at: start_at, end_at: end_at } # todo: Meeting.new(start_at: ___, end_at: ________)
       end
     end
 

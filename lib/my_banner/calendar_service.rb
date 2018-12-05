@@ -1,5 +1,5 @@
 module MyBanner
-  class CalendarService
+  class CalendarService #todo: CalendarClient
 
     attr_accessor :section, :calendar_name, :time_zone, :location, :meetings #, :client
 
@@ -41,10 +41,6 @@ module MyBanner
     end
 
     private
-
-    #
-    # EVENT SERVICE
-    #
 
     def list_events
       client.list_events(calendar.id, {

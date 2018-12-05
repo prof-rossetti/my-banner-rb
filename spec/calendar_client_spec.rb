@@ -17,3 +17,19 @@ stub_request(:post, "https://oauth2.googleapis.com/token").with(
   ).to_return(status: 200, body: "", headers: {})
 
 =end
+
+module MyBanner
+  RSpec.describe CalendarClient do
+
+    let(:client) { described_class.new }
+
+    before(:each) do
+
+    end
+
+    it "has options" do
+      expect(client.client_options).to be_kind_of(Struct)
+    end
+
+  end
+end
