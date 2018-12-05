@@ -5,22 +5,30 @@ module MyBanner
     let(:token_filepath) { "spec/mocks/calendar_auth/token.yaml" }
     let(:authorizer) { described_class.new(scope, credentials_filepath, token_filepath) }
 
+    let(:mock_client_id) { "mock-client-id.apps.googleusercontent.com" }
+    let(:redirect_uri) { "urn:ietf:wg:oauth:2.0:oob" }
+
     describe "#credentials" do
+      let(:credentials) { authorizer.credentials }
+
       context "from existing file" do
         it "returns google credentials" do
-          creds = authorizer.credentials
-          expect(creds).to be_kind_of(Google::Auth::UserRefreshCredentials)
-          expect(creds.client_id).to eql("mock-client-id.apps.googleusercontent.com")
-          expect(creds.client_secret).to eql("mock-client-secret")
-          expect(creds.refresh_token).to eql("mock-refresh-token")
-          expect(creds.expires_at).to be_kind_of(Time)
-          expect(creds.expiry).to eql(60)
-          expect(creds.scope).to eql([scope])
-          #expect(creds.authorization_uri).to eql("AUTH URI")
+          expect(credentials).to be_kind_of(Google::Auth::UserRefreshCredentials)
+          expect(credentials.client_id).to eql(mock_client_id)
+          expect(credentials.client_secret).to eql("mock-client-secret")
+          expect(credentials.refresh_token).to eql("mock-refresh-token")
+          expect(credentials.expires_at).to be_kind_of(Time)
+          expect(credentials.expiry).to eql(60)
+          expect(credentials.scope).to eql([scope])
         end
       end
     end
 
+    describe "#authorization_url" do
+      it "prompts the user to login via google" do
+        expect(authorizer.authorization_url).to eql( "https://accounts.google.com/o/oauth2/auth?access_type=offline&approval_prompt=force&client_id=#{mock_client_id}&include_granted_scopes=true&redirect_uri=#{redirect_uri}&response_type=code&scope=#{scope}")
+      end
+    end
 
 
 
