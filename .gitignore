@@ -18,5 +18,5 @@ coverage
 
 # google calendar credentials
 .env
-google_auth/credentials.json
-google_auth/token.yaml
+calendar_auth/credentials.json
+calendar_auth/token.yaml

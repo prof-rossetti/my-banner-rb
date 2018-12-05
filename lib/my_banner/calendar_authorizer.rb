@@ -4,16 +4,25 @@ require "googleauth/stores/file_token_store"
 require "fileutils"
 
 module MyBanner
-  class CalendarAuthorizer < Google::Auth::UserAuthorizer
+  class CalendarAuthorizer
+    # returns authorization code in browser title bar and promps user to copy the code
+    # @see https://developers.google.com/api-client-library/python/auth/installed-app#choosingredirecturi
+    BASE_URL = "urn:ietf:wg:oauth:2.0:oob"
 
-    def initialize(auth_scope, credentials_filepath=nil, token_filepath=nil)
-      auth_scope ||= "https://www.googleapis.com/auth/calendar"
-      credentials_filepath ||= "google_auth/credentials.json"
-      token_filepath ||= "google_auth/token.yaml"
+    USER_ID = "default"
 
-      client_id = Google::Auth::ClientId.from_file(credentials_filepath)
+    attr_reader :auth_scope, :credentials_filepath, :token_filepath
+
+    def initialize(auth_scope=nil, credentials_filepath=nil, token_filepath=nil)
+      @auth_scope = auth_scope || "https://www.googleapis.com/auth/calendar"
+      @credentials_filepath = credentials_filepath || "calendar_auth/credentials.json"
+      @token_filepath = credentials_filepath || "calendar_auth/token.yaml"
+    end
+
+    def authorizer
+      client_id = Google::Auth::ClientId.from_file(credentials_filepath) # rescue nil # Errno::ENOENT: No such file or directory
       token_store = Google::Auth::Stores::FileTokenStore.new(file: token_filepath)
-      super(client_id, auth_scope, token_store)
+      Google::Auth::UserAuthorizer.new(client_id, auth_scope, token_store) # RuntimeError: Client id can not be nil.
     end
 
     # @return [Google::Auth::UserRefreshCredentials] OAuth2 credentials
@@ -21,28 +30,22 @@ module MyBanner
       stored_credentials || user_provided_credentials
     end
 
-    USER_ID = "default"
-
     def stored_credentials
-      get_credentials(USER_ID)
+      authorizer.get_credentials(USER_ID)
     end
 
-    # returns authorization code in browser title bar and promps user to copy the code
-    # @see https://developers.google.com/api-client-library/python/auth/installed-app#choosingredirecturi
-    BASE_URL = "urn:ietf:wg:oauth:2.0:oob"
+    def user_provided_credentials
+      authorizer.get_and_store_credentials_from_code(user_id: USER_ID, code: user_provided_code, base_url: BASE_URL)
+    end
 
     # prompt user for results of redirected auth flow
-    def user_provided_credentials
-      get_and_store_credentials_from_code(user_id: USER_ID, code: user_provided_code, base_url: BASE_URL)
-    end
-
     def user_provided_code
       puts "Please visit ... \n\n #{authorization_url} \n\n ... login to your google account, get a code, paste it here, and press enter: "
       gets
     end
 
     def authorization_url
-      get_authorization_url(base_url: BASE_URL)
+      authorizer.get_authorization_url(base_url: BASE_URL)
     end
 
   end

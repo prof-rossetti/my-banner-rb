@@ -11,7 +11,7 @@ module MyBanner
     describe "#credentials" do
       let(:credentials) { authorizer.credentials }
 
-      context "from existing file" do
+      context "with existing file" do
         it "returns google credentials" do
           expect(credentials).to be_kind_of(Google::Auth::UserRefreshCredentials)
           expect(credentials.client_id).to eql(mock_client_id)
@@ -22,6 +22,35 @@ module MyBanner
           expect(credentials.scope).to eql([scope])
         end
       end
+
+      context "without existing file" do
+        let(:credentials_filepath) { "spec/mocks/calendar_auth/temp_credentials.json" }
+        let(:token_filepath) { "spec/mocks/calendar_auth/temp_token.yaml" }
+
+        before(:each) do
+          FileUtils.rm_rf(credentials_filepath)
+          FileUtils.rm_rf(token_filepath)
+        end
+
+        after(:each) do
+          FileUtils.rm_rf(credentials_filepath)
+          FileUtils.rm_rf(token_filepath)
+        end
+
+        #it "asks the user to login" do
+        #end
+
+        it "returns google credentials" do
+          expect(credentials).to be_kind_of(Google::Auth::UserRefreshCredentials)
+          expect(credentials.client_id).to eql(mock_client_id)
+          expect(credentials.client_secret).to eql("mock-client-secret")
+          expect(credentials.refresh_token).to eql("mock-refresh-token")
+          expect(credentials.expires_at).to be_kind_of(Time)
+          expect(credentials.expiry).to eql(60)
+          expect(credentials.scope).to eql([scope])
+        end
+      end
+
     end
 
     describe "#authorization_url" do
@@ -29,16 +58,6 @@ module MyBanner
         expect(authorizer.authorization_url).to eql( "https://accounts.google.com/o/oauth2/auth?access_type=offline&approval_prompt=force&client_id=#{mock_client_id}&include_granted_scopes=true&redirect_uri=#{redirect_uri}&response_type=code&scope=#{scope}")
       end
     end
-
-
-
-
-    #let(:token_request_body) { {
-    #  "client_id"=>"mock-client-id.apps.googleusercontent.com",
-    #  "client_secret"=>"mock-client-secret",
-    #  "grant_type"=>"refresh_token",
-    #  "refresh_token"=>"mock-refresh-token"
-    #} }
 
     #before(:each) do
     #  stub_request(:post, "https://oauth2.googleapis.com/token").with(
@@ -56,11 +75,6 @@ module MyBanner
     #    }
     #  ).to_return(status: 200, body: "", headers: {})
     #end
-
-
-
-
-
 
   end
 end
