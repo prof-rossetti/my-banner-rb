@@ -10,6 +10,7 @@ module MyBanner
     let(:refresh_token) { "mock-refresh-token" }
 
     let(:user_code) { "mock-user-auth-code" }
+    let(:redirect_uri) { "urn:ietf:wg:oauth:2.0:oob" }
 
     describe "#credentials" do
       context "with stored token" do
@@ -70,6 +71,42 @@ module MyBanner
         end
       end
 
+    end
+
+    describe "#user_provided_credentials" do
+      let(:token_filepath) { "spec/mocks/calendar_auth/temp_token.yaml" }
+
+      before(:each) do
+        FileUtils.rm_rf(token_filepath)
+
+        allow(authorizer).to receive(:user_provided_code).and_return(user_code)
+
+        stub_request(:post, "https://oauth2.googleapis.com/token").with(
+          body: {
+            "client_id"=> client_id,
+            "client_secret"=> client_secret,
+            "code"=> user_code,
+            "grant_type"=>"authorization_code",
+            "redirect_uri"=>redirect_uri
+          },
+          headers: {
+            'Accept'=>'*/*',
+            'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
+            'Content-Type'=>'application/x-www-form-urlencoded',
+            'User-Agent'=>'Faraday v0.15.3'
+          }
+        ).to_return(status: 200, body: "", headers: {})
+        # for some reason, this is producing ArgumentError Invalid content type ''
+        # ... see https://github.com/googleapis/signet/blob/master/lib/signet/oauth_2.rb#L85
+        # ... so try to bypass that error:
+        allow(Signet::OAuth2).to receive(:parse_credentials)
+      end
+
+      after(:each) do ; FileUtils.rm_rf(token_filepath) ;  end
+
+      it "makes a token request and returns google credentials" do
+        expect(authorizer.user_provided_credentials).to be_kind_of(Google::Auth::UserRefreshCredentials)
+      end
     end
 
     describe "#user_provided_code" do
