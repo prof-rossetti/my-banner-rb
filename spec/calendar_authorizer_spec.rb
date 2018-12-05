@@ -30,44 +30,28 @@ module MyBanner
       context "without stored token" do
         let(:token_filepath) { "spec/mocks/calendar_auth/temp_token.yaml" }
 
-        let(:token_request_body) { {
-          "client_id"=> client_id,
-          "client_secret"=> client_secret,
-          "code"=> user_code,
-          "grant_type"=>"authorization_code",
-          "redirect_uri"=>"urn:ietf:wg:oauth:2.0:oob"
-        } }
-
-        #let(:mock_credentials) { Google::Auth::UserRefreshCredentials.new(
-        #  client_id: client_id,
-        #  client_secret: client_secret,
-        #  scope: scope,
-        #  refresh_token: refresh_token,
-        #) }
+        let(:mock_credentials) { Google::Auth::UserRefreshCredentials.new(
+          client_id: client_id,
+          client_secret: client_secret,
+          scope: scope,
+          refresh_token: refresh_token,
+        ) }
 
         before(:each) do
-          FileUtils.rm_rf(token_filepath)
-          allow(authorizer).to receive(:user_provided_code).and_return(user_code)
-          allow(Signet::OAuth2).to receive(:parse_credentials) # bypass Invalid content type ''
-          # for some reason, this is producing ArgumentError Invalid content type '' https://github.com/googleapis/signet/blob/master/lib/signet/oauth_2.rb#L85
-          stub_request(:post, "https://oauth2.googleapis.com/token").with(
-            body: token_request_body,
-            headers: {
-              'Accept'=>'*/*',
-              'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
-              'Content-Type'=>'application/x-www-form-urlencoded',
-              'User-Agent'=>'Faraday v0.15.3'
-            }
-          ).to_return(status: 200, body: "", headers: {})
-          #allow(authorizer.authorizer).to receive(:get_and_store_credentials_from_code).with(user_id: "default", code: user_code, base_url: "urn:ietf:wg:oauth:2.0:oob").and_return(mock_credentials)
-          #allow(authorizer).to receive(:user_provided_credentials).and_return(mock_credentials) # ultimately cheat to get to a working test
+          allow(authorizer).to receive(:user_provided_credentials).and_return(mock_credentials)
         end
-
-        after(:each) do ; FileUtils.rm_rf(token_filepath) ;  end
 
         it "returns google credentials" do
           expect(File.exist?(token_filepath)).to eql(false)
-          expect(authorizer.credentials).to be_kind_of(Google::Auth::UserRefreshCredentials)
+          expect(authorizer.stored_credentials).to eql(nil)
+          creds = authorizer.credentials
+          expect(creds).to be_kind_of(Google::Auth::UserRefreshCredentials)
+          expect(creds.client_id).to eql(client_id)
+          expect(creds.client_secret).to eql(client_secret)
+          expect(creds.refresh_token).to eql(refresh_token)
+          #expect(creds.expires_at).to be_kind_of(Time)
+          #expect(creds.expiry).to eql(60)
+          expect(creds.scope).to eql([scope])
         end
       end
 
@@ -112,6 +96,7 @@ module MyBanner
     describe "#user_provided_code" do
       before(:each) do
         allow($stdin).to receive(:gets).and_return(user_code)
+        allow(STDOUT).to receive(:puts) # suppress puts statement
       end
 
       it "prompts the user for a code" do
