@@ -3,11 +3,13 @@ module MyBanner
     let(:scope) { "https://www.googleapis.com/auth/calendar" }
     let(:credentials_filepath) { "spec/mocks/calendar_auth/credentials.json" }
     let(:token_filepath) { "spec/mocks/calendar_auth/token.yaml" }
-    let(:authorizer) { described_class.new(scope, credentials_filepath, token_filepath) }
+    let(:authorizer) { described_class.new(scope: scope, credentials_filepath: credentials_filepath, token_filepath: token_filepath) }
 
-    let(:mock_client_id) { "mock-client-id.apps.googleusercontent.com" }
-    let(:mock_client_secret) { "mock-client-secret" }
-    let(:mock_refresh_token) { "mock-refresh-token" }
+    let(:client_id) { "mock-client-id.apps.googleusercontent.com" }
+    let(:client_secret) { "mock-client-secret" }
+    let(:refresh_token) { "mock-refresh-token" }
+
+    let(:user_code) { "mock-user-auth-code" }
 
     describe "#credentials" do
       context "with stored token" do
@@ -15,9 +17,9 @@ module MyBanner
           expect(File.exist?(token_filepath)).to eql(true)
           creds = authorizer.credentials
           expect(creds).to be_kind_of(Google::Auth::UserRefreshCredentials)
-          expect(creds.client_id).to eql(mock_client_id)
-          expect(creds.client_secret).to eql(mock_client_secret)
-          expect(creds.refresh_token).to eql(mock_refresh_token)
+          expect(creds.client_id).to eql(client_id)
+          expect(creds.client_secret).to eql(client_secret)
+          expect(creds.refresh_token).to eql(refresh_token)
           expect(creds.expires_at).to be_kind_of(Time)
           expect(creds.expiry).to eql(60)
           expect(creds.scope).to eql([scope])
@@ -27,25 +29,24 @@ module MyBanner
       context "without stored token" do
         let(:token_filepath) { "spec/mocks/calendar_auth/temp_token.yaml" }
 
-        let(:mock_auth_code) { "mock-auth-code" }
         let(:token_request_body) { {
-          "client_id"=> mock_client_id,
-          "client_secret"=> mock_client_secret,
-          "code"=> mock_auth_code,
+          "client_id"=> client_id,
+          "client_secret"=> client_secret,
+          "code"=> user_code,
           "grant_type"=>"authorization_code",
           "redirect_uri"=>"urn:ietf:wg:oauth:2.0:oob"
         } }
 
         #let(:mock_credentials) { Google::Auth::UserRefreshCredentials.new(
-        #  client_id: mock_client_id,
-        #  client_secret: mock_client_secret,
+        #  client_id: client_id,
+        #  client_secret: client_secret,
         #  scope: scope,
-        #  refresh_token: mock_refresh_token,
+        #  refresh_token: refresh_token,
         #) }
 
         before(:each) do
           FileUtils.rm_rf(token_filepath)
-          allow(authorizer).to receive(:user_provided_code).and_return(mock_auth_code)
+          allow(authorizer).to receive(:user_provided_code).and_return(user_code)
           allow(Signet::OAuth2).to receive(:parse_credentials) # bypass Invalid content type ''
           # for some reason, this is producing ArgumentError Invalid content type '' https://github.com/googleapis/signet/blob/master/lib/signet/oauth_2.rb#L85
           stub_request(:post, "https://oauth2.googleapis.com/token").with(
@@ -57,7 +58,7 @@ module MyBanner
               'User-Agent'=>'Faraday v0.15.3'
             }
           ).to_return(status: 200, body: "", headers: {})
-          #allow(authorizer.authorizer).to receive(:get_and_store_credentials_from_code).with(user_id: "default", code: mock_auth_code, base_url: "urn:ietf:wg:oauth:2.0:oob").and_return(mock_credentials)
+          #allow(authorizer.authorizer).to receive(:get_and_store_credentials_from_code).with(user_id: "default", code: user_code, base_url: "urn:ietf:wg:oauth:2.0:oob").and_return(mock_credentials)
           #allow(authorizer).to receive(:user_provided_credentials).and_return(mock_credentials) # ultimately cheat to get to a working test
         end
 
@@ -71,5 +72,22 @@ module MyBanner
 
     end
 
+    describe "#user_provided_code" do
+      before(:each) do
+        allow($stdin).to receive(:gets).and_return(user_code)
+      end
+
+      it "prompts the user for a code" do
+        expect(authorizer.user_provided_code).to eql(user_code) # looks like "module MyBanner" is the deafult when there is no mocking...
+      end
+    end
+
+    describe "#authorization_url" do
+      let(:redirect_uri) { "urn:ietf:wg:oauth:2.0:oob" }
+
+      it "provides a place for the user to login to google" do
+        expect(authorizer.authorization_url).to eql("https://accounts.google.com/o/oauth2/auth?access_type=offline&approval_prompt=force&client_id=#{client_id}&include_granted_scopes=true&redirect_uri=#{redirect_uri}&response_type=code&scope=#{scope}")
+      end
+    end
   end
 end
