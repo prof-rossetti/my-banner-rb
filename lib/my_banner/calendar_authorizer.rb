@@ -14,8 +14,8 @@ module MyBanner
 
     def initialize(scope, credentials_filepath=nil, token_filepath=nil)
       @scope = scope || "https://www.googleapis.com/auth/calendar"
-      @credentials_filepath = credentials_filepath || "google_auth/credentials.json"
-      @token_filepath = token_filepath || "google_auth/token.yaml"
+      @credentials_filepath = credentials_filepath || "calendar_auth/credentials.json"
+      @token_filepath = token_filepath || "calendar_auth/token.yaml"
     end
 
     def authorizer
@@ -34,12 +34,19 @@ module MyBanner
     end
 
     def user_provided_credentials
-      authorizer.get_and_store_credentials_from_code(user_id: USER_ID, code: user_provided_code, base_url: BASE_URL)
+      #begin
+        authorizer.get_and_store_credentials_from_code(user_id: USER_ID, code: user_provided_code, base_url: BASE_URL)
+      #rescue => e
+      #  puts e.class
+      #  puts e.message
+      #  nil
+      #end
     end
 
     def user_provided_code
       puts "Please visit ... \n\n #{authorization_url} \n\n ... login to your google account, get a code, paste it here, and press enter: "
-      gets
+      code = gets
+      return code
     end
 
     def authorization_url
