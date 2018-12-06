@@ -39,7 +39,7 @@ require_relative "../my_banner"
     sections = MyBanner::Page.new.scheduled_sections
     sections.each do |section|
       service = MyBanner::CalendarService.new(section)
-      service.clear_calendar
+      service.send(:delete_events)
     end
   end
 

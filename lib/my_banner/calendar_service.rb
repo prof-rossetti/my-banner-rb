@@ -30,17 +30,19 @@ module MyBanner
       @calendars ||= list_calendars.items.sort_by { |cal| cal.summary }
     end
 
-    def clear_calendar # warning: use with caution!
-      events.map do |event|
-        client.delete_event(calendar.id, event.id)
-      end
-    end
-
     def client
       @client = CalendarClient.new
     end
 
     private
+
+    #
+    # EVENT OPERATIONS
+    #
+
+    def delete_events
+      events.map { |event| client.delete_event(calendar.id, event.id) }
+    end
 
     def list_events
       client.list_events(calendar.id, {
@@ -98,7 +100,7 @@ module MyBanner
     end
 
     #
-    # CALENDAR SERVICE
+    # CALENDAR OPERATIONS
     #
 
     def list_calendars
