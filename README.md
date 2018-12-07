@@ -31,7 +31,7 @@ From a developer console (`bin/console`), for the first time only, invoke `MyBan
 
 ## Usage
 
-### Generate Schedule on Google Calendar
+### Create Google Calendar Events
 
 1. Login to https://myaccess.georgetown.edu/, then navigate to: **Home > Faculty Services > Faculty Detail Schedule** to access your schedule of classes. Note: you might need to select a term along the way.
 
