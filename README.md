@@ -1,4 +1,4 @@
-# MyBanner
+# MyBanner - Ruby
 
 WIP - Generates Google Calendar Events and Google Sheet Rosters for all your classes.
 

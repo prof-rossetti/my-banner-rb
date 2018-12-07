@@ -4,11 +4,10 @@ module MyBanner
   class CalendarClient < Google::Apis::CalendarV3::CalendarService
 
     def initialize(authorization=nil)
-      authorization ||= CalendarAuthorization.new.stored_credentials
       super()
       self.client_options.application_name = "MyBanner Calendar Client"
       self.client_options.application_version = VERSION
-      self.authorization = authorization
+      self.authorization = authorization || CalendarAuthorization.new.stored_credentials
     end
 
     def calendars
