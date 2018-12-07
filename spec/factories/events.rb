@@ -17,22 +17,16 @@ FactoryBot.define do
     # description
     # attendees
     # source
-    add_attribute(:start) {
-      OpenStruct.new(date_time: "2018-10-17T12:00:00-04:00".to_datetime)
-    }
-    add_attribute(:end) {
-      Google::Apis::CalendarV3::EventDateTime.new(date_time: "2018-10-17T13:30:00-04:00".to_datetime)
-    }
+
+    add_attribute(:start) { Google::Apis::CalendarV3::EventDateTime.new(date_time: "2018-10-17T12:00:00-04:00".to_datetime) }
+    add_attribute(:end) { Google::Apis::CalendarV3::EventDateTime.new(date_time: "2018-10-17T13:30:00-04:00".to_datetime) }
 
     factory :all_day_event do
       summary { "My All-day Event" }
-      add_attribute(:start) {
-        OpenStruct.new(date: "2018-10-16") # .to_date?
-      }
-      add_attribute(:end) {
-        Google::Apis::CalendarV3::EventDateTime.new(date: "2018-10-17") # .to_date?
-      }
+      add_attribute(:start) { Google::Apis::CalendarV3::EventDateTime.new(date: "2018-10-16") } # yes, these dates are strings
+      add_attribute(:end) { Google::Apis::CalendarV3::EventDateTime.new(date: "2018-10-17") } # yes, these dates are strings
     end
+
   end
 
 end
