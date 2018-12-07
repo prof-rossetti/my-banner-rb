@@ -1,6 +1,6 @@
 # MyBanner
 
-WIP - Generates Google Calendar schedules and Google Sheet rosters for all your classes.
+WIP - Generates Google Calendar Events and Google Sheet Rosters for all your classes.
 
 [![Maintainability](https://api.codeclimate.com/v1/badges/41968ec227c9b165cd82/maintainability)](https://codeclimate.com/github/prof-rossetti/my-banner-rb/maintainability)
 
