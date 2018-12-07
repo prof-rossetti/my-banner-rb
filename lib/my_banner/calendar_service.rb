@@ -1,14 +1,14 @@
 module MyBanner
   class CalendarService
 
-    attr_accessor :section, :calendar_name, :time_zone, :location, :meetings #, :client
+    attr_accessor :section, :calendar_name, :time_zone, :location, :meetings
 
     def initialize(section)
       @section = section
       @calendar_name = section.calendar_name
       @time_zone = section.time_zone
       @location = section.location
-      @meetings = section.meetings # todo: exclude "Holidays in the United States"
+      @meetings = section.meetings # todo: exclude meetings cancelled/rescheduled due to holidays
     end
 
     def execute
