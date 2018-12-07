@@ -13,8 +13,8 @@ module MyBanner
 
     def execute
       meetings.map do |meeting|
-        event = find_event(meeting)
-        event ? update_event(event, meeting) : create_event(meeting)
+        event = find_event(meeting.to_h)
+        event ? update_event(event, meeting.to_h) : create_event(meeting.to_h)
       end
     end
 

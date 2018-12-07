@@ -21,7 +21,8 @@ module MyBanner
     }
     let(:events) { [ create(:event), create(:all_day_event) ] }
     let(:event_list) { Google::Apis::CalendarV3::Events.new(items: events) }
-    let(:client) { instance_double(Google::Apis::CalendarV3::CalendarService, list_calendar_lists: nil, insert_calendar: nil, list_events: nil) }
+    #let(:client) { instance_double(CalendarClient, list_calendar_lists: calendar_list, insert_calendar: nil, list_events: event_list) }
+    let(:client) { instance_double(CalendarClient, list_calendar_lists: nil, insert_calendar: nil, list_events: nil) }
     let(:service) { described_class.new(section) }
 
     before(:each) do
@@ -31,43 +32,51 @@ module MyBanner
     let(:calendar_name) { service.calendar_name }
     let(:calendar) { create(:calendar, summary: calendar_name) }
 
-    #describe "#execute" do
-    #  it "iterates through all meetings" do
-    #    expect(service).to receive(:meetings).and_return(section.meetings)
-    #    service.execute
-    #  end
-#
-    #  describe "for each meeting" do
-    #    let(:meeting) { service.meetings.first }
-#
-    #    #let(:event) { }
-    #    it "checks for an existing event" do
-    #      expect(service).to receive(:find_event).with(meeting) #.and_return(section.meetings)
-    #      service.execute
-    #    end
-#
-    #    context "event exists" do
-    #      let(:revised_event) { create(:event, start: event.start, end: event.end, summary: "OOPS") }
-#
-    #      it "overwrites the event with expected/original attributes" do
-    #        expect(service).to receive(:update_event).with(revised_event, meeting) #.and_return(event)
-    #        service.execute
-    #      end
-    #    end
-#
-    #    context "event doesn't exist" do
-    #      it "creates a new event" do
-    #        expect(service).to receive(:create_event).with(meeting) #.and_return(new_event)
-    #        service.execute
-    #      end
-    #    end
-    #  end
-    #end
+    describe "#execute" do
+
+      #it "iterates through all meetings" do
+      #  expect(service).to receive(:meetings) #.and_return(section.meetings)
+      #  service.execute
+      #end
+
+      describe "for each meeting" do
+        let(:events) { [ create(:event) ] }
+        let(:meeting) { service.meetings.first }
+
+        before(:each) do
+          allow(service).to receive(:meetings).and_return([meeting]) # test for single meeting only
+        end
+
+        context "event exists" do
+          let(:event){ events.first }
+
+          before(:each) do
+            allow(service).to receive(:find_event).with(meeting.to_h).and_return(event)
+          end
+
+          it "overwrites the event with expected attributes" do
+            expect(service).to receive(:update_event).with(event, meeting.to_h)
+            service.execute
+          end
+        end
+
+        context "event doesn't exist" do
+          before(:each) do
+            allow(service).to receive(:find_event).with(meeting.to_h).and_return(nil)
+          end
+
+          it "creates a new event" do
+            expect(service).to receive(:create_event).with(meeting.to_h)
+            service.execute
+          end
+        end
+      end
+    end
 
     describe "#events" do
       before(:each) do
         allow(service).to receive(:calendar).and_return(calendar)
-        allow(client).to receive(:list_events).and_return(event_list)
+        allow(client).to receive(:list_events).and_return(event_list) #...
       end
 
       it "returns a list of google calendar events" do
@@ -132,7 +141,7 @@ module MyBanner
     describe "#list_events" do
       before(:each) do
         allow(service).to receive(:calendar).and_return(calendar)
-        allow(client).to receive(:list_events).and_return(event_list)
+        allow(client).to receive(:list_events).and_return(event_list) # ...
       end
 
       it "issues a request" do
