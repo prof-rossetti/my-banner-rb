@@ -38,6 +38,7 @@ module MyBanner
       authorizer.get_and_store_credentials_from_code(user_id: user_id, code: user_provided_code, base_url: BASE_URL)
     end
 
+    # prompt user for results of redirected auth flow
     def user_provided_code
       puts "Please visit ... \n\n #{authorization_url} \n\n ... login to your google account, get a code, paste it here, and press enter: "
       code = $stdin.gets.chomp

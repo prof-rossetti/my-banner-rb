@@ -129,8 +129,6 @@ module MyBanner
     end
 
     describe "#authorization_url" do
-      let(:redirect_uri) { "urn:ietf:wg:oauth:2.0:oob" }
-
       it "provides a place for the user to login to google" do
         expect(calendar_authorizer.authorization_url).to eql("https://accounts.google.com/o/oauth2/auth?access_type=offline&approval_prompt=force&client_id=#{client_id}&include_granted_scopes=true&redirect_uri=#{redirect_uri}&response_type=code&scope=#{scope}")
       end
