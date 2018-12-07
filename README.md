@@ -2,6 +2,8 @@
 
 WIP - Generates Google Calendar Events and Google Sheet Rosters for all your classes.
 
+[![Build Status](https://travis-ci.com/prof-rossetti/my-banner-rb.svg?branch=master)](https://travis-ci.com/prof-rossetti/my-banner-rb)
+
 [![Maintainability](https://api.codeclimate.com/v1/badges/41968ec227c9b165cd82/maintainability)](https://codeclimate.com/github/prof-rossetti/my-banner-rb/maintainability)
 
 [![Test Coverage](https://api.codeclimate.com/v1/badges/41968ec227c9b165cd82/test_coverage)](https://codeclimate.com/github/prof-rossetti/my-banner-rb/test_coverage)
