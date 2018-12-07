@@ -19,9 +19,9 @@ module MyBanner
     end
 
     def authorizer
-      client_id = Google::Auth::ClientId.from_file(credentials_filepath) # rescue nil # Errno::ENOENT: No such file or directory
+      client_id = Google::Auth::ClientId.from_file(credentials_filepath)
       token_store = Google::Auth::Stores::FileTokenStore.new(file: token_filepath)
-      Google::Auth::UserAuthorizer.new(client_id, auth_scope, token_store) # RuntimeError: Client id can not be nil.
+      Google::Auth::UserAuthorizer.new(client_id, scope, token_store)
     end
 
     # @return [Google::Auth::UserRefreshCredentials] OAuth2 credentials
