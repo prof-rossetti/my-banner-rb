@@ -25,11 +25,9 @@ bin/setup
 
 ## Configuration
 
-From the [Google Calendar API's quickstart guide](https://developers.google.com/calendar/quickstart/ruby), click "Enable the Calendar API" and follow the instructions to create a new app and generate new credentials. Store the resulting **credentials.json** in the root directory of this repo.
+From the [Google Calendar API's quickstart guide](https://developers.google.com/calendar/quickstart/ruby), click "Enable the Calendar API" and follow the instructions to create a new app and generate new credentials. Store the resulting file in this repository as **calendar_auth/credentials.json**.
 
-From a developer console (`bin/console`), for the first time only, invoke `MyBanner::CalendarClient.new` to receive a redirect URL, follow the URL to log in with your Google Account, then copy and paste the code back into the development console and press "ENTER". This will generate a **token.yaml** file in the root directory of this repository and store an access token there. The access token will be used to authorize subsequent requests.
-
-Finally, move both the **credentials.json** and **token.yaml** files into the **google_auth** directory before proceeding.
+From a developer console (`bin/console`), for the first time only, invoke `MyBanner::CalendarClient.new` to receive a redirect URL, visit the URL in a browser, log in with your Google Account, then copy and paste the code back into the development console and press "ENTER". This will generate a **calendar_auth/token.yaml** file and store an access token there. The access token will be used to authorize subsequent requests.
 
 ## Usage
 
@@ -44,8 +42,6 @@ Finally, move both the **credentials.json** and **token.yaml** files into the **
 ```rb
 bundle exec rake create_calendars
 ```
-
-> NOTE: this currently fetches and processes future events only, assuming the semester hasn't started yet, and safe-guarding against overwriting previous semester's calendars.
 
 ## [Contributing](/CONTRIBUTING.md)
 

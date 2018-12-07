@@ -55,11 +55,11 @@ module MyBanner
     describe "#meetings" do
       it "enumerates meeting datetimes between term start and end" do
         expect(section.meetings.count).to eql(15)
-        expect(section.meetings.map(&:class).uniq).to eql([Hash])
-        expect(section.meetings.map{ |m| m[:start_at].class }.uniq).to eql([ DateTime ])
-        expect(section.meetings.map{ |m| m[:end_at].class }.uniq).to eql([ DateTime ])
-        expect(section.meetings.map{ |m| m[:start_at].strftime("%H:%M %P") }.uniq).to eql([ "11:00 am" ])
-        expect(section.meetings.map{ |m| m[:end_at].strftime("%H:%M %P") }.uniq).to eql([ "12:20 pm" ])
+        expect(section.meetings.map(&:class).uniq).to eql([ MyBanner::Section::Meeting ])
+        expect(section.meetings.map{ |m| m.start_at.class }.uniq).to eql([ DateTime ])
+        expect(section.meetings.map{ |m| m.end_at.class }.uniq).to eql([ DateTime ])
+        expect(section.meetings.map{ |m| m.start_at.strftime("%H:%M %P") }.uniq).to eql([ "11:00 am" ])
+        expect(section.meetings.map{ |m| m.end_at.strftime("%H:%M %P") }.uniq).to eql([ "12:20 pm" ])
       end
     end
 

@@ -27,10 +27,9 @@ module MyBanner
 
     def meetings
       meeting_dates.map do |date|
-        {
-          start_at: DateTime.parse("#{date} #{start_time}"),
-          end_at:  DateTime.parse("#{date} #{end_time}")
-        }
+        start_at = DateTime.parse("#{date} #{start_time}")
+        end_at = DateTime.parse("#{date} #{end_time}")
+        Meeting.new(start_at: start_at, end_at: end_at)
       end
     end
 
@@ -47,6 +46,24 @@ module MyBanner
     end
 
     WEEKDAYS_MAP = { M: 1, T: 2, W: 3, R: 4, F: 5, S: 6, N: 0 } # S and N not yet verified
+
+    class Meeting
+      attr_reader :start_at, :end_at
+
+      def initialize(options={})
+        @start_at = options[:start_at]
+        @end_at = options[:end_at]
+      end
+
+      def label
+        "#{start_at.try(:strftime, '%Y-%m-%d %H:%M')} ... #{end_at.try(:strftime, '%Y-%m-%d %H:%M')}"
+      end
+
+      def to_h
+        { start_at: start_at, end_at: end_at }
+      end
+
+    end
 
   end
 end

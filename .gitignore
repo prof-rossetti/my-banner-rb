@@ -10,11 +10,13 @@
 # rspec failure tracking
 .rspec_status
 
+# test coverage
+coverage
+
 # roster reports with PII
 *.html
 
 # google calendar credentials
 .env
-credentials.json
-token.yaml
-coverage
+calendar_auth/credentials.json
+calendar_auth/token.yaml
