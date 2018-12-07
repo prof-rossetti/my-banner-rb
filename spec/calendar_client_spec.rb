@@ -32,8 +32,6 @@ module MyBanner
       expect(client).to respond_to(:insert_event)
     end
 
-
-
     describe "#calendars" do
       let(:calendar_list) {
         Google::Apis::CalendarV3::CalendarList.new(items: [
@@ -52,14 +50,15 @@ module MyBanner
           } ),
           Google::Apis::CalendarV3::CalendarListEntry.new( {
             :access_role=>"reader",
-            :background_color=>"#9a9cff",
-            :color_id=>"17",
+            :background_color=>"#a47ae2",
+            :color_id=>"24",
             :conference_properties=>{:allowed_conference_solution_types=>["eventHangout"]},
             :default_reminders=>[],
-            :etag=>"\"39887154084050222\"",
+            :etag=>"\"1538933735074000\"",
             :foreground_color=>"#000000",
-            :id=>"#contacts@group.v.calendar.google.com",
+            :id=>"#en.usa@group.v.calendar.google.com",
             :kind=>"calendar#calendarListEntry",
+            :selected=>true,
             :summary=> "Holidays in the United States",
             :time_zone=>"America/New_York"
           } )
@@ -75,11 +74,37 @@ module MyBanner
         client.calendars
       end
 
-      it "lists and sorts all my calendars" do
+      it "lists google calendars" do
         expect(client.calendars.map(&:class).uniq).to eql([Google::Apis::CalendarV3::CalendarListEntry])
         expect(client.calendars.map(&:summary)).to match_array(["My Calendar XYZ", "Holidays in the United States"])
       end
     end
 
+    describe "#upcoming_events" do
+      let(:calendar) { create(:calendar) }
+
+      let(:events) { [ create(:event), create(:all_day_event) ] }
+      let(:event_list) { Google::Apis::CalendarV3::Events.new(items: events) }
+
+      let(:upcoming_events) { client.upcoming_events(calendar) }
+
+      #let(:request_options) { {max_results: 100, single_events: true, order_by: "startTime", time_min: Time.now.iso8601, show_deleted: false} }
+
+      before(:each) do
+        allow(client).to receive(:list_events).and_return(event_list)
+      end
+
+      it "issues a request" do
+        expect(client).to receive(:list_events).and_return(event_list)
+        #expect(client).to receive(:list_events).with(calendar.id, request_options).and_return(event_list)
+        upcoming_events
+      end
+
+      it "returns google calendar events" do
+        expect(upcoming_events.map(&:class).uniq).to eql( [Google::Apis::CalendarV3::Event] )
+        expect(upcoming_events.map(&:summary)).to match_array(["My All-day Event", "My Lunch Event"])
+      end
+
+    end
   end
 end

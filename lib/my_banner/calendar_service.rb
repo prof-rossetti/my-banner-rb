@@ -19,7 +19,7 @@ module MyBanner
     end
 
     def events
-      @events ||= list_events.items
+      @events ||= client.upcoming_events(calendar)
     end
 
     def calendar
@@ -42,16 +42,6 @@ module MyBanner
 
     def delete_events
       events.map { |event| client.delete_event(calendar.id, event.id) }
-    end
-
-    def list_events
-      client.list_events(calendar.id, {
-        max_results: 100,
-        single_events: true,
-        order_by: "startTime",
-        time_min: Time.now.iso8601,
-        show_deleted: false
-      } )
     end
 
     def update_event(event, meeting_attrs)

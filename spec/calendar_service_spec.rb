@@ -21,7 +21,7 @@ module MyBanner
     let(:events) { [ create(:event), create(:all_day_event) ] }
     let(:event_list) { Google::Apis::CalendarV3::Events.new(items: events) }
 
-    let(:client) { instance_double(CalendarClient, list_calendar_lists: nil, insert_calendar: nil, list_events: nil, calendars: nil) }
+    let(:client) { instance_double(CalendarClient, list_calendar_lists: nil, insert_calendar: nil, list_events: nil, calendars: nil, upcoming_events: nil) }
 
     let(:service) { described_class.new(section) }
 
@@ -70,12 +70,11 @@ module MyBanner
     describe "#events" do
       before(:each) do
         allow(service).to receive(:calendar).and_return(calendar)
-        allow(client).to receive(:list_events).and_return(event_list) #...
       end
 
-      it "returns a list of google calendar events" do
-        expect(service.events.map(&:class).uniq).to eql( [Google::Apis::CalendarV3::Event] )
-        expect(service.events.map(&:summary)).to match_array(["My All-day Event", "My Lunch Event"])
+      it "fetches upcoming events" do
+        expect(client).to receive(:upcoming_events).with(calendar)
+        service.events
       end
     end
 
@@ -129,23 +128,6 @@ module MyBanner
       it "lists and sorts all my calendars" do
         expect(service.calendars.map(&:class).uniq ).to eql( [Google::Apis::CalendarV3::CalendarListEntry] )
         expect(service.calendars.first.summary).to eql(calendar_name)
-      end
-    end
-
-    describe "#list_events" do
-      before(:each) do
-        allow(service).to receive(:calendar).and_return(calendar)
-        allow(client).to receive(:list_events).and_return(event_list) # ...
-      end
-
-      it "issues a request" do
-        expect(client).to receive(:list_events).and_return(event_list)
-        service.send(:list_events)
-      end
-
-      it "returns a response" do
-        expect(service.send(:list_events)).to eql(event_list)
-        expect(service.send(:list_events)).to be_kind_of(Google::Apis::CalendarV3::Events)
       end
     end
 
