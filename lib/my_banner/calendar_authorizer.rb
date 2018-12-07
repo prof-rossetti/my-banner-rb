@@ -1,7 +1,5 @@
-require "google/apis/calendar_v3"
 require "googleauth"
 require "googleauth/stores/file_token_store"
-require "fileutils"
 
 module MyBanner
   class CalendarAuthorizer
@@ -19,7 +17,7 @@ module MyBanner
     end
 
     def authorizer
-      client_id = Google::Auth::ClientId.from_file(credentials_filepath)
+      client_id = Google::Auth::ClientId.from_file(credentials_filepath) # will throw an error without credentials file
       token_store = Google::Auth::Stores::FileTokenStore.new(file: token_filepath)
       Google::Auth::UserAuthorizer.new(client_id, scope, token_store)
     end

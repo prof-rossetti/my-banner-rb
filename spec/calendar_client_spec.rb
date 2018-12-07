@@ -69,12 +69,12 @@ module MyBanner
         allow(client).to receive(:list_calendar_lists).and_return(calendar_list)
       end
 
-      it "issues an api request" do
+      it "makes a request" do
         expect(client).to receive(:list_calendar_lists).and_return(calendar_list)
         client.calendars
       end
 
-      it "lists google calendars" do
+      it "gets google calendars" do
         expect(client.calendars.map(&:class).uniq).to eql([Google::Apis::CalendarV3::CalendarListEntry])
         expect(client.calendars.map(&:summary)).to match_array(["My Calendar XYZ", "Holidays in the United States"])
       end
@@ -94,13 +94,13 @@ module MyBanner
         allow(client).to receive(:list_events).and_return(event_list)
       end
 
-      it "issues a request" do
+      it "makes a request" do
         expect(client).to receive(:list_events).and_return(event_list)
         #expect(client).to receive(:list_events).with(calendar.id, request_options).and_return(event_list)
         upcoming_events
       end
 
-      it "returns google calendar events" do
+      it "gets google calendar events" do
         expect(upcoming_events.map(&:class).uniq).to eql( [Google::Apis::CalendarV3::Event] )
         expect(upcoming_events.map(&:summary)).to match_array(["My All-day Event", "My Lunch Event"])
       end
