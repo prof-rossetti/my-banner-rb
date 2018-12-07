@@ -27,7 +27,7 @@ module MyBanner
     end
 
     def calendars
-      @calendars ||= list_calendars.items.sort_by { |cal| cal.summary }
+      client.calendars
     end
 
     def client
@@ -102,10 +102,6 @@ module MyBanner
     #
     # CALENDAR OPERATIONS
     #
-
-    def list_calendars
-      client.list_calendar_lists
-    end
 
     def find_calendar
       calendars.find{ |cal| cal.summary == calendar_name }

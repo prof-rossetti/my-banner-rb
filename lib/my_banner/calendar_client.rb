@@ -18,5 +18,9 @@ module MyBanner
       self.authorization = authorizer.credentials
     end
 
+    def calendars
+      @calendars ||= list_calendar_lists.items.sort_by { |cal| cal.summary }
+    end
+
   end
 end

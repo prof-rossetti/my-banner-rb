@@ -2,27 +2,27 @@ module MyBanner
   RSpec.describe CalendarService do
 
     let(:section) { create(:section) }
-    let(:calendar_list) {
-      Google::Apis::CalendarV3::CalendarList.new(items: [
-        Google::Apis::CalendarV3::CalendarListEntry.new( {
-          :access_role=>"reader",
-          :background_color=>"#9a9cff",
-          :color_id=>"17",
-          :conference_properties=>{:allowed_conference_solution_types=>["eventHangout"]},
-          :default_reminders=>[],
-          :etag=>"\"39887154084050111\"",
-          :foreground_color=>"#000000",
-          :id=>"#contacts@group.v.calendar.google.com",
-          :kind=>"calendar#calendarListEntry",
-          :summary=> section.calendar_name,
-          :time_zone=>"America/New_York"
-        } )
-      ] )
-    }
+
+    let(:calendar_list_item) { Google::Apis::CalendarV3::CalendarListEntry.new(
+      :access_role=>"reader",
+      :background_color=>"#9a9cff",
+      :color_id=>"17",
+      :conference_properties=>{:allowed_conference_solution_types=>["eventHangout"]},
+      :default_reminders=>[],
+      :etag=>"\"39887154084050111\"",
+      :foreground_color=>"#000000",
+      :id=>"#contacts@group.v.calendar.google.com",
+      :kind=>"calendar#calendarListEntry",
+      :summary=> section.calendar_name,
+      :time_zone=>"America/New_York"
+    ) }
+    let(:calendar_list) { Google::Apis::CalendarV3::CalendarList.new(items: [calendar_list_item]) }
+
     let(:events) { [ create(:event), create(:all_day_event) ] }
     let(:event_list) { Google::Apis::CalendarV3::Events.new(items: events) }
-    #let(:client) { instance_double(CalendarClient, list_calendar_lists: calendar_list, insert_calendar: nil, list_events: event_list) }
-    let(:client) { instance_double(CalendarClient, list_calendar_lists: nil, insert_calendar: nil, list_events: nil) }
+
+    let(:client) { instance_double(CalendarClient, list_calendar_lists: nil, insert_calendar: nil, list_events: nil, calendars: nil) }
+
     let(:service) { described_class.new(section) }
 
     before(:each) do
@@ -85,7 +85,7 @@ module MyBanner
 
       context "calendar exists" do
         before(:each) do
-          allow(service).to receive(:list_calendars).and_return(calendar_list)
+          allow(client).to receive(:calendars).and_return([calendar_list_item])
         end
 
         it "finds a calendar with the given name" do
@@ -123,7 +123,7 @@ module MyBanner
 
     describe "#calendars" do
       before(:each) do
-        allow(service).to receive(:list_calendars).and_return(calendar_list)
+        allow(client).to receive(:calendars).and_return([calendar_list_item])
       end
 
       it "lists and sorts all my calendars" do
@@ -146,27 +146,6 @@ module MyBanner
       it "returns a response" do
         expect(service.send(:list_events)).to eql(event_list)
         expect(service.send(:list_events)).to be_kind_of(Google::Apis::CalendarV3::Events)
-      end
-    end
-
-    describe "#list_calendars" do
-      let(:results) { service.send(:list_calendars) }
-
-      it "issues an api request" do
-        expect(service.client).to receive(:list_calendar_lists)
-        results
-      end
-
-      context "when successful" do
-        before(:each) do
-          allow(service).to receive(:list_calendars).and_return(calendar_list)
-        end
-
-        it "returns a calendar list" do
-          expect(results.class).to eql(Google::Apis::CalendarV3::CalendarList)
-          expect(results.items.any?).to be true
-          expect(results.items.first.class).to eql(Google::Apis::CalendarV3::CalendarListEntry)
-        end
       end
     end
 
