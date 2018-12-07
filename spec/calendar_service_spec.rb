@@ -3,6 +3,7 @@ module MyBanner
 
     let(:section) { create(:section) }
 
+    let(:calendar_name) { section.calendar_name }
     let(:calendar_list_item) { Google::Apis::CalendarV3::CalendarListEntry.new(
       :access_role=>"reader",
       :background_color=>"#9a9cff",
@@ -13,7 +14,7 @@ module MyBanner
       :foreground_color=>"#000000",
       :id=>"#contacts@group.v.calendar.google.com",
       :kind=>"calendar#calendarListEntry",
-      :summary=> section.calendar_name,
+      :summary=> calendar_name,
       :time_zone=>"America/New_York"
     ) }
     let(:calendar_list) { Google::Apis::CalendarV3::CalendarList.new(items: [calendar_list_item]) }
@@ -28,9 +29,6 @@ module MyBanner
     before(:each) do
       allow(service).to receive(:client).and_return(client)
     end
-
-    let(:calendar_name) { service.calendar_name }
-    let(:calendar) { create(:calendar, summary: calendar_name) }
 
     describe "#execute" do
       describe "for each meeting" do
@@ -68,6 +66,8 @@ module MyBanner
     end
 
     describe "#events" do
+      let(:calendar) { create(:calendar, summary: calendar_name) }
+
       before(:each) do
         allow(service).to receive(:calendar).and_return(calendar)
       end
@@ -79,7 +79,8 @@ module MyBanner
     end
 
     describe "#calendar" do
-      let(:calendar_names) { service.calendars.map(&:summary) }
+      let(:calendar_names) { client.calendars.map(&:summary) }
+
       let(:cal) { service.calendar }
 
       context "calendar exists" do
@@ -100,10 +101,11 @@ module MyBanner
 
       context "calendar doesn't exist" do
         let(:new_calendar) { Google::Apis::CalendarV3::Calendar.new(summary: calendar_name, time_zone: "America/New_York") }
+        let(:calendar) { create(:calendar, summary: calendar_name, time_zone: "America/New_York") }
         let(:insertion_response) { calendar }
 
         before(:each) do
-          allow(service).to receive(:calendars).and_return([])
+          allow(client).to receive(:calendars).and_return([])
           allow(service).to receive(:new_calendar).and_return(new_calendar)
           allow(client).to receive(:insert_calendar).with(new_calendar).and_return(insertion_response)
         end
@@ -117,17 +119,6 @@ module MyBanner
           expect(cal.summary).to eql(calendar_name)
           expect(cal.time_zone).to eql("America/New_York")
         end
-      end
-    end
-
-    describe "#calendars" do
-      before(:each) do
-        allow(client).to receive(:calendars).and_return([calendar_list_item])
-      end
-
-      it "lists and sorts all my calendars" do
-        expect(service.calendars.map(&:class).uniq ).to eql( [Google::Apis::CalendarV3::CalendarListEntry] )
-        expect(service.calendars.first.summary).to eql(calendar_name)
       end
     end
 

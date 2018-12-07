@@ -26,10 +26,6 @@ module MyBanner
       @calendar ||= (find_calendar || create_calendar)
     end
 
-    def calendars
-      client.calendars
-    end
-
     def client
       @client = CalendarClient.new
     end
@@ -94,7 +90,7 @@ module MyBanner
     #
 
     def find_calendar
-      calendars.find{ |cal| cal.summary == calendar_name }
+      client.calendars.find { |cal| cal.summary == calendar_name }
     end
 
     def create_calendar
@@ -106,7 +102,7 @@ module MyBanner
     end
 
     def calendar_attributes
-      {summary: calendar_name, time_zone: time_zone}
+      { summary: calendar_name, time_zone: time_zone }
     end
 
   end
