@@ -1,6 +1,6 @@
 # MyBanner
 
-Generates Google Calendar schedules and Google Sheet rosters for all your classes.
+WIP - Generates Google Calendar schedules and Google Sheet rosters for all your classes.
 
 [![Maintainability](https://api.codeclimate.com/v1/badges/41968ec227c9b165cd82/maintainability)](https://codeclimate.com/github/prof-rossetti/my-banner-rb/maintainability)
 
@@ -27,7 +27,7 @@ bin/setup
 
 From the [Google Calendar API's quickstart guide](https://developers.google.com/calendar/quickstart/ruby), click "Enable the Calendar API" and follow the instructions to create a new app and generate new credentials. Store the resulting file in this repository as **calendar_auth/credentials.json**.
 
-From a developer console (`bin/console`), for the first time only, invoke `MyBanner::CalendarClient.new` to receive a redirect URL, visit the URL in a browser, log in with your Google Account, then copy and paste the code back into the development console and press "ENTER". This will generate a **calendar_auth/token.yaml** file and store an access token there. The access token will be used to authorize subsequent requests.
+From a developer console (`bin/console`), for the first time only, invoke `MyBanner::CalendarAuthorization.new.user_provided_credentials` and follow the instructions to get permission to make requests on behalf of some google calendar user. This will generate a **calendar_auth/token.yaml** file and store an access token there. The access token will be used to authorize subsequent requests.
 
 ## Usage
 
