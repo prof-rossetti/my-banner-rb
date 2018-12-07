@@ -26,7 +26,7 @@ module MyBanner
 
     # @return [Google::Auth::UserRefreshCredentials] OAuth2 credentials
     def credentials
-      stored_credentials || user_provided_credentials
+      stored_credentials || user_provided_credentials #todo: de-couple these distinct processes
     end
 
     def stored_credentials

@@ -1,5 +1,3 @@
-
-
 require "google/apis/calendar_v3"
 
 module MyBanner
@@ -10,14 +8,13 @@ module MyBanner
     AUTH_SCOPE = Google::Apis::CalendarV3::AUTH_CALENDAR #> "https://www.googleapis.com/auth/calendar"
 
     def initialize(options={})
+      credentials_filepath = options[:credentials_filepath] || "calendar_auth/credentials.json"
+      token_filepath = options[:token_filepath] || "calendar_auth/token.yaml"
+      authorizer = CalendarAuthorizer.new(credentials_filepath: credentials_filepath, scope: AUTH_SCOPE, token_filepath: token_filepath)
+
       super()
       self.client_options.application_name = "MyBanner Calendar Client"
       self.client_options.application_version = VERSION
-      authorizer = CalendarAuthorizer.new(
-        credentials_filepath: (options[:credentials_filepath] || "calendar_auth/credentials.json"),
-        scope: AUTH_SCOPE,
-        token_filepath: (options[:token_filepath] || "calendar_auth/token.yaml")
-      )
       self.authorization = authorizer.credentials
     end
 
