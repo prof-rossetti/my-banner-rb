@@ -33,12 +33,6 @@ module MyBanner
     let(:calendar) { create(:calendar, summary: calendar_name) }
 
     describe "#execute" do
-
-      #it "iterates through all meetings" do
-      #  expect(service).to receive(:meetings) #.and_return(section.meetings)
-      #  service.execute
-      #end
-
       describe "for each meeting" do
         let(:events) { [ create(:event) ] }
         let(:meeting) { service.meetings.first }

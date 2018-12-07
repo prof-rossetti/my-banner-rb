@@ -18,7 +18,7 @@ require_relative "../my_banner"
       meetings = section.meetings
       puts "\nMEETINGS: #{meetings.count}"
       meetings.each do |meeting|
-        puts " + #{meeting[:start_at].strftime('%Y-%m-%d %H:%M')} ... #{meeting[:end_at].strftime('%Y-%m-%d %H:%M')}"
+        puts " + #{meeting.label}"
       end
 
       events = service.events
