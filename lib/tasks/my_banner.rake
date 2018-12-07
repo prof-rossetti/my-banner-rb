@@ -2,32 +2,45 @@ require_relative "../my_banner"
 
 # namespace :my_banner do
 
-  task :schedule do
-    puts "---------------------------------"
-    puts "SCHEDULING..."
-
-    service = MyBanner::Scheduler.new
-    sections = service.sections
-    calendars = service.calendars
-
-    puts "---------------------------------"
-    puts "SCHEDULED SECTIONS (#{sections.count}):"
+  # @example bundle exec rake create_calendars
+  task :create_calendars do
+    sections = MyBanner::Page.new.scheduled_sections
+    puts "-----------------------"
+    puts "SECTIONS: #{sections.count}"
+    puts "-----------------------"
     sections.each do |section|
-      puts " + #{section.abbreviation}"
+      puts "\nSECTION: #{section.abbreviation} (#{section.title})"
+      service = MyBanner::CalendarService.new(section)
+
+      calendar = service.calendar
+      puts "\nCALENDAR: #{calendar.summary} (#{calendar.id})"
+
+      meetings = section.meetings
+      puts "\nMEETINGS: #{meetings.count}"
+      meetings.each do |meeting|
+        puts " + #{meeting.label}"
+      end
+
+      events = service.events
+      puts "\nFUTURE EVENTS: #{events.count}"
+      events.each do |event|
+        event_start = event.start.date_time.try(:strftime, "%Y-%m-%d %H:%M") || event.start.date.try(:strftime, "%Y-%m-%d")
+        event_end = event.end.date_time.try(:strftime, "%Y-%m-%d %H:%M") || event.end.date.try(:strftime, "%Y-%m-%d")
+        puts " + #{event_start} ... #{event_end} (#{event.class})"
+      end
+
+      service.execute
+      puts "\n-----------------------"
     end
+  end
 
-    puts "---------------------------------"
-    puts "CALENDARS (#{calendars.count}):"
-    calendars.each do |calendar|
-      puts " + #{calendar.id} (#{calendar.summary})"
+  # @example bundle exec rake clear_calendars
+  task :clear_calendars do
+    sections = MyBanner::Page.new.scheduled_sections
+    sections.each do |section|
+      service = MyBanner::CalendarService.new(section)
+      service.send(:delete_events)
     end
-
-    puts "---------------------------------"
-    puts "FINDING OR CREATING CALENDARS:"
-    #service.execute
-
   end
 
 #end
-
-

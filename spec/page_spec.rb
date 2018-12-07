@@ -1,8 +1,12 @@
 module MyBanner
   RSpec.describe Page do
-    include_context "sections"
-
     let(:page) { described_class.new }
+
+    let(:sections){ [ create(:section), create(:advanced_section), create(:evening_section) ] }
+
+    before(:each) do
+      allow(page).to receive(:scheduled_sections).and_return(sections)
+    end
 
     describe "#parse" do
       it "converts HTML page into useful metadata" do
@@ -10,11 +14,7 @@ module MyBanner
       end
     end
 
-    describe '#scheduled_sections' do
-      before(:each) do
-        allow(page).to receive(:scheduled_sections).and_return(sections)
-      end
-
+    describe "#scheduled_sections" do
       it "is a machine-readable version of what is visible on the page" do
         expect(page.scheduled_sections.map(&:class).uniq).to eql([MyBanner::Section])
         expect(page.scheduled_sections.count).to eql(3)

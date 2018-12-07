@@ -1,11 +1,12 @@
 sudo: false
 language: ruby
 rvm:
-  - 2.2.5
-before_install: gem install bundler -v 1.16.0
+  - 2.5.3
+before_install: gem install bundler -v 1.17.1
 env:
   global:
     - CC_TEST_REPORTER_ID=8f424c1882aec9c7bf8f1975801bf5913caa16ca31ecf859b2b4bd839bb362ca
+    - COVERAGE=true
 before_script:
   - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
   - chmod +x ./cc-test-reporter

@@ -12,6 +12,8 @@ bin/console
 bundle exec rspec spec/
 ```
 
+## Generating Code Coverage Reports
+
 ```sh
-GO_LIVE=true bundle exec rspec spec/scheduler_spec.rb -e "go-live"
+COVERAGE=true bundle exec rspec spec
 ```
