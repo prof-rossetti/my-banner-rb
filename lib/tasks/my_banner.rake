@@ -18,7 +18,7 @@ require_relative "../my_banner"
       meetings = section.meetings
       puts "\nMEETINGS: #{meetings.count}"
       meetings.each do |meeting|
-        puts " + #{meeting[:start_at].strftime('%Y-%m-%d %H:%M')} ... #{meeting[:end_at].strftime('%Y-%m-%d %H:%M')}"
+        puts " + #{meeting.label}"
       end
 
       events = service.events
@@ -39,7 +39,7 @@ require_relative "../my_banner"
     sections = MyBanner::Page.new.scheduled_sections
     sections.each do |section|
       service = MyBanner::CalendarService.new(section)
-      service.clear_calendar
+      service.send(:delete_events)
     end
   end
 

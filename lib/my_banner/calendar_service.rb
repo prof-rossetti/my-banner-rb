@@ -13,8 +13,8 @@ module MyBanner
 
     def execute
       meetings.map do |meeting|
-        event = find_event(meeting)
-        event ? update_event(event, meeting) : create_event(meeting)
+        event = find_event(meeting.to_h)
+        event ? update_event(event, meeting.to_h) : create_event(meeting.to_h)
       end
     end
 
@@ -30,17 +30,19 @@ module MyBanner
       @calendars ||= list_calendars.items.sort_by { |cal| cal.summary }
     end
 
-    def clear_calendar # warning: use with caution!
-      events.map do |event|
-        client.delete_event(calendar.id, event.id)
-      end
-    end
-
     def client
       @client = CalendarClient.new
     end
 
     private
+
+    #
+    # EVENT OPERATIONS
+    #
+
+    def delete_events
+      events.map { |event| client.delete_event(calendar.id, event.id) }
+    end
 
     def list_events
       client.list_events(calendar.id, {
@@ -52,43 +54,43 @@ module MyBanner
       } )
     end
 
-    def update_event(event, meeting)
-      client.update_event(calendar.id, event.id, new_event(meeting))
+    def update_event(event, meeting_attrs)
+      client.update_event(calendar.id, event.id, new_event(meeting_attrs))
     end
 
-    def find_event(meeting)
+    def find_event(meeting_attrs)
       events.find do |e|
         # match datetime events
         (
-          e.start.date_time.try(:strftime, "%Y-%m-%dT%H:%M:%S") == meeting[:start_at].try(:strftime, "%Y-%m-%dT%H:%M:%S") &&
-          e.end.date_time.try(:strftime, "%Y-%m-%dT%H:%M:%S") == meeting[:end_at].try(:strftime, "%Y-%m-%dT%H:%M:%S")
+          e.start.date_time.try(:strftime, "%Y-%m-%dT%H:%M:%S") == meeting_attrs[:start_at].try(:strftime, "%Y-%m-%dT%H:%M:%S") &&
+          e.end.date_time.try(:strftime, "%Y-%m-%dT%H:%M:%S") == meeting_attrs[:end_at].try(:strftime, "%Y-%m-%dT%H:%M:%S")
         ) ||
         # match date events
         (
-          e.start.date.try(:strftime, "%Y-%m-%dT%H:%M:%S") == meeting[:start_at].try(:strftime, "%Y-%m-%dT%H:%M:%S") &&
-          e.end.date.try(:strftime, "%Y-%m-%dT%H:%M:%S") == meeting[:end_at].try(:strftime, "%Y-%m-%dT%H:%M:%S")
+          e.start.date.try(:strftime, "%Y-%m-%dT%H:%M:%S") == meeting_attrs[:start_at].try(:strftime, "%Y-%m-%dT%H:%M:%S") &&
+          e.end.date.try(:strftime, "%Y-%m-%dT%H:%M:%S") == meeting_attrs[:end_at].try(:strftime, "%Y-%m-%dT%H:%M:%S")
         )
       end
     end
 
-    def create_event(meeting)
-      client.insert_event(calendar.id, new_event(meeting))
+    def create_event(meeting_attrs)
+      client.insert_event(calendar.id, new_event(meeting_attrs))
     end
 
-    def new_event(meeting)
-      Google::Apis::CalendarV3::Event.new(event_attributes(meeting))
+    def new_event(meeting_attrs)
+      Google::Apis::CalendarV3::Event.new(event_attributes(meeting_attrs))
     end
 
-    def event_attributes(meeting)
+    def event_attributes(meeting_attrs)
       {
         summary: calendar_name,
         location: location,
         start: {
-          date_time: meeting[:start_at].strftime("%Y-%m-%-dT%H:%M:%S"), # excludes offset, regardless of tz presence, to avoid maladjustment
+          date_time: meeting_attrs[:start_at].strftime("%Y-%m-%-dT%H:%M:%S"), # excludes offset, regardless of tz presence, to avoid maladjustment
           time_zone: time_zone
         },
         end: {
-          date_time: meeting[:end_at].strftime("%Y-%m-%-dT%H:%M:%S"), # excludes offset, regardless of tz presence, to avoid maladjustment
+          date_time: meeting_attrs[:end_at].strftime("%Y-%m-%-dT%H:%M:%S"), # excludes offset, regardless of tz presence, to avoid maladjustment
           time_zone: time_zone
         },
         # description: "Agenda: https://.../units/1 \n \n Objectives: \n 1: ....  \n 2: ....  \n 3: ....", # todo
@@ -98,7 +100,7 @@ module MyBanner
     end
 
     #
-    # CALENDAR SERVICE
+    # CALENDAR OPERATIONS
     #
 
     def list_calendars
