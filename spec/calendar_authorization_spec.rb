@@ -13,7 +13,7 @@ module MyBanner
     let(:redirect_uri) { "urn:ietf:wg:oauth:2.0:oob" }
 
     describe "#user_authorizer" do
-      it "manages credential files" do
+      it "manages credentials" do
         expect(File.exist?(token_filepath)).to eql(true)
         auth = calendar_authorization.user_authorizer
         expect(auth).to be_kind_of(Google::Auth::UserAuthorizer)
@@ -68,7 +68,7 @@ module MyBanner
     #end
 
     describe "#stored_credentials" do
-      it "returns google credentials" do
+      it "gets existing credentials from file" do
         expect(File.exist?(token_filepath)).to eql(true)
         creds = calendar_authorization.stored_credentials
         expect(creds).to be_kind_of(Google::Auth::UserRefreshCredentials)
@@ -83,6 +83,8 @@ module MyBanner
 
     describe "#user_provided_credentials" do
       let(:token_filepath) { "spec/mocks/calendar_auth/temp_token.yaml" }
+
+      #let(:token_request_options) { { user_id: "default", code: user_code, base_url: redirect_uri } }
 
       before(:each) do
         FileUtils.rm_rf(token_filepath)
@@ -112,7 +114,17 @@ module MyBanner
 
       after(:each) { FileUtils.rm_rf(token_filepath) }
 
-      it "makes a token request and returns google credentials" do
+      it "prompts user for auth code" do
+        expect(calendar_authorization).to receive(:user_provided_code).and_return(user_code)
+        calendar_authorization.user_provided_credentials
+      end
+
+      #it "makes a token request" do
+      #  expect(calendar_authorization.user_authorizer).to receive(:get_and_store_credentials_from_code).with(token_request_options)
+      #  calendar_authorization.user_provided_credentials
+      #end
+
+      it "returns user refresh credentials" do
         expect(calendar_authorization.user_provided_credentials).to be_kind_of(Google::Auth::UserRefreshCredentials)
       end
     end
