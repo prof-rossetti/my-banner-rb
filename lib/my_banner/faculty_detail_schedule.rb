@@ -19,13 +19,38 @@ module MyBanner
       ] # todo: parse HTML
     end
 
+    TABLE_SUMMARIES = {
+      info: "This layout table is used to present instructional assignments for the selected Term..",
+      enrollment: "This table displays enrollment and waitlist counts.",
+      schedule: "This table lists the scheduled meeting times and assigned instructors for this class.."
+    }
+
     def sections_metadata
-      #binding.pry
-      [{}, {}, {}]
+      results = []
+      tablesets.each do |tableset|
+        summaries = tableset.map { |t| t.attributes["summary"].value }
+        raise "Unexpected tableset: #{summaries}" unless summaries.sort == TABLE_SUMMARIES.values.sort
+
+        info_table =  tableset.find { |t| t.attributes["summary"].value == TABLE_SUMMARIES[:info] }
+        enrollment_table = tableset.find { |t| t.attributes["summary"].value == TABLE_SUMMARIES[:enrollment] }
+        schedule_table = tableset.find { |t| t.attributes["summary"].value == TABLE_SUMMARIES[:schedule] }
+        raise "Unexpected tableset: #{summaries}" unless info_table && enrollment_table && schedule_table
+
+        #binding.pry
+
+        results << {
+          title: "ABC",
+          section: "009"
+        }
+      end
+      results
     end
 
     def tablesets
-      tables.to_a.in_groups_of(3).map { |batch| batch }
+      batches = tables.to_a.in_groups_of(3).map { |batch| batch }
+      #summaries = tableset.map { |t| t.attributes["summary"].value }
+      #raise "Unexpected tableset: #{summaries}" unless summaries.sort == TABLE_SUMMARIES.values.sort
+      batches
     end
 
     # @return Nokogiri::XML::NodeSet

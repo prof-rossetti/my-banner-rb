@@ -7,7 +7,15 @@ module MyBanner
     let(:enrollment_table_summary) { "This table displays enrollment and waitlist counts." }
     let(:schedule_table_summary) { "This table lists the scheduled meeting times and assigned instructors for this class.." }
 
-    #let(:sections){ [ create(:section), create(:advanced_section), create(:evening_section) ] }
+    describe "::TABLE_SUMMARIES" do
+      it "describes a set of expected table summaries for each section" do
+        expect(described_class::TABLE_SUMMARIES).to eql( {
+          info: info_table_summary,
+          enrollment: enrollment_table_summary,
+          schedule: schedule_table_summary
+        } )
+      end
+    end
 
     describe "@filepath" do
       it "points to an existing file" do
@@ -23,10 +31,14 @@ module MyBanner
     end
 
     describe "#sections_metadata" do
-      it "extracts metadata from HTML" do
+      let(:sections){ [ create(:section), create(:advanced_section), create(:evening_section) ] } # TODO: revise approach
+      let(:metadata) { sections.first.metadata }
+
+      it "extracts section metadata from each tableset" do
         expect(schedule.sections_metadata).to be_kind_of(Array)
         expect(schedule.sections_metadata.first).to be_kind_of(Hash)
         expect(schedule.sections_metadata.count).to eql(3)
+        expect(schedule.sections_metadata.first).to eql(metadata)
       end
     end
 
