@@ -1,7 +1,8 @@
-
+require "active_support/core_ext/array"
 require "active_support/core_ext/numeric/time"
 require "active_support/core_ext/object/try"
 require "active_support/core_ext/string/conversions"
+require "nokogiri"
 require "pry"
 
 require "my_banner/version"

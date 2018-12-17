@@ -1,4 +1,5 @@
 require "nokogiri"
+require "active_support/core_ext/array"
 
 module MyBanner
   class FacultyDetailSchedule # < Page
@@ -23,8 +24,8 @@ module MyBanner
       [{}, {}, {}]
     end
 
-    def table_sets
-      tables
+    def tablesets
+      tables.to_a.in_groups_of(3).map { |batch| batch }
     end
 
     # @return Nokogiri::XML::NodeSet

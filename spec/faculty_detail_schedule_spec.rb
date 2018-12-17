@@ -3,6 +3,10 @@ module MyBanner
     let(:filepath) { "spec/mocks/pages/faculty-detail-schedule.html" }
     let(:schedule) { described_class.new(filepath) }
 
+    let(:info_table_summary) { "This layout table is used to present instructional assignments for the selected Term.." }
+    let(:enrollment_table_summary) { "This table displays enrollment and waitlist counts." }
+    let(:schedule_table_summary) { "This table lists the scheduled meeting times and assigned instructors for this class.." }
+
     #let(:sections){ [ create(:section), create(:advanced_section), create(:evening_section) ] }
 
     describe "@filepath" do
@@ -26,24 +30,32 @@ module MyBanner
       end
     end
 
-    #describe "#tablesets" do
-    #end
+    describe "#tablesets" do
+      it "is a nested collection of three tables per section" do
+        expect(schedule.tablesets).to be_kind_of(Array)
+        expect(schedule.tablesets.count).to eql(3)
+
+        schedule.tablesets.each do |tableset|
+          expect(tableset).to be_kind_of(Array)
+          expect(tableset.count).to eql(3)
+          expect(tableset.map(&:class).uniq).to match_array([Nokogiri::XML::Element])
+          expect(tableset.map{ |t| t.attributes["summary"].value }).to match_array([info_table_summary, enrollment_table_summary, schedule_table_summary])
+        end
+      end
+    end
 
     describe "#tables" do
-      let(:info_table_summary) { "This layout table is used to present instructional assignments for the selected Term.." }
-      let(:enrollment_table_summary) { "This table displays enrollment and waitlist counts." }
-      let(:schedule_table_summary) { "This table lists the scheduled meeting times and assigned instructors for this class.." }
-
-      it "represents all relevant tables" do
+      it "is a flat collection of three tables per section" do
         expect(schedule.tables).to be_kind_of(Nokogiri::XML::NodeSet)
-        expect(schedule.tables.first).to be_kind_of(Nokogiri::XML::Element)
-      end
-
-      it "three kinds" do
         expect(schedule.tables.count).to eql(9)
-        expect(schedule.tables.select { |t| t.attributes["summary"].value == info_table_summary}.count ).to eql(3)
-        expect(schedule.tables.select { |t| t.attributes["summary"].value == enrollment_table_summary}.count ).to eql(3)
-        expect(schedule.tables.select { |t| t.attributes["summary"].value == schedule_table_summary}.count ).to eql(3)
+
+        expect(schedule.tables.map(&:class).uniq).to match_array([Nokogiri::XML::Element])
+        summaries = schedule.tables.map { |t| t.attributes["summary"].value }
+        expect(summaries).to match_array([
+          info_table_summary, enrollment_table_summary, schedule_table_summary,
+          info_table_summary, enrollment_table_summary, schedule_table_summary,
+          info_table_summary, enrollment_table_summary, schedule_table_summary,
+        ])
       end
     end
 
