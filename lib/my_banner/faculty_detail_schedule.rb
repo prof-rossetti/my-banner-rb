@@ -35,11 +35,12 @@ module MyBanner
         #raise "Unexpected number of info table rows: #{info_rows.count}" unless info_rows.count == 12
 
         enrollment_rows = enrollment_table.css("tr")
-        raise "Unexpected number of enrollment table rows: #{enrollment_rows.count}" unless enrollment_rows.count == 3
+        raise "Unexpected enrollment table row count: #{enrollment_rows.count}" unless enrollment_rows.count == 3
+        enrollment_table_headers = ["", "Maximum", "Actual", "Remaining"]
+        raise "Unexpected enrollment table headers" unless enrollment_rows[0].css("th").map(&:text) == enrollment_table_headers
         enrollment_row = enrollment_rows[1]
-        raise "Unrecognized enrollment row" unless enrollment_row.css("th").text == "Enrollment:"
-        raise "Unrecognized enrollment data" unless enrollment_row.css("td").count == 3
-
+        raise "Unexpected enrollment table row" unless enrollment_row.css("th").text == "Enrollment:"
+        raise "Unexpected enrollment table data" unless enrollment_row.css("td").count == 3
         enrollment_max = enrollment_row.css("td")[0].text.to_i
         enrollment_actual = enrollment_row.css("td")[1].text.to_i
         enrollment_remaining = enrollment_row.css("td")[2].text.to_i
