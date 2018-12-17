@@ -5,9 +5,12 @@ require "active_support/core_ext/string/conversions"
 require "pry"
 
 require "my_banner/version"
+
 require "my_banner/calendar_authorization"
 require "my_banner/calendar_client"
 require "my_banner/calendar_service"
+
+require "my_banner/faculty_detail_schedule"
 require "my_banner/page"
 require "my_banner/section"
 

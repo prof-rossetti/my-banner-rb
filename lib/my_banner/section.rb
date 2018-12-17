@@ -6,19 +6,22 @@ module MyBanner
 
     def initialize(metadata={})
       @metadata = metadata
-      @abbreviation = "#{metadata[:course]}-#{metadata[:section]}"
-      @title = metadata[:title]
-      schedule_info = metadata[:scheduled_meeting_times]
-      @instructor = schedule_info[:instructors].first
-      @weekdays = schedule_info[:days].each_char.to_a
-      @location = schedule_info[:where]
+      @abbreviation = "#{metadata.try(:[], :course)}-#{metadata.try(:[], :section)}"
+      @title = metadata.try(:[], :title)
+
+      schedule_info = metadata.try(:[], :scheduled_meeting_times)
+      @instructor = schedule_info.try(:[], :instructors).try(:first)
+      @weekdays = schedule_info.try(:[], :days).try(:each_char).try(:to_a)
+      @location = schedule_info.try(:[], :where)
       @time_zone = "America/New_York" #todo: lookup or customize
-      term_info = schedule_info[:date_range] #todo: validate string splits into two-member array
-      @term_start = Date.parse(term_info.split(" - ").first)
-      @term_end = Date.parse(term_info.split(" - ").last)
-      time_info = schedule_info[:time] #todo: validate string splits into two-member array
-      @start_time = time_info.split(" - ").first
-      @end_time = time_info.split(" - ").last
+
+      term_info = schedule_info.try(:[], :date_range) #todo: validate string splits into two-member array
+      @term_start = Date.parse( term_info.try(:split, " - ").try(:first) ) rescue nil
+      @term_end = Date.parse( term_info.try(:split, " - ").try(:last) ) rescue nil
+
+      time_info = schedule_info.try(:[], :time) #todo: validate string splits into two-member array
+      @start_time = time_info.try(:split, " - ").try(:first)
+      @end_time = time_info.try(:split, " - ").try(:last)
     end
 
     def calendar_name
