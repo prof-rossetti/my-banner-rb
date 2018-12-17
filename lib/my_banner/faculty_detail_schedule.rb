@@ -1,3 +1,5 @@
+require "nokogiri"
+
 module MyBanner
   class FacultyDetailSchedule # < Page
 
@@ -14,6 +16,14 @@ module MyBanner
         MyBanner::Section.new(title: "Advanced Programming", section: 40, schedule_info:{}),
         MyBanner::Section.new(title: "Advanced Programming", section: 41, schedule_info:{}),
       ] # todo: parse HTML
+    end
+
+    def parse_html
+      binding.pry
+    end
+
+    def doc
+      @doc ||= File.open(filepath) { |f| Nokogiri::XML(f) }
     end
 
     private

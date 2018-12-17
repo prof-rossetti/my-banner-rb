@@ -18,5 +18,11 @@ module MyBanner
       end
     end
 
+    describe "#doc" do
+      it "represents the entire HTML page" do
+        expect(schedule.doc).to be_kind_of(Nokogiri::XML::Document)
+      end
+    end
+
   end
 end
