@@ -13,8 +13,8 @@
 # test coverage
 coverage
 
-# roster reports with PII
-*.html
+# roster pages and schedule pages, which can contain PII
+pages/*.html
 
 # google calendar credentials
 .env

@@ -44,7 +44,7 @@ module MyBanner
     def section2_attributes
       section_attributes.merge({
         title: "Advanced Programming",
-        crn: 23456,
+        crn: 234567,
         course: "INFO 220",
         section: 40,
         scheduled_meeting_times: meeting_times.merge(days: "MW")
