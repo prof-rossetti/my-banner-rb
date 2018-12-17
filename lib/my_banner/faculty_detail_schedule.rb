@@ -6,7 +6,7 @@ module MyBanner
     attr_reader :filepath
 
     def initialize(filepath=nil)
-      @filepath ||= "pages/faculty-detail-schedule.html"
+      @filepath = filepath || "pages/faculty-detail-schedule.html"
       validate_file_exists
     end
 
@@ -18,10 +18,21 @@ module MyBanner
       ] # todo: parse HTML
     end
 
-    def parse_html
-      binding.pry
+    def sections_metadata
+      #binding.pry
+      [{}, {}, {}]
     end
 
+    def table_sets
+      tables
+    end
+
+    # @return Nokogiri::XML::NodeSet
+    def tables
+      doc.css(".pagebodydiv").css("table")
+    end
+
+    # @return Nokogiri::XML::Document
     def doc
       @doc ||= File.open(filepath) { |f| Nokogiri::XML(f) }
     end
