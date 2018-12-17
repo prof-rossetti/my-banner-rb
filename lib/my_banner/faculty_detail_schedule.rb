@@ -11,7 +11,7 @@ module MyBanner
     end
 
     def sections
-      sections_metadata.map{ |metadata| MyBanner::Section.new(metadata) }
+      @sections ||= sections_metadata.map{ |metadata| MyBanner::Section.new(metadata) }
     end
 
     TABLE_SUMMARIES = {
@@ -23,40 +23,54 @@ module MyBanner
     def sections_metadata
       results = []
       tablesets.each do |tableset|
-        summaries = tableset.map { |t| t.attributes["summary"].value }
-        raise "Unexpected tableset: #{summaries}" unless summaries.sort == TABLE_SUMMARIES.values.sort
+        #summaries = tableset.map { |t| t.attributes["summary"].value }
+        #raise "Unexpected tableset: #{summaries}" unless summaries.sort == TABLE_SUMMARIES.values.sort
 
-        info_table =  tableset.find { |t| t.attributes["summary"].value == TABLE_SUMMARIES[:info] }
-        enrollment_table = tableset.find { |t| t.attributes["summary"].value == TABLE_SUMMARIES[:enrollment] }
-        schedule_table = tableset.find { |t| t.attributes["summary"].value == TABLE_SUMMARIES[:schedule] }
+        info_table =  tableset.find { |t| t.attributes["summary"].value == TABLE_SUMMARIES[:info] } #> Nokogiri::XML::Element
+        enrollment_table = tableset.find { |t| t.attributes["summary"].value == TABLE_SUMMARIES[:enrollment] } #> Nokogiri::XML::Element
+        schedule_table = tableset.find { |t| t.attributes["summary"].value == TABLE_SUMMARIES[:schedule] } #> Nokogiri::XML::Element
         raise "Unexpected tableset: #{summaries}" unless info_table && enrollment_table && schedule_table
 
-        # todo: parse HTML
-        #binding.pry
+        #info_rows = info_table.css("tr")
+        #raise "Unexpected number of info table rows: #{info_rows.count}" unless info_rows.count == 12
 
+        enrollment_rows = enrollment_table.css("tr")
+        raise "Unexpected number of enrollment table rows: #{enrollment_rows.count}" unless enrollment_rows.count == 3
+        enrollment_row = enrollment_rows[1]
+        raise "Unrecognized enrollment row" unless enrollment_row.css("th").text == "Enrollment:"
+        raise "Unrecognized enrollment data" unless enrollment_row.css("td").count == 3
+
+        enrollment_max = enrollment_row.css("td")[0].text.to_i
+        enrollment_actual = enrollment_row.css("td")[1].text.to_i
+        enrollment_remaining = enrollment_row.css("td")[2].text.to_i
+
+        schedule_rows = schedule_table.css("tr")
+        raise "Unexpected number of schedule table rows: #{schedule_rows.count}" unless schedule_rows.count == 2
+
+        #binding.pry
         metadata = {
-          :title=>"Intro to Programming",
-          :crn=>123456,
-          :course=>"INFO 101",
-          :section=>20,
-          :status=>"OPEN",
-          :registration=>"May 01, 2018 - Nov 02, 2018",
-          :college=>"School of Business and Technology",
-          :department=>"Information Systems",
-          :part_of_term=>"C04",
-          :credits=>1.5,
-          :levels=>["Graduate", "Juris Doctor", "Undergraduate"],
-          :campus=>"Main Campus",
-          :override=>"No",
-          :enrollment_counts=>{:maximum=>50, :actual=>45, :remaining=>5},
-          :scheduled_meeting_times=>{
-            :type=>"Lecture",
-            :time=>"11:00 am - 12:20 pm",
-            :days=>"TR",
-            :where=>"Science Building 111",
-            :date_range=>"Oct 29, 2018 - Dec 18, 2018",
-            :schedule_type=>"Lecture",
-            :instructors=>["Polly Professor"]
+          title: "Intro to Programming",
+          crn: 123456,
+          course: "INFO 101",
+          section: 20,
+          status: "OPEN",
+          registration: "May 01, 2018 - Nov 02, 2018",
+          college: "School of Business and Technology",
+          department: "Information Systems",
+          part_of_term: "C04",
+          credits: 1.5,
+          levels: ["Graduate", "Juris Doctor", "Undergraduate"],
+          campus: "Main Campus",
+          override: "No",
+          enrollment_counts: {maximum: enrollment_max, actual: enrollment_actual, remaining: enrollment_remaining},
+          scheduled_meeting_times: {
+            type: "Lecture",
+            time: "11:00 am - 12:20 pm",
+            days: "TR",
+            where: "Science Building 111",
+            date_range: "Oct 29, 2018 - Dec 18, 2018",
+            schedule_type: "Lecture",
+            instructors: ["Polly Professor"]
           }
         }
 
