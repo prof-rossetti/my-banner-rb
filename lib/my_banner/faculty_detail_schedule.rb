@@ -26,12 +26,18 @@ module MyBanner
         #summaries = tableset.map { |t| t.attributes["summary"].value }
         #raise "Unexpected tableset: #{summaries}" unless summaries.sort == TABLE_SUMMARIES.values.sort
 
-        info_table =  tableset.find { |t| t.attributes["summary"].value == TABLE_SUMMARIES[:info] } #> Nokogiri::XML::Element
+        info_table = tableset.find { |t| t.attributes["summary"].value.squish == TABLE_SUMMARIES[:info].squish } #> Nokogiri::XML::Element
+        # not sure why this is returning all three tables with all 51 rows. what is going on?...
+        info_table = info_table.css("table").find { |t| t.attributes["summary"].value.squish == TABLE_SUMMARIES[:info].squish }
+        # WTF IS GOING ON??????????????
+
+
+
         enrollment_table = tableset.find { |t| t.attributes["summary"].value == TABLE_SUMMARIES[:enrollment] } #> Nokogiri::XML::Element
         schedule_table = tableset.find { |t| t.attributes["summary"].value == TABLE_SUMMARIES[:schedule] } #> Nokogiri::XML::Element
         raise "Unexpected tableset: #{summaries}" unless info_table && enrollment_table && schedule_table
 
-        #info_rows = info_table.css("tr")
+        info_rows = info_table.css("tr")
         #raise "Unexpected number of info table rows: #{info_rows.count}" unless info_rows.count == 12
         #binding.pry
 
@@ -79,7 +85,7 @@ module MyBanner
           levels: ["Graduate", "Juris Doctor", "Undergraduate"],
           campus: "Main Campus",
           override: "No",
-          enrollment_counts: {maximum: enrollment_max, actual: enrollment_actual, remaining: enrollment_remaining},
+          enrollment_counts: { maximum: enrollment_max, actual: enrollment_actual, remaining: enrollment_remaining },
           scheduled_meeting_times: {
             type: meeting_type,
             time: meeting_times,
