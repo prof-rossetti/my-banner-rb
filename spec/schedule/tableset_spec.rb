@@ -9,6 +9,14 @@ module MyBanner
     let(:schedule_table) { tables.third }
     let(:tableset) { described_class.new(info_table, enrollment_table, schedule_table) }
 
+    describe "#enrollment_counts" do
+      let(:enrollment_counts) { {:actual=>45, :maximum=>50, :remaining=>5} }
+
+      it "parses enrollment table html" do
+        expect(tableset.enrollment_counts).to eql(enrollment_counts)
+      end
+    end
+
     describe "#scheduled_meeting_times" do
       let(:scheduled_meeting_times) { {
         :type=>"Lecture",
