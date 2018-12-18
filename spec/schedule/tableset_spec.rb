@@ -12,7 +12,7 @@ module MyBanner
     describe "#info" do
       let(:info) { {
         title: "Intro to Programming",
-        crn: 123456,
+        crn: "123456",
         course: "INFO 101",
         section: 20,
         status: "Open",

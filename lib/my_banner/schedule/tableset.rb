@@ -23,12 +23,15 @@ module MyBanner
       info_rows = iso_table.css("tr")
       raise "Unexpected number of info table rows: #{info_rows.count}" unless info_rows.count == 12
 
-      #binding.pry
+      #> info_rows[0] includes all rows WAT? trying to isolate the first row only...
+      link_text = info_rows[0].css("a").first.text.split("Status:").first.squish #> "Intro to Programming - 123456 - INFO 101 - 020"
+      link_text = link_text.split(" - ") #> ["Intro to Programming", "123456", "INFO 101", "020"]
+
       {
-        title: "Intro to Programming",
-        crn: 123456,
-        course: "INFO 101",
-        section: 20,
+        title: link_text[0],
+        crn: link_text[1],
+        course: link_text[2],
+        section: link_text[3].to_i,
         status: info_rows[1].css("td").text,
         registration: info_rows[2].css("td").text,
         college: info_rows[3].css("td").text.squish,
