@@ -23,13 +23,11 @@ module MyBanner
 
     def tablesets
       @tablesets ||= tables.to_a.in_groups_of(3).map do |batch|
-        #summaries = tableset.map { |t| t.attributes["summary"].value }
-        #puts summaries
-        #raise "Unexpected tableset: #{summaries}" unless summaries.sort == TABLE_SUMMARIES.values.sort
-        info_table = batch.find { |t| t.attributes["summary"].value.squish == TABLE_SUMMARIES[:info].squish } #> Nokogiri::XML::Element
-        enrollment_table = batch.find { |t| t.attributes["summary"].value == TABLE_SUMMARIES[:enrollment] } #> Nokogiri::XML::Element
-        schedule_table = batch.find { |t| t.attributes["summary"].value == TABLE_SUMMARIES[:schedule] } #> Nokogiri::XML::Element
-
+        summaries = batch.map { |t| t.attributes["summary"].value.squish }
+        raise "Unexpected tableset: #{summaries}" unless summaries.sort == TABLE_SUMMARIES.values.sort
+        info_table = batch.find { |t| t.attributes["summary"].value.squish == TABLE_SUMMARIES[:info].squish }
+        enrollment_table = batch.find { |t| t.attributes["summary"].value == TABLE_SUMMARIES[:enrollment] }
+        schedule_table = batch.find { |t| t.attributes["summary"].value == TABLE_SUMMARIES[:schedule] }
         Tableset.new(info_table, enrollment_table, schedule_table)
       end
     end

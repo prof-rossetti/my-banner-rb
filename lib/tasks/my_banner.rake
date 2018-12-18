@@ -3,13 +3,17 @@ require_relative "../my_banner"
 # namespace :my_banner do
 
   task :parse_schedule do
-    schedule = MyBanner::Schedule.new
-    sections = schedule.sections
+    page = MyBanner::Schedule.new("pages/faculty-detail-schedule-copy.html")
+    sections = page.sections
     puts "-----------------------"
     puts "SECTIONS: #{sections.count}"
     puts "-----------------------"
     sections.each do |section|
-      puts "  + #{section.title}"
+      puts ""
+      puts "#{section.title.upcase}:"
+      puts ""
+      pp section.metadata
+      puts ""
     end
   end
 

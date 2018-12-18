@@ -65,13 +65,18 @@ module MyBanner
 
     def scheduled_meeting_times
       # schedule table caption should be "Scheduled Meeting Times"
-      schedule_rows = schedule_table.css("tr")
+
+      #schedule_rows = schedule_table.css("tr") #> schedule_table.to_html looks good, but the nokogiri node includes 71 rows. WAT? trying to isolate the given table only...
+      iso_table = Nokogiri::XML(schedule_table.to_html)
+      schedule_rows = iso_table.css("tr")
+
       raise "Unexpected schedule table row count: #{schedule_rows.count}" unless schedule_rows.count == 2
       schedule_table_headers = ["Type", "Time", "Days", "Where", "Date Range", "Schedule Type", "Instructors"]
       raise "Unexpected schedule table headers" unless schedule_rows[0].css("th").map(&:text) == schedule_table_headers
       schedule_row = schedule_rows[1]
       raise "Unexpected schedule table data" unless schedule_row.css("td").count == 7 # schedule_table_headers.count
       schedule_data = schedule_row.css("td")
+
       return {
         type: schedule_data[0].text,
         time: schedule_data[1].text,
