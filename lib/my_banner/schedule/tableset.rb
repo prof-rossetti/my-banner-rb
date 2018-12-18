@@ -18,23 +18,26 @@ module MyBanner
     end
 
     def info
-      info_rows = info_table.css("tr")
-      #raise "Unexpected number of info table rows: #{info_rows.count}" unless info_rows.count == 12
+      #> info_table.to_html looks good, but the nokogiri node includes all tables with 52 rows. WAT? trying to isolate the first table only...
+      iso_table = Nokogiri::XML(info_table.to_html)
+      info_rows = iso_table.css("tr")
+      raise "Unexpected number of info table rows: #{info_rows.count}" unless info_rows.count == 12
+
       #binding.pry
       {
         title: "Intro to Programming",
         crn: 123456,
         course: "INFO 101",
         section: 20,
-        status: "OPEN",
-        registration: "May 01, 2018 - Nov 02, 2018",
-        college: "School of Business and Technology",
-        department: "Information Systems",
-        part_of_term: "C04",
-        credits: 1.5,
-        levels: ["Graduate", "Juris Doctor", "Undergraduate"],
-        campus: "Main Campus",
-        override: "No"
+        status: info_rows[1].css("td").text,
+        registration: info_rows[2].css("td").text,
+        college: info_rows[3].css("td").text.squish,
+        department: info_rows[4].css("td").text.squish,
+        part_of_term: info_rows[5].css("td").text,
+        credits: info_rows[6].css("td").text.squish.to_f,
+        levels: info_rows[7].css("td").text.split(", "),
+        campus: info_rows[8].css("td").text,
+        override: info_rows[9].css("td").text
       }
     end
 

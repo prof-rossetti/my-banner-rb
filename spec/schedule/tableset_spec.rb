@@ -9,6 +9,28 @@ module MyBanner
     let(:schedule_table) { tables.third }
     let(:tableset) { described_class.new(info_table, enrollment_table, schedule_table) }
 
+    describe "#info" do
+      let(:info) { {
+        title: "Intro to Programming",
+        crn: 123456,
+        course: "INFO 101",
+        section: 20,
+        status: "Open",
+        registration: "May 01, 2018 - Nov 02, 2018",
+        college: "School of Business and Technology",
+        department: "Information Systems",
+        part_of_term: "C04",
+        credits: 1.5,
+        levels: ["MN or MC Graduate", "Juris Doctor", "Undergraduate"],
+        campus: "Main Campus",
+        override: "No"
+      } }
+
+      it "parses info table html" do
+        expect(tableset.info).to eql(info)
+      end
+    end
+
     describe "#enrollment_counts" do
       let(:enrollment_counts) { {:actual=>45, :maximum=>50, :remaining=>5} }
 
