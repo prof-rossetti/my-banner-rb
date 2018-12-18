@@ -2,6 +2,17 @@ require_relative "../my_banner"
 
 # namespace :my_banner do
 
+  task :parse_schedule do
+    schedule = MyBanner::Schedule.new
+    sections = schedule.sections
+    puts "-----------------------"
+    puts "SECTIONS: #{sections.count}"
+    puts "-----------------------"
+    sections.each do |section|
+      puts "  + #{section.title}"
+    end
+  end
+
   # @example bundle exec rake create_calendars
   task :create_calendars do
     sections = MyBanner::Page.new.scheduled_sections
