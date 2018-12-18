@@ -1,5 +1,5 @@
 module MyBanner
-  class Tableset
+  class FacultyDetailSchedule::Tableset
 
     attr_reader :info_table, :enrollment_table, :schedule_table
 
