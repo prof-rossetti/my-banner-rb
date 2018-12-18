@@ -35,7 +35,7 @@ module MyBanner
 
     # @return Nokogiri::XML::NodeSet
     def tables
-      @tables ||= doc.css(".pagebodydiv").css("table")
+      @tables ||= doc.css(".pagebodydiv").css("table") # "datadisplaytable" only (ignore/remove last table from the end)
     end
 
     # @return Nokogiri::XML::Document
