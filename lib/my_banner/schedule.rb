@@ -22,20 +22,21 @@ module MyBanner
     end
 
     def tablesets
-      @tablesets ||= tables.to_a.in_groups_of(3).map do |batch|
+      @tablesets ||= tables.to_a.in_groups_of(3).map do |arr|
         #summaries = tableset.map { |t| t.attributes["summary"].value }
         #puts summaries
         #raise "Unexpected tableset: #{summaries}" unless summaries.sort == TABLE_SUMMARIES.values.sort
-        info_table = tableset.find { |t| t.attributes["summary"].value.squish == TABLE_SUMMARIES[:info].squish } #> Nokogiri::XML::Element
-        enrollment_table = tableset.find { |t| t.attributes["summary"].value == TABLE_SUMMARIES[:enrollment] } #> Nokogiri::XML::Element
-        schedule_table = tableset.find { |t| t.attributes["summary"].value == TABLE_SUMMARIES[:schedule] } #> Nokogiri::XML::Element
+        info_table = arr.find { |t| t.attributes["summary"].value.squish == TABLE_SUMMARIES[:info].squish } #> Nokogiri::XML::Element
+        enrollment_table = arr.find { |t| t.attributes["summary"].value == TABLE_SUMMARIES[:enrollment] } #> Nokogiri::XML::Element
+        schedule_table = arr.find { |t| t.attributes["summary"].value == TABLE_SUMMARIES[:schedule] } #> Nokogiri::XML::Element
+
         Tableset.new(info_table, enrollment_table, schedule_table)
       end
     end
 
     # @return Nokogiri::XML::NodeSet
     def tables
-      @tables ||= doc.css(".pagebodydiv").css("table") # "datadisplaytable" only (ignore/remove last table from the end)
+      @tables ||= doc.css(".pagebodydiv").css("table").css(".datadisplaytable") # ignores the last table
     end
 
     # @return Nokogiri::XML::Document

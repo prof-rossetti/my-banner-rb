@@ -1,5 +1,6 @@
 module MyBanner
   RSpec.describe Schedule do
+
     let(:filepath) { "spec/mocks/pages/faculty-detail-schedule.html" }
     let(:schedule) { described_class.new(filepath) }
 
@@ -24,34 +25,88 @@ module MyBanner
     end
 
     describe "#sections" do
+      let(:first) { {
+        :title=>"Intro to Programming",
+        :crn=>"123456",
+        :course=>"INFO 101",
+        :section=>20,
+        :status=>"Open",
+        :registration=>"May 01, 2018 - Nov 02, 2018",
+        :college=>"School of Business and Technology",
+        :department=>"Information Systems",
+        :part_of_term=>"C04",
+        :credits=>1.5,
+        :levels=>["MN or MC Graduate", "Juris Doctor", "Undergraduate"],
+        :campus=>"Main Campus",
+        :override=>"No",
+        :enrollment_counts=>{:maximum=>50, :actual=>45, :remaining=>5},
+        :scheduled_meeting_times=>{
+          :type=>"Lecture",
+          :time=>"11:00 am - 12:20 pm",
+          :days=>"TR",
+          :where=>"Science Building 111",
+          :date_range=>"Oct 29, 2018 - Dec 18, 2018",
+          :schedule_type=>"Lecture",
+          :instructors=>["Polly Professor"]
+        }
+      } }
+      let(:second) { {
+        :title=>"Advanced Programming",
+        :crn=>"234567",
+        :course=>"INFO 220",
+        :section=>40,
+        :status=>"Open",
+        :registration=>"May 01, 2018 - Nov 02, 2018",
+        :college=>"School of Business and Technology",
+        :department=>"Information Systems",
+        :part_of_term=>"C04",
+        :credits=>1.5,
+        :levels=>["MN or MC Graduate", "Juris Doctor", "Undergraduate"],
+        :campus=>"Main Campus",
+        :override=>"No",
+        :enrollment_counts=>{:maximum=>50, :actual=>42, :remaining=>8},
+        :scheduled_meeting_times=>{
+          :type=>"Lecture",
+          :time=>"11:00 am - 12:20 pm",
+          :days=>"MW",
+          :where=>"Science Building 111",
+          :date_range=>"Oct 29, 2018 - Dec 18, 2018",
+          :schedule_type=>"Lecture",
+          :instructors=>["Polly Professor"]
+        }
+      } }
+      let(:third) { {
+        :title=>"Advanced Programming",
+        :crn=>"345678",
+        :course=>"INFO 220",
+        :section=>41,
+        :status=>"Open",
+        :registration=>"May 01, 2018 - Nov 02, 2018",
+        :college=>"School of Business and Technology",
+        :department=>"Information Systems",
+        :part_of_term=>"C04",
+        :credits=>1.5,
+        :levels=>["MN or MC Graduate", "Juris Doctor", "Undergraduate"],
+        :campus=>"Main Campus",
+        :override=>"No",
+        :enrollment_counts=>{:maximum=>50, :actual=>35, :remaining=>15},
+        :scheduled_meeting_times=>{
+          :type=>"Lecture",
+          :time=>"6:30 pm - 9:20 pm",
+          :days=>"M",
+          :where=>"Science Building 111",
+          :date_range=>"Oct 29, 2018 - Dec 18, 2018",
+          :schedule_type=>"Lecture",
+          :instructors=>["Polly Professor"]
+        }
+      } }
+
       it "wraps metadata in section objects" do
         expect(schedule.sections.map(&:class).uniq).to eql([MyBanner::Section])
         expect(schedule.sections.count).to eql(3)
-      end
-    end
-
-    describe "#sections_metadata" do
-      let(:sections){ [ create(:section), create(:advanced_section), create(:evening_section) ] } # TODO: revise approach
-      let(:metadata) { sections.first.metadata }
-
-      let(:enrollment_counts) { { actual: 45, maximum: 50, remaining: 5 } }
-      let(:scheduled_meeting_times) { {
-        type: "Lecture",
-        time: "11:00 am - 12:20 pm",
-        days: "TR",
-        where: "Science Building 111",
-        date_range: "Oct 29, 2018 - Dec 18, 2018",
-        schedule_type: "Lecture",
-        instructors: ["Polly Professor"]
-      } }
-
-      it "extracts section metadata from each tableset" do
-        expect(schedule.sections_metadata).to be_kind_of(Array)
-        expect(schedule.sections_metadata.first).to be_kind_of(Hash)
-        expect(schedule.sections_metadata.count).to eql(3)
-        #expect(schedule.sections_metadata.first).to eql(metadata)
-        expect(schedule.sections_metadata.first[:enrollment_counts]).to eql(enrollment_counts)
-        expect(schedule.sections_metadata.first[:scheduled_meeting_times]).to eql(scheduled_meeting_times)
+        expect(schedule.sections.first.metadata).to eql(first)
+        expect(schedule.sections.second.metadata).to eql(second)
+        expect(schedule.sections.third.metadata).to eql(third)
       end
     end
 
@@ -61,10 +116,10 @@ module MyBanner
         expect(schedule.tablesets.count).to eql(3)
 
         schedule.tablesets.each do |tableset|
-          expect(tableset).to be_kind_of(Array)
-          expect(tableset.count).to eql(3)
-          expect(tableset.map(&:class).uniq).to match_array([Nokogiri::XML::Element])
-          expect(tableset.map{ |t| t.attributes["summary"].value }).to match_array([info_table_summary, enrollment_table_summary, schedule_table_summary])
+          expect(tableset).to be_kind_of(Schedule::Tableset)
+          expect(tableset.info_table.attributes["summary"].value).to eql(info_table_summary)
+          expect(tableset.enrollment_table.attributes["summary"].value).to eql(enrollment_table_summary)
+          expect(tableset.schedule_table.attributes["summary"].value).to eql(schedule_table_summary)
         end
       end
     end
