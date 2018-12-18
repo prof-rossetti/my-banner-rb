@@ -34,12 +34,24 @@ module MyBanner
       let(:sections){ [ create(:section), create(:advanced_section), create(:evening_section) ] } # TODO: revise approach
       let(:metadata) { sections.first.metadata }
 
+      let(:enrollment_counts) { { actual: 45, maximum: 50, remaining: 5 } }
+      let(:scheduled_meeting_times) { {
+        type: "Lecture",
+        time: "11:00 am - 12:20 pm",
+        days: "TR",
+        where: "Science Building 111",
+        date_range: "Oct 29, 2018 - Dec 18, 2018",
+        schedule_type: "Lecture",
+        instructors: ["Polly Professor"]
+      } }
+
       it "extracts section metadata from each tableset" do
         expect(schedule.sections_metadata).to be_kind_of(Array)
         expect(schedule.sections_metadata.first).to be_kind_of(Hash)
         expect(schedule.sections_metadata.count).to eql(3)
         #expect(schedule.sections_metadata.first).to eql(metadata)
-        expect(schedule.sections_metadata.first[:enrollment_counts]).to eql({actual: 45, maximum: 50, remaining: 5})
+        expect(schedule.sections_metadata.first[:enrollment_counts]).to eql(enrollment_counts)
+        expect(schedule.sections_metadata.first[:scheduled_meeting_times]).to eql(scheduled_meeting_times)
       end
     end
 

@@ -33,6 +33,9 @@ module MyBanner
 
         #info_rows = info_table.css("tr")
         #raise "Unexpected number of info table rows: #{info_rows.count}" unless info_rows.count == 12
+        #binding.pry
+
+
 
         enrollment_rows = enrollment_table.css("tr")
         raise "Unexpected enrollment table row count: #{enrollment_rows.count}" unless enrollment_rows.count == 3
@@ -41,14 +44,27 @@ module MyBanner
         enrollment_row = enrollment_rows[1]
         raise "Unexpected enrollment table row" unless enrollment_row.css("th").text == "Enrollment:"
         raise "Unexpected enrollment table data" unless enrollment_row.css("td").count == 3
-        enrollment_max = enrollment_row.css("td")[0].text.to_i
-        enrollment_actual = enrollment_row.css("td")[1].text.to_i
-        enrollment_remaining = enrollment_row.css("td")[2].text.to_i
+        enrollment_data = enrollment_row.css("td")
+        enrollment_max = enrollment_data[0].text.to_i
+        enrollment_actual = enrollment_data[1].text.to_i
+        enrollment_remaining = enrollment_data[2].text.to_i
 
+        # schedule table caption should be "Scheduled Meeting Times"
         schedule_rows = schedule_table.css("tr")
-        raise "Unexpected number of schedule table rows: #{schedule_rows.count}" unless schedule_rows.count == 2
+        raise "Unexpected schedule table row count: #{schedule_rows.count}" unless schedule_rows.count == 2
+        schedule_table_headers = ["Type", "Time", "Days", "Where", "Date Range", "Schedule Type", "Instructors"]
+        raise "Unexpected schedule table headers" unless schedule_rows[0].css("th").map(&:text) == schedule_table_headers
+        schedule_row = schedule_rows[1]
+        raise "Unexpected schedule table data" unless schedule_row.css("td").count == 7 # schedule_table_headers.count
+        schedule_data = schedule_row.css("td")
+        meeting_type = schedule_data[0].text
+        meeting_times = schedule_data[1].text
+        meeting_days = schedule_data[2].text
+        meeting_location = schedule_data[3].text
+        meeting_daterange = schedule_data[4].text
+        meeting_schedule_type = schedule_data[5].text
+        meeting_instructors = schedule_data[6].text.squish.split(",")
 
-        #binding.pry
         metadata = {
           title: "Intro to Programming",
           crn: 123456,
@@ -65,13 +81,13 @@ module MyBanner
           override: "No",
           enrollment_counts: {maximum: enrollment_max, actual: enrollment_actual, remaining: enrollment_remaining},
           scheduled_meeting_times: {
-            type: "Lecture",
-            time: "11:00 am - 12:20 pm",
-            days: "TR",
-            where: "Science Building 111",
-            date_range: "Oct 29, 2018 - Dec 18, 2018",
-            schedule_type: "Lecture",
-            instructors: ["Polly Professor"]
+            type: meeting_type,
+            time: meeting_times,
+            days: meeting_days,
+            where: meeting_location,
+            date_range: meeting_daterange,
+            schedule_type: meeting_schedule_type,
+            instructors: meeting_instructors
           }
         }
 
@@ -81,12 +97,12 @@ module MyBanner
     end
 
     def tablesets
-      tables.to_a.in_groups_of(3).map { |batch| batch }
+      @tablesets ||= tables.to_a.in_groups_of(3).map { |batch| batch }
     end
 
     # @return Nokogiri::XML::NodeSet
     def tables
-      doc.css(".pagebodydiv").css("table")
+      @tables ||= doc.css(".pagebodydiv").css("table")
     end
 
     # @return Nokogiri::XML::Document
