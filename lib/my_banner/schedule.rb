@@ -2,7 +2,7 @@ require "nokogiri"
 require "active_support/core_ext/array"
 
 module MyBanner
-  class FacultyDetailSchedule
+  class Schedule
 
     TABLE_SUMMARIES = {
       info: "This layout table is used to present instructional assignments for the selected Term..",

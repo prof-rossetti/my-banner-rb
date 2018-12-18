@@ -1,5 +1,5 @@
 module MyBanner
-  RSpec.describe FacultyDetailSchedule::Tableset do
+  RSpec.describe Schedule::Tableset do
     let(:filepath) { "spec/mocks/pages/faculty-detail-schedule.html" }
     let(:doc) { File.open(filepath) { |f| Nokogiri::XML(f) } }
     let(:tables) { doc.css(".pagebodydiv").css("table") }
@@ -12,6 +12,7 @@ module MyBanner
       let(:scheduled_meeting_times) { {} }
 
       it "parses schedule table html" do
+        binding.pry
         expect(tableset.scheduled_meeting_times).to eql(scheduled_meeting_times)
       end
     end

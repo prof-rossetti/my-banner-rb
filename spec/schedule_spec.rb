@@ -1,5 +1,5 @@
 module MyBanner
-  RSpec.describe FacultyDetailSchedule do
+  RSpec.describe Schedule do
     let(:filepath) { "spec/mocks/pages/faculty-detail-schedule.html" }
     let(:schedule) { described_class.new(filepath) }
 
