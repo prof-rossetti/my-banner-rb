@@ -13,7 +13,6 @@ require "my_banner/calendar_service"
 
 require "my_banner/schedule"
 require "my_banner/schedule/tableset"
-require "my_banner/page"
 require "my_banner/section"
 
 module MyBanner

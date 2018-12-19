@@ -3,7 +3,7 @@ require_relative "../my_banner"
 # namespace :my_banner do
 
   task :parse_schedule do
-    page = MyBanner::Schedule.new("pages/faculty-detail-schedule-copy.html")
+    page = MyBanner::Schedule.new
     sections = page.sections
     puts "-----------------------"
     puts "SECTIONS: #{sections.count}"
@@ -19,7 +19,8 @@ require_relative "../my_banner"
 
   # @example bundle exec rake create_calendars
   task :create_calendars do
-    sections = MyBanner::Page.new.scheduled_sections
+    page = MyBanner::Schedule.new
+    sections = page.sections
     puts "-----------------------"
     puts "SECTIONS: #{sections.count}"
     puts "-----------------------"
@@ -51,7 +52,8 @@ require_relative "../my_banner"
 
   # @example bundle exec rake clear_calendars
   task :clear_calendars do
-    sections = MyBanner::Page.new.scheduled_sections
+    page = MyBanner::Schedule.new
+    sections = page.sections
     sections.each do |section|
       service = MyBanner::CalendarService.new(section)
       service.send(:delete_events)

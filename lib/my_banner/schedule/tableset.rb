@@ -22,12 +22,11 @@ module MyBanner
       iso_table = Nokogiri::XML(info_table.to_html)
       info_rows = iso_table.css("tr")
       raise "Unexpected number of info table rows: #{info_rows.count}" unless info_rows.count == 12
-
       #> info_rows[0] includes all rows WAT? trying to isolate the first row only...
       link_text = info_rows[0].css("a").first.text.split("Status:").first.squish #> "Intro to Programming - 123456 - INFO 101 - 020"
       link_text = link_text.split(" - ") #> ["Intro to Programming", "123456", "INFO 101", "020"]
 
-      {
+      return {
         title: link_text[0],
         crn: link_text[1],
         course: link_text[2],
@@ -53,23 +52,19 @@ module MyBanner
       raise "Unexpected enrollment table row" unless enrollment_row.css("th").text == "Enrollment:"
       raise "Unexpected enrollment table data" unless enrollment_row.css("td").count == 3
       enrollment_data = enrollment_row.css("td")
-      enrollment_max = enrollment_data[0].text.to_i
-      enrollment_actual = enrollment_data[1].text.to_i
-      enrollment_remaining = enrollment_data[2].text.to_i
+
       return {
-        maximum: enrollment_max,
-        actual: enrollment_actual,
-        remaining: enrollment_remaining
+        maximum: enrollment_data[0].text.to_i,
+        actual: enrollment_data[1].text.to_i,
+        remaining: enrollment_data[2].text.to_i
       }
     end
 
     def scheduled_meeting_times
       # schedule table caption should be "Scheduled Meeting Times"
-
       #schedule_rows = schedule_table.css("tr") #> schedule_table.to_html looks good, but the nokogiri node includes 71 rows. WAT? trying to isolate the given table only...
       iso_table = Nokogiri::XML(schedule_table.to_html)
       schedule_rows = iso_table.css("tr")
-
       raise "Unexpected schedule table row count: #{schedule_rows.count}" unless schedule_rows.count == 2
       schedule_table_headers = ["Type", "Time", "Days", "Where", "Date Range", "Schedule Type", "Instructors"]
       raise "Unexpected schedule table headers" unless schedule_rows[0].css("th").map(&:text) == schedule_table_headers

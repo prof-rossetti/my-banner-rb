@@ -31,7 +31,7 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
 
   spec.add_dependency "activesupport", "~> 5.2"
-  spec.add_dependency "google-api-client", "~> 0.8"
+  spec.add_dependency "google-api-client", "~> 0.27"
   spec.add_dependency "nokogiri", '~> 1.9'
   spec.add_dependency "pry"
 

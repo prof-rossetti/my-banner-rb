@@ -3,7 +3,7 @@ PATH
   specs:
     my_banner (0.1.0)
       activesupport (~> 5.2)
-      google-api-client (~> 0.8)
+      google-api-client (~> 0.27)
       nokogiri (~> 1.9)
       pry
 
@@ -61,7 +61,7 @@ GEM
     minitest (5.11.3)
     multi_json (1.13.1)
     multipart-post (2.0.0)
-    nokogiri (1.9.0)
+    nokogiri (1.9.1)
       mini_portile2 (~> 2.4.0)
     os (1.0.0)
     pry (0.12.2)
