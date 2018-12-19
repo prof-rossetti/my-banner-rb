@@ -16,8 +16,8 @@ module MyBanner
 
     def initialize(options={})
       @scope = options[:scope] || AUTH_SCOPE
-      @credentials_filepath = options[:credentials_filepath] || "calendar_auth/credentials.json"
-      @token_filepath = options[:token_filepath] || "calendar_auth/token.yaml"
+      @credentials_filepath = options[:credentials_filepath] || "auth/calendar_credentials.json"
+      @token_filepath = options[:token_filepath] || "auth/calendar_token.yaml"
       @user_id = options[:user_id] || "default"
     end
 

@@ -40,6 +40,10 @@
   + So many events. They don't get deleted, they go into "cancelled" [status](https://developers.google.com/calendar/v3/reference/events#status)
   + https://developers.google.com/calendar/v3/reference/events/list
 
+## Google Sheets API
+
+  + https://developers.google.com/sheets/api/quickstart/ruby
+
 ## Parsing HTML with Nokogiri
 
   + https://www.nokogiri.org/tutorials/searching_a_xml_html_document.html

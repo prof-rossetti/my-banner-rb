@@ -1,8 +1,8 @@
 module MyBanner
   RSpec.describe CalendarClient do
 
-    let(:credentials_filepath) { "spec/mocks/calendar_auth/credentials.json" }
-    let(:token_filepath) { "spec/mocks/calendar_auth/token.yaml" }
+    let(:credentials_filepath) { "spec/mocks/auth/calendar_credentials.json" }
+    let(:token_filepath) { "spec/mocks/auth/calendar_token.yaml" }
     let(:authorization) { CalendarAuthorization.new(credentials_filepath: credentials_filepath, token_filepath: token_filepath) }
     let(:client) { described_class.new(authorization.stored_credentials) }
 
@@ -16,10 +16,10 @@ module MyBanner
     it "has client credentials and user refresh token" do
       creds = client.authorization
       expect(creds).to be_kind_of(Google::Auth::UserRefreshCredentials)
-      expect(creds.client_id).to eql("mock-client-id.apps.googleusercontent.com")
-      expect(creds.client_secret).to eql("mock-client-secret")
+      expect(creds.client_id).to eql("mock-calendar-client-id.apps.googleusercontent.com")
+      expect(creds.client_secret).to eql("mock-calendar-client-secret")
       expect(creds.scope).to eql(["https://www.googleapis.com/auth/calendar"])
-      expect(creds.refresh_token).to eql("mock-refresh-token")
+      expect(creds.refresh_token).to eql("mock-calendar-refresh-token")
       expect(creds.expires_at).to be_kind_of(Time)
       expect(creds.expiry).to eql(60)
     end

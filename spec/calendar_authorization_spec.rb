@@ -1,13 +1,13 @@
 module MyBanner
   RSpec.describe CalendarAuthorization do
     let(:scope) { "https://www.googleapis.com/auth/calendar" }
-    let(:credentials_filepath) { "spec/mocks/calendar_auth/credentials.json" }
-    let(:token_filepath) { "spec/mocks/calendar_auth/token.yaml" }
+    let(:credentials_filepath) { "spec/mocks/auth/calendar_credentials.json" }
+    let(:token_filepath) { "spec/mocks/auth/calendar_token.yaml" }
     let(:calendar_authorization) { described_class.new(scope: scope, credentials_filepath: credentials_filepath, token_filepath: token_filepath) }
 
-    let(:client_id) { "mock-client-id.apps.googleusercontent.com" }
-    let(:client_secret) { "mock-client-secret" }
-    let(:refresh_token) { "mock-refresh-token" }
+    let(:client_id) { "mock-calendar-client-id.apps.googleusercontent.com" }
+    let(:client_secret) { "mock-calendar-client-secret" }
+    let(:refresh_token) { "mock-calendar-refresh-token" }
 
     let(:user_code) { "mock-user-auth-code" }
     let(:redirect_uri) { "urn:ietf:wg:oauth:2.0:oob" }
@@ -82,7 +82,7 @@ module MyBanner
     end
 
     describe "#user_provided_credentials" do
-      let(:token_filepath) { "spec/mocks/calendar_auth/temp_token.yaml" }
+      let(:token_filepath) { "spec/mocks/auth/temp_calendar_token.yaml" }
 
       before(:each) do
         FileUtils.rm_rf(token_filepath)
