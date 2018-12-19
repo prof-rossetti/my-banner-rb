@@ -13,8 +13,8 @@ require "my_banner/calendar_service"
 
 require "my_banner/schedule"
 require "my_banner/schedule/tableset"
-require "my_banner/section"
-require "my_banner/section/meeting"
+require "my_banner/section" # consider "my_banner/schedule/tableset/section"
+require "my_banner/section/meeting" # consider "my_banner/schedule/tableset/section/meeting" but that's starting to get out of hand, no?
 
 module MyBanner
 end

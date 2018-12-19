@@ -41,7 +41,7 @@ module MyBanner
     end
 
     def meeting_dates
-      term_date_range.select{ |date| weekday_numbers.include?(date.wday) }
+      term_date_range.select { |date| weekday_numbers.include?(date.wday) }
     end
 
     def term_date_range
@@ -49,7 +49,7 @@ module MyBanner
     end
 
     def weekday_numbers
-      weekdays.map{|char| WEEKDAYS_MAP[char.to_sym] }
+      weekdays.map { |char| WEEKDAYS_MAP[char.to_sym] }
     end
 
   end

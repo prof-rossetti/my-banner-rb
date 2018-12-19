@@ -10,27 +10,19 @@ module MyBanner
     end
 
     def section
-      Section.new(metadata)
+      @section ||= Section.new(metadata)
     end
 
     def metadata
-      info.merge(enrollment_counts: enrollment_counts, scheduled_meeting_times: scheduled_meeting_times)
+      @metadata ||= info.merge(enrollment_counts: enrollment_counts, scheduled_meeting_times: scheduled_meeting_times)
     end
 
     def info
-      #> info_table.to_html looks good, but the nokogiri node includes all tables with 52 rows. WAT? trying to isolate the first table only...
-      iso_table = Nokogiri::XML(info_table.to_html)
-      info_rows = iso_table.css("tr")
-      raise "Unexpected number of info table rows: #{info_rows.count}" unless info_rows.count == 12
-      #> info_rows[0] includes all rows WAT? trying to isolate the first row only...
-      link_text = info_rows[0].css("a").first.text.split("Status:").first.squish #> "Intro to Programming - 123456 - INFO 101 - 020"
-      link_text = link_text.split(" - ") #> ["Intro to Programming", "123456", "INFO 101", "020"]
-
-      return {
-        title: link_text[0],
-        crn: link_text[1],
-        course: link_text[2],
-        section: link_text[3].to_i,
+      @info ||= {
+        title: info_link_text[0],
+        crn: info_link_text[1],
+        course: info_link_text[2],
+        section: info_link_text[3].to_i,
         status: info_rows[1].css("td").text,
         registration: info_rows[2].css("td").text,
         college: info_rows[3].css("td").text.squish,
@@ -44,16 +36,7 @@ module MyBanner
     end
 
     def enrollment_counts
-      enrollment_rows = enrollment_table.css("tr")
-      raise "Unexpected enrollment table row count: #{enrollment_rows.count}" unless enrollment_rows.count == 3
-      enrollment_table_headers = ["", "Maximum", "Actual", "Remaining"]
-      raise "Unexpected enrollment table headers" unless enrollment_rows[0].css("th").map(&:text) == enrollment_table_headers
-      enrollment_row = enrollment_rows[1]
-      raise "Unexpected enrollment table row" unless enrollment_row.css("th").text == "Enrollment:"
-      raise "Unexpected enrollment table data" unless enrollment_row.css("td").count == 3
-      enrollment_data = enrollment_row.css("td")
-
-      return {
+      @enrollment_counts ||= {
         maximum: enrollment_data[0].text.to_i,
         actual: enrollment_data[1].text.to_i,
         remaining: enrollment_data[2].text.to_i
@@ -61,18 +44,7 @@ module MyBanner
     end
 
     def scheduled_meeting_times
-      # schedule table caption should be "Scheduled Meeting Times"
-      #schedule_rows = schedule_table.css("tr") #> schedule_table.to_html looks good, but the nokogiri node includes 71 rows. WAT? trying to isolate the given table only...
-      iso_table = Nokogiri::XML(schedule_table.to_html)
-      schedule_rows = iso_table.css("tr")
-      raise "Unexpected schedule table row count: #{schedule_rows.count}" unless schedule_rows.count == 2
-      schedule_table_headers = ["Type", "Time", "Days", "Where", "Date Range", "Schedule Type", "Instructors"]
-      raise "Unexpected schedule table headers" unless schedule_rows[0].css("th").map(&:text) == schedule_table_headers
-      schedule_row = schedule_rows[1]
-      raise "Unexpected schedule table data" unless schedule_row.css("td").count == 7 # schedule_table_headers.count
-      schedule_data = schedule_row.css("td")
-
-      return {
+      {
         type: schedule_data[0].text,
         time: schedule_data[1].text,
         days: schedule_data[2].text,
@@ -81,6 +53,62 @@ module MyBanner
         schedule_type: schedule_data[5].text,
         instructors: schedule_data[6].text.squish.split(",")
       }
+    end
+
+    private
+
+    def info_link_text
+      @info_link_text ||= info_rows[0].css("a").first.text.split("Status:").first.squish.split(" - ")
+    end
+
+    def enrollment_data
+      @enrollment_data ||= begin
+        enrollment_row = enrollment_rows[1]
+        raise "Unexpected enrollment table row" unless enrollment_row.css("th").text == "Enrollment:"
+        raise "Unexpected enrollment table data" unless enrollment_row.css("td").count == 3
+        enrollment_row.css("td")
+      end
+    end
+
+    def schedule_data
+      @schedule_data ||= begin
+        schedule_row = schedule_rows[1]
+        raise "Unexpected schedule table data" unless schedule_row.css("td").count == 7 # schedule_table_headers.count
+        schedule_data = schedule_row.css("td")
+      end
+    end
+
+    def info_rows
+      @info_rows ||= begin
+        table = Nokogiri::XML(info_table.to_html) #> workaround because info_table.css("tr") seems to return too many rows (52). the raw html looks good though.
+        table_rows = table.css("tr")
+        raise "Unexpected number of info table rows: #{table_rows.count}" unless table_rows.count == 12
+        table_rows
+      end
+    end
+
+    def enrollment_rows
+      @enrollment_rows ||= begin
+        table_rows = enrollment_table.css("tr")
+        raise "Unexpected enrollment table row count: #{table_rows.count}" unless table_rows.count == 3
+        expected_headers = ["", "Maximum", "Actual", "Remaining"]
+        table_headers = table_rows[0].css("th").map(&:text)
+        raise "Unexpected enrollment table headers" unless table_headers == expected_headers
+        table_rows
+      end
+    end
+
+    def schedule_rows
+      @schedule_rows ||= begin
+        table = Nokogiri::XML(schedule_table.to_html)#> workaround because schedule_table.css("tr") seems to return too many rows (71). the raw html looks good though.
+        table_rows = table.css("tr")
+        raise "Unexpected schedule table row count: #{table_rows.count}" unless table_rows.count == 2
+        # consider also validating table caption == "Scheduled Meeting Times"
+        expected_headers = ["Type", "Time", "Days", "Where", "Date Range", "Schedule Type", "Instructors"]
+        table_headers = table_rows[0].css("th").map(&:text)
+        raise "Unexpected schedule table headers" unless table_headers == expected_headers
+        table_rows
+      end
     end
 
   end
