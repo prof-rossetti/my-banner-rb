@@ -1,10 +1,8 @@
 module MyBanner
   class Section
 
-    WEEKDAYS_MAP = { M: 1, T: 2, W: 3, R: 4, F: 5, S: 6, N: 0 } # S and N assumed but not yet verified
-
-    attr_accessor :metadata, :abbreviation, :title, :instructor, :location,
-                  :time_zone, :weekdays, :term_start, :term_end, :start_time, :end_time
+    attr_accessor :metadata, :abbreviation, :title, :instructor, :location, :time_zone, :weekdays,
+                  :term_start, :term_end, :start_time, :end_time
 
     def initialize(metadata={})
       @metadata = metadata
@@ -51,6 +49,8 @@ module MyBanner
     def weekday_numbers
       weekdays.map { |char| WEEKDAYS_MAP[char.to_sym] }
     end
+
+    WEEKDAYS_MAP = { M: 1, T: 2, W: 3, R: 4, F: 5, S: 6, N: 0 } # S and N assumed but not yet verified
 
   end
 end

@@ -2,13 +2,7 @@ require "nokogiri"
 require "active_support/core_ext/array"
 
 module MyBanner
-  class Schedule
-
-    TABLE_SUMMARIES = {
-      info: "This layout table is used to present instructional assignments for the selected Term..",
-      enrollment: "This table displays enrollment and waitlist counts.",
-      schedule: "This table lists the scheduled meeting times and assigned instructors for this class.."
-    }
+  class Schedule # consider Page, SchedulePage, DetailSchedulePage, FacultyDetailSchedulePage
 
     attr_reader :filepath
 
@@ -31,6 +25,12 @@ module MyBanner
         Tableset.new(info_table, enrollment_table, schedule_table)
       end
     end
+
+    TABLE_SUMMARIES = {
+      info: "This layout table is used to present instructional assignments for the selected Term..",
+      enrollment: "This table displays enrollment and waitlist counts.",
+      schedule: "This table lists the scheduled meeting times and assigned instructors for this class.."
+    }
 
     # @return Nokogiri::XML::NodeSet
     def tables
