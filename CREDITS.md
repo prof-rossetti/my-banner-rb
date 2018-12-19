@@ -40,6 +40,10 @@
   + So many events. They don't get deleted, they go into "cancelled" [status](https://developers.google.com/calendar/v3/reference/events#status)
   + https://developers.google.com/calendar/v3/reference/events/list
 
+## Parsing HTML with Nokogiri
+
+  + https://www.nokogiri.org/tutorials/searching_a_xml_html_document.html
+
 ## Testing and Quality Control
 
   + https://github.com/bblimke/webmock/wiki/Enabling-and-Disabling-WebMock

@@ -37,11 +37,15 @@ From a developer console (`bin/console`), for the first time only, invoke `MyBan
 
 1. Login to https://myaccess.georgetown.edu/, then navigate to: **Home > Faculty Services > Faculty Detail Schedule** to access your schedule of classes. Note: you might need to select a term along the way.
 
-2. Once you have accessed your schedule, use your browser to save the HTML page in this repository as: **pages/faculty-detail-schedule.html**.
+2. Once you have accessed your schedule, use your browser to save the HTML page in this repository as: **pages/faculty-detail-schedule.html**. Test the validity of the schedule page:
+
+```sh
+bundle exec rake parse_schedule
+```
 
 3. Finally, execute the scheduling program:
 
-```rb
+```sh
 bundle exec rake create_calendars
 ```
 

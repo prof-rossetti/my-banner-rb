@@ -2,9 +2,25 @@ require_relative "../my_banner"
 
 # namespace :my_banner do
 
+  task :parse_schedule do
+    page = MyBanner::Schedule.new
+    sections = page.sections
+    puts "-----------------------"
+    puts "SECTIONS: #{sections.count}"
+    puts "-----------------------"
+    sections.each do |section|
+      puts ""
+      puts "#{section.title.upcase}:"
+      puts ""
+      pp section.metadata
+      puts ""
+    end
+  end
+
   # @example bundle exec rake create_calendars
   task :create_calendars do
-    sections = MyBanner::Page.new.scheduled_sections
+    page = MyBanner::Schedule.new
+    sections = page.sections
     puts "-----------------------"
     puts "SECTIONS: #{sections.count}"
     puts "-----------------------"
@@ -18,7 +34,7 @@ require_relative "../my_banner"
       meetings = section.meetings
       puts "\nMEETINGS: #{meetings.count}"
       meetings.each do |meeting|
-        puts " + #{meeting.label}"
+        puts " + #{meeting.to_s}"
       end
 
       events = service.events
@@ -36,7 +52,8 @@ require_relative "../my_banner"
 
   # @example bundle exec rake clear_calendars
   task :clear_calendars do
-    sections = MyBanner::Page.new.scheduled_sections
+    page = MyBanner::Schedule.new
+    sections = page.sections
     sections.each do |section|
       service = MyBanner::CalendarService.new(section)
       service.send(:delete_events)
