@@ -9,7 +9,7 @@ module MyBanner
       validate_datetimes
     end
 
-    def label # consider .to_s
+    def to_s
       "#{start_at.try(:strftime, '%Y-%m-%d %H:%M')} ... #{end_at.try(:strftime, '%Y-%m-%d %H:%M')}"
     end
 

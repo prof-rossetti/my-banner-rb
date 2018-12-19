@@ -1,7 +1,7 @@
 module MyBanner
   RSpec.describe Schedule::Tableset do
+
     let(:filepath) { "spec/mocks/pages/faculty-detail-schedule.html" }
-    #let(:filepath) { "pages/faculty-detail-schedule.html" }
     let(:doc) { File.open(filepath) { |f| Nokogiri::XML(f) } }
     let(:tables) { doc.css(".pagebodydiv").css("table").first(3) }
     let(:info_table) { tables.first }
