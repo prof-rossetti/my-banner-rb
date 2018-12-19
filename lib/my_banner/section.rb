@@ -1,8 +1,10 @@
 module MyBanner
   class Section
 
+    WEEKDAYS_MAP = { M: 1, T: 2, W: 3, R: 4, F: 5, S: 6, N: 0 } # S and N assumed but not yet verified
+
     attr_accessor :metadata, :abbreviation, :title, :instructor, :location,
-      :time_zone, :weekdays, :term_start, :term_end, :start_time, :end_time
+                  :time_zone, :weekdays, :term_start, :term_end, :start_time, :end_time
 
     def initialize(metadata={})
       @metadata = metadata
@@ -28,6 +30,8 @@ module MyBanner
       abbreviation
     end
 
+    # @note does not exclude meetings cancelled due to holidays
+    # @todo cross-reference the "Holidays in the United States" calendar events to make a best guess at which classes to exclude
     def meetings
       meeting_dates.map do |date|
         start_at = DateTime.parse("#{date} #{start_time}")
@@ -46,32 +50,6 @@ module MyBanner
 
     def weekday_numbers
       weekdays.map{|char| WEEKDAYS_MAP[char.to_sym] }
-    end
-
-    WEEKDAYS_MAP = { M: 1, T: 2, W: 3, R: 4, F: 5, S: 6, N: 0 } # S and N not yet verified
-
-    class Meeting
-      attr_reader :start_at, :end_at
-
-      def initialize(options={})
-        @start_at = options[:start_at]
-        @end_at = options[:end_at]
-        validate_datetimes
-      end
-
-      def label
-        "#{start_at.try(:strftime, '%Y-%m-%d %H:%M')} ... #{end_at.try(:strftime, '%Y-%m-%d %H:%M')}"
-      end
-
-      def to_h
-        { start_at: start_at, end_at: end_at }
-      end
-
-      private
-
-      def validate_datetimes
-        raise "expecting datetimes" unless start_at && end_at && start_at.is_a?(DateTime) && end_at.is_a?(DateTime)
-      end
     end
 
   end

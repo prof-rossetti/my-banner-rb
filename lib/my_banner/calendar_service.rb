@@ -8,7 +8,7 @@ module MyBanner
       @calendar_name = section.calendar_name
       @time_zone = section.time_zone
       @location = section.location
-      @meetings = section.meetings # todo: exclude meetings cancelled/rescheduled due to holidays
+      @meetings = section.meetings
     end
 
     def execute
