@@ -1,12 +1,10 @@
-require "google/apis/calendar_v3"
+require "google/apis/sheets_v4"
 require "googleauth"
 require "googleauth/stores/file_token_store"
 
 module MyBanner
   class SpreadsheetAuthorization
-    # permission to read and write ("https://www.googleapis.com/auth/calendar")
-    # @see: https://github.com/googleapis/google-api-ruby-client/blob/6773823e78266830a9a8a651d5fd52e307b63e97/generated/google/apis/calendar_v3.rb#L31-L43
-    AUTH_SCOPE = Google::Apis::CalendarV3::AUTH_CALENDAR
+    AUTH_SCOPE = Google::Apis::SheetsV4::AUTH_SPREADSHEETS_READONLY # AUTH_SPREADSHEETS
 
     # returns authorization code in browser title bar and promps user to copy the code
     # @see https://developers.google.com/api-client-library/python/auth/installed-app#choosingredirecturi
@@ -16,8 +14,8 @@ module MyBanner
 
     def initialize(options={})
       @scope = options[:scope] || AUTH_SCOPE
-      @credentials_filepath = options[:credentials_filepath] || "auth/calendar_credentials.json"
-      @token_filepath = options[:token_filepath] || "auth/calendar_token.yaml"
+      @credentials_filepath = options[:credentials_filepath] || "auth/spreadsheet_credentials.json"
+      @token_filepath = options[:token_filepath] || "auth/spreadsheet_token.yaml"
       @user_id = options[:user_id] || "default"
     end
 

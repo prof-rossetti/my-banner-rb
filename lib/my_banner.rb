@@ -11,6 +11,7 @@ require "my_banner/calendar_authorization"
 require "my_banner/calendar_client"
 require "my_banner/calendar_service"
 
+require "my_banner/spreadsheet_authorization"
 require "my_banner/spreadsheet_service"
 
 require "my_banner/schedule"
