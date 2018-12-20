@@ -49,6 +49,7 @@
   + https://stackoverflow.com/questions/37876423/get-the-list-of-all-spreadsheets-associated-with-google-account-using-sheets-api
   + https://github.com/googleapis/google-api-ruby-client/blob/711dfb83b33c03535076917726956584d5c8bf9a/generated/google/apis/drive_v3/service.rb#L795-L847
   + https://github.com/googleapis/google-api-ruby-client/blob/711dfb83b33c03535076917726956584d5c8bf9a/generated/google/apis/sheets_v4/service.rb#L481-L518
+  + https://developers.google.com/sheets/api/reference/rest/v4/spreadsheets/create
 
 ## Parsing HTML with Nokogiri
 

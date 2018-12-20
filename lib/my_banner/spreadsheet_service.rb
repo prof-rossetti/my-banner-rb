@@ -16,8 +16,11 @@ module MyBanner
         #
       else
         puts "CREATING NEW SHEET..."
-        # create the sheet
-        # sheet = _________
+        new_sheet = Google::Apis::SheetsV4::Spreadsheet.new #(name: sheet_name)
+        #new_sheet_options = {name: sheet_name}
+        response = client.create_spreadsheet(new_sheet) #> Google::Apis::SheetsV4::Spreadsheet
+        puts response.to_h
+        sheet = response
       end
 
       #spreadsheet_id = "1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms"
