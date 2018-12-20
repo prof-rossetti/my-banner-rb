@@ -8,7 +8,7 @@ module MyBanner
     attr_reader :spreadsheet_title, :sheet_name, :sheet_values
 
     def initialize
-      @spreadsheet_title = "Gradebook - INFO 101 (201905)" # todo: get from section/roster
+      @spreadsheet_title = "Gradebook - INFO 101 (20190XYZ)" # todo: get from section/roster
       @sheet_name = "Sheet1" # todo: "Roster #{Date.today.to_s}"
       @sheet_values = [["email", "registration_number", "net_id"]] + 9.times.map { |i| ["student#{i+1}@example.edu", i+1, "student#{i+1}"] } # todo: get from section/roster
     end
@@ -31,7 +31,10 @@ module MyBanner
         if doc
           client.get_spreadsheet(doc.id)
         else
-          new_spreadsheet_attrs = {properties: {title: spreadsheet_title}}
+          #binding.pry
+          #grid_properties = Google::Apis::SheetsV4::GridProperties.new(column_count: 5, row_count: 19)
+          roster_sheet = Google::Apis::SheetsV4::Sheet.new(properties: {title: "Roster", sheet_type: "GRID"})
+          new_spreadsheet_attrs = { properties: {title: spreadsheet_title}, sheets: [roster_sheet] }
           new_spreadsheet = Google::Apis::SheetsV4::Spreadsheet.new(new_spreadsheet_attrs)
           client.create_spreadsheet(new_spreadsheet)
         end
