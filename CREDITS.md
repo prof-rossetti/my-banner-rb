@@ -50,6 +50,11 @@
   + https://github.com/googleapis/google-api-ruby-client/blob/711dfb83b33c03535076917726956584d5c8bf9a/generated/google/apis/drive_v3/service.rb#L795-L847
   + https://github.com/googleapis/google-api-ruby-client/blob/711dfb83b33c03535076917726956584d5c8bf9a/generated/google/apis/sheets_v4/service.rb#L481-L518
   + https://developers.google.com/sheets/api/reference/rest/v4/spreadsheets/create
+  + https://developers.google.com/sheets/api/reference/rest/v4/spreadsheets#Spreadsheet
+  + https://developers.google.com/sheets/api/reference/rest/v4/spreadsheets/sheets
+  + https://stackoverflow.com/questions/43207765/how-do-i-add-data-to-a-google-sheet-from-ruby
+  + https://github.com/googleapis/google-api-ruby-client/blob/711dfb83b33c03535076917726956584d5c8bf9a/generated/google/apis/sheets_v4/service.rb#L338-L406
+  + https://developers.google.com/sheets/api/reference/rest/v4/spreadsheets.values/append
 
 ## Parsing HTML with Nokogiri
 

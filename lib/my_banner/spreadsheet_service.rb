@@ -31,14 +31,22 @@ module MyBanner
         puts "  + #{sheet.properties.title} (#{cols} cols x #{rows} rows)"
       end
 
-      #spreadsheet_id = "1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms"
-      #range = 'Class Data!A2:E'
-      #response = client.get_spreadsheet_values(spreadsheet_id, range)
-      #puts 'Name, Major:'
-      #puts 'No data found.' if response.values.empty?
-      #response.values.each do |row|
-      #  puts "#{row[0]}, #{row[4]}"
-      #end
+
+      data = 10.times.map { |i| ["email#{i}@example.com", "ABC123", i] }
+      value_range = Google::Apis::SheetsV4::ValueRange.new(values: data)
+      range = "Sheet1!A1"
+      #response = client.append_spreadsheet_value(spreadsheet.spreadsheet_id, range, value_range, value_input_option: "RAW") # adds rows after existing ones
+      response = client.update_spreadsheet_value(spreadsheet.spreadsheet_id, range, value_range, value_input_option: "RAW") # replaces existing ones
+
+      #fields = ["spreadsheetId", "tableRange", "updates"]
+      #fields = "spreadsheetId tableRange updates"
+      #fr = client.update_spreadsheet_value(spreadsheet.spreadsheet_id, range, value_range, value_input_option: "RAW", fields: fields)
+
+      range = "Sheet1!A1:E10"
+      response = client.get_spreadsheet_values(spreadsheet.spreadsheet_id, range)
+      response.values.each do |row|
+        puts "      #{row.join(" | ")}"
+      end
 
     end
 
