@@ -1,0 +1,2 @@
+---
+default: '{"client_id":"mock-drive-client-id.apps.googleusercontent.com","access_token":"mock-drive-access-token","refresh_token":"mock-drive-refresh-token","scope":["https://www.googleapis.com/auth/drive.file"],"expiration_time_millis":1544032192000}'
