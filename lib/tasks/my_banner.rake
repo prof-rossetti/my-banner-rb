@@ -81,6 +81,8 @@ require_relative "../my_banner"
     getter_response.values.each do |row|
       puts "  #{row.join(" | ")}"
     end
+
+    #service.drive_client.delete_file(spreadsheet.spreadsheet_id) # temporary, helps to test file creation
   end
 
 #end
