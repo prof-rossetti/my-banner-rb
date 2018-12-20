@@ -56,6 +56,8 @@
   + https://github.com/googleapis/google-api-ruby-client/blob/711dfb83b33c03535076917726956584d5c8bf9a/generated/google/apis/sheets_v4/service.rb#L338-L406
   + https://developers.google.com/sheets/api/reference/rest/v4/spreadsheets.values/append
   + https://github.com/googleapis/google-api-ruby-client/blob/711dfb83b33c03535076917726956584d5c8bf9a/generated/google/apis/drive_v3/service.rb#L604-L639
+  + https://developers.google.com/drive/api/v2/reference/files/delete
+  + https://stackoverflow.com/questions/46836393/how-do-i-delete-a-spreadsheet-file-using-google-spreadsheets-api
 
 ## Parsing HTML with Nokogiri
 

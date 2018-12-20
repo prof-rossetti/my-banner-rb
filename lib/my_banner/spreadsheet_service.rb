@@ -19,6 +19,7 @@ module MyBanner
 
     # @return Google::Apis::SheetsV4::UpdateValuesResponse
     def update_values
+      # need to create sheet if it doesn't already exist
       range = "#{sheet_name}!A1"
       vals = Google::Apis::SheetsV4::ValueRange.new(values: sheet_values)
       client.update_spreadsheet_value(spreadsheet.spreadsheet_id, range, vals, value_input_option: "RAW")
