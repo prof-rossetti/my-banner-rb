@@ -7,6 +7,8 @@ require "pry"
 
 require "my_banner/version"
 
+require "my_banner/google_authorization"
+
 require "my_banner/calendar_authorization"
 require "my_banner/calendar_client"
 require "my_banner/calendar_service"

@@ -21,7 +21,8 @@ module MyBanner
         sheets_client = Google::Apis::SheetsV4::SheetsService.new
         sheets_client.client_options.application_name = "MyBanner Spreadsheet Client"
         sheets_client.client_options.application_version = VERSION
-        sheets_client.authorization = SpreadsheetAuthorization.new.stored_credentials
+        auth = SpreadsheetAuthorization.new
+        sheets_client.authorization = auth.stored_credentials || auth.user_provided_credentials
         sheets_client
       end
     end
