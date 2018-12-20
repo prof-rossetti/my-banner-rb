@@ -7,20 +7,28 @@ module MyBanner
 
     def execute
       request_options = {q: "mimeType='application/vnd.google-apps.spreadsheet'", order_by: "createdTime desc", page_size: 25}
-      all_sheets = drive_client.list_files(request_options) #> Google::Apis::DriveV3::FileList
+      docs = drive_client.list_files(request_options) #> Google::Apis::DriveV3::FileList
 
-      sheet_name = "Gradebook - INFO 101 (201909)"
-      sheet = all_sheets.files.find{|f| f.name == sheet_name }
-      if sheet
-        puts "FOUND THE SHEET: #{sheet.id}"
-        #
+      doc_title = "Gradebook - INFO 101 (201905)"
+      doc = docs.files.find{|f| f.name == doc_title } #> Google::Apis::DriveV3::File:0x007f8585e67cd0
+
+      if doc
+        puts "FOUND EXISTING DOCUMENT: #{doc.id}"
+        puts "FETCHING THE SPREADSHEET..."
+        spreadsheet = client.get_spreadsheet(doc.id) #> #> Google::Apis::SheetsV4::Spreadsheet
       else
-        puts "CREATING NEW SHEET..."
-        new_sheet = Google::Apis::SheetsV4::Spreadsheet.new #(name: sheet_name)
-        #new_sheet_options = {name: sheet_name}
-        response = client.create_spreadsheet(new_sheet) #> Google::Apis::SheetsV4::Spreadsheet
-        puts response.to_h
-        sheet = response
+        puts "CREATING THE SPREADSHEET..."
+        new_spreadsheet_attrs = {properties: {title: doc_title}}
+        new_spreadsheet = Google::Apis::SheetsV4::Spreadsheet.new(new_spreadsheet_attrs)
+        spreadsheet = client.create_spreadsheet(new_spreadsheet) #> Google::Apis::SheetsV4::Spreadsheet
+      end
+
+      puts "ID: #{spreadsheet.spreadsheet_id}"
+      puts "SHEETS/TABS:"
+      spreadsheet.sheets.each do |sheet|
+        cols = sheet.properties.grid_properties.column_count
+        rows = sheet.properties.grid_properties.row_count
+        puts "  + #{sheet.properties.title} (#{cols} cols x #{rows} rows)"
       end
 
       #spreadsheet_id = "1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms"
