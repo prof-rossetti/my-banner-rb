@@ -40,9 +40,15 @@
   + So many events. They don't get deleted, they go into "cancelled" [status](https://developers.google.com/calendar/v3/reference/events#status)
   + https://developers.google.com/calendar/v3/reference/events/list
 
-## Google Sheets API
+## Google Sheets and Drive APIs
 
   + https://developers.google.com/sheets/api/quickstart/ruby
+  + https://developers.google.com/sheets/api/guides/migration#list_spreadsheets_for_the_authenticated_user
+  + https://developers.google.com/drive/api/v3/reference/files/list
+  + https://developers.google.com/drive/api/v3/quickstart/ruby
+  + https://stackoverflow.com/questions/37876423/get-the-list-of-all-spreadsheets-associated-with-google-account-using-sheets-api
+  + https://github.com/googleapis/google-api-ruby-client/blob/711dfb83b33c03535076917726956584d5c8bf9a/generated/google/apis/drive_v3/service.rb#L795-L847
+  + https://github.com/googleapis/google-api-ruby-client/blob/711dfb83b33c03535076917726956584d5c8bf9a/generated/google/apis/sheets_v4/service.rb#L481-L518
 
 ## Parsing HTML with Nokogiri
 
