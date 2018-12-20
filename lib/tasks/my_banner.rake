@@ -60,4 +60,10 @@ require_relative "../my_banner"
     end
   end
 
+  # @example bundle exec rake create_spreadsheets
+  task :create_spreadsheets do
+    service = MyBanner::SpreadsheetService.new
+    service.execute
+  end
+
 #end
