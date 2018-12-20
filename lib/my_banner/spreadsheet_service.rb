@@ -14,17 +14,14 @@ module MyBanner
     end
 
     def execute
-      puts ""
-      setter_values = Google::Apis::SheetsV4::ValueRange.new(values: sheet_values)
-      setter_range = "#{sheet_name}!A1"
-      setter_response = client.update_spreadsheet_value(spreadsheet.spreadsheet_id, setter_range, setter_values, value_input_option: "RAW")
-      pp setter_response.to_h
-      puts ""
-      getter_range = "#{sheet_name}!A1:C10"
-      getter_response = client.get_spreadsheet_values(spreadsheet.spreadsheet_id, getter_range)
-      getter_response.values.each do |row|
-        puts "  #{row.join(" | ")}"
-      end
+      update_values
+    end
+
+    # @return Google::Apis::SheetsV4::UpdateValuesResponse
+    def update_values
+      range = "#{sheet_name}!A1"
+      vals = Google::Apis::SheetsV4::ValueRange.new(values: sheet_values)
+      client.update_spreadsheet_value(spreadsheet.spreadsheet_id, range, vals, value_input_option: "RAW")
     end
 
     # @return Google::Apis::SheetsV4::Spreadsheet
@@ -56,28 +53,6 @@ module MyBanner
     def drive_client
       @drive_client ||= DriveClient.new
     end
-
-
-
-
-
-
-
-
-
-    #def inspect_spreadsheet
-    #  puts "ID: #{spreadsheet.spreadsheet_id}"
-    #  puts "SHEETS/TABS:"
-    #  spreadsheet.sheets.each do |sheet|
-    #    cols = sheet.properties.grid_properties.column_count
-    #    rows = sheet.properties.grid_properties.row_count
-    #    puts "  + #{sheet.properties.title} (#{cols} cols x #{rows} rows)"
-    #  end
-    #end
-
-
-
-
 
   end
 end

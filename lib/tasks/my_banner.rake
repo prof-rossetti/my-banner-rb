@@ -63,7 +63,24 @@ require_relative "../my_banner"
   # @example bundle exec rake create_spreadsheets
   task :create_spreadsheets do
     service = MyBanner::SpreadsheetService.new
-    service.execute
+
+    spreadsheet = service.spreadsheet
+    puts "SPREADSHEET: #{spreadsheet.properties.title.upcase}"
+    puts "ID: #{spreadsheet.spreadsheet_id}"
+    #puts "SHEETS:"
+    #spreadsheet.sheets.each do |sheet|
+    #  cols = sheet.properties.grid_properties.column_count
+    #  rows = sheet.properties.grid_properties.row_count
+    #  puts "  + #{sheet.properties.title} (#{cols} cols x #{rows} rows)"
+    #end
+
+    setter_response = service.execute
+
+    puts "DATA:"
+    getter_response = service.client.get_spreadsheet_values(spreadsheet.spreadsheet_id, setter_response.updated_range)
+    getter_response.values.each do |row|
+      puts "  #{row.join(" | ")}"
+    end
   end
 
 #end
