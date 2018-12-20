@@ -17,14 +17,7 @@ module MyBanner
     end
 
     def client
-      @client ||= begin
-        sheets_client = Google::Apis::SheetsV4::SheetsService.new
-        sheets_client.client_options.application_name = "MyBanner Spreadsheet Client"
-        sheets_client.client_options.application_version = VERSION
-        auth = SpreadsheetAuthorization.new
-        sheets_client.authorization = auth.stored_credentials || auth.user_provided_credentials
-        sheets_client
-      end
+      @client ||= SpreadsheetClient.new
     end
 
   end
