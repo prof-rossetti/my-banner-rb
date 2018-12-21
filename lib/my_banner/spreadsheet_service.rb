@@ -5,12 +5,18 @@ require "google/apis/sheets_v4"
 module MyBanner
   class SpreadsheetService
 
-    attr_reader :spreadsheet_title, :sheet_name, :sheet_values
+    attr_reader :section, :spreadsheet_title, :sheet_name, :sheet_values
 
-    def initialize
-      @spreadsheet_title = "Gradebook - INFO 101 (201901)" # todo: get from section/roster
-      @sheet_name = "roster-#{Date.today.to_s}"
-      @sheet_values = [["email", "registration_number", "net_id"]] + 9.times.map { |i| ["student#{i+1}@example.edu", i+1, "student#{i+1}"] } # todo: get from section/roster
+    alias_attribute :title, :spreadsheet_title
+    alias_attribute :doc_title, :spreadsheet_title
+    alias_attribute :document_title, :spreadsheet_title
+
+    def initialize(section)
+      @section = section
+      validate_section
+      @spreadsheet_title = "Gradebook - #{section.course} (#{section.term_start.strftime("%Y%m")})"
+      @sheet_name = "roster-todo" # "roster-#{Date.today.to_s}"
+      @sheet_values = [["email", "registration_number", "net_id"]] + 9.times.map { |i| ["student#{i+1}@todo.edu", i+1, "student#{i+1}"] } # todo: get from roster
     end
 
     def execute
@@ -56,6 +62,12 @@ module MyBanner
 
     def drive_client
       @drive_client ||= DriveClient.new
+    end
+
+    private
+
+    def validate_section
+      raise "OOPS, expecting a section object" unless section && section.is_a?(Section)
     end
 
   end

@@ -62,27 +62,36 @@ require_relative "../my_banner"
 
   # @example bundle exec rake create_spreadsheets
   task :create_spreadsheets do
-    service = MyBanner::SpreadsheetService.new
+    page = MyBanner::Schedule.new
+    sections = page.sections
+    puts "-----------------------"
+    puts "SECTIONS: #{sections.count}"
+    puts "-----------------------"
+    sections.each do |section|
+      puts "\nSECTION: #{section.abbreviation} (#{section.title})"
 
-    spreadsheet = service.spreadsheet
-    puts "SPREADSHEET: #{spreadsheet.properties.title.upcase}"
-    puts "ID: #{spreadsheet.spreadsheet_id}"
-    #puts "SHEETS:"
-    #spreadsheet.sheets.each do |sheet|
-    #  cols = sheet.properties.grid_properties.column_count
-    #  rows = sheet.properties.grid_properties.row_count
-    #  puts "  + #{sheet.properties.title} (#{cols} cols x #{rows} rows)"
-    #end
+      service = MyBanner::SpreadsheetService.new(section)
 
-    setter_response = service.execute
+      spreadsheet = service.spreadsheet
+      puts "SPREADSHEET: #{spreadsheet.properties.title.upcase}"
+      puts "ID: #{spreadsheet.spreadsheet_id}"
+      #puts "SHEETS:"
+      #spreadsheet.sheets.each do |sheet|
+      #  cols = sheet.properties.grid_properties.column_count
+      #  rows = sheet.properties.grid_properties.row_count
+      #  puts "  + #{sheet.properties.title} (#{cols} cols x #{rows} rows)"
+      #end
 
-    puts "DATA:"
-    getter_response = service.client.get_spreadsheet_values(spreadsheet.spreadsheet_id, setter_response.updated_range)
-    getter_response.values.each do |row|
-      puts "  #{row.join(" | ")}"
+      setter_response = service.execute
+
+      puts "DATA:"
+      getter_response = service.client.get_spreadsheet_values(spreadsheet.spreadsheet_id, setter_response.updated_range)
+      getter_response.values.each do |row|
+        puts "  #{row.join(" | ")}"
+      end
+
+      #service.drive_client.delete_file(spreadsheet.spreadsheet_id) # temporary, helps to test file creation
     end
-
-    #service.drive_client.delete_file(spreadsheet.spreadsheet_id) # temporary, helps to test file creation
   end
 
 #end
