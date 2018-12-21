@@ -3,7 +3,7 @@ require "google/apis/calendar_v3"
 module MyBanner
   class CalendarAuthorization < GoogleAuthorization
 
-    AUTH_SCOPE = Google::Apis::CalendarV3::AUTH_CALENDAR
+    AUTH_SCOPE = Google::Apis::CalendarV3::AUTH_CALENDAR #> "https://www.googleapis.com/auth/calendar"
 
     def initialize(options={})
       options[:scope] ||= AUTH_SCOPE
