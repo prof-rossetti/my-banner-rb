@@ -15,11 +15,12 @@ module MyBanner
       @section = section
       validate_section
       @spreadsheet_title = "Gradebook - #{section.course} (#{section.term_start.strftime("%Y%m")})"
-      @sheet_name = "roster-todo" # "roster-#{Date.today.to_s}"
+      @sheet_name = "roster-todo" # todo: "roster-#{Date.today.to_s}"
       @sheet_values = [["email", "registration_number", "net_id"]] + 9.times.map { |i| ["student#{i+1}@todo.edu", i+1, "student#{i+1}"] } # todo: get from roster
     end
 
     def execute
+      binding.pry
       update_values
     end
 
