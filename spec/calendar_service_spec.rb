@@ -3,7 +3,7 @@ module MyBanner
 
     let(:section) { create(:section) }
 
-    let(:calendar_name) { section.calendar_name }
+    let(:calendar_name) { section.abbreviation }
     let(:calendar_list_item) { Google::Apis::CalendarV3::CalendarListEntry.new(
       :access_role=>"reader",
       :background_color=>"#9a9cff",
