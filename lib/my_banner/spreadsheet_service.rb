@@ -4,12 +4,10 @@ require "google/apis/sheets_v4"
 
 module MyBanner
   class SpreadsheetService
-    attr_reader :section, :spreadsheet_title #, :sheet_name #, :sheet_values
+    attr_reader :spreadsheet_title #, :sheet_name #, :sheet_values
 
-    def initialize(section)
-      @section = section
-      validate_section
-      @spreadsheet_title = "Gradebook - #{section.course} (#{section.term_start.strftime("%Y%m")})"
+    def initialize(spreadsheet_title)
+      @spreadsheet_title = spreadsheet_title
       #@sheet_name = "roster-todo" # todo: "roster-#{Date.today.to_s}"
       #@sheet_values = [["email", "registration_number", "net_id"]] + 27.times.map { |i| ["student#{i+1}@todo.edu", i+1, "student#{i+1}"] } # todo: get from roster
     end
@@ -71,10 +69,6 @@ module MyBanner
 
     def delete_spreadsheet # DANGER!
       drive_client.delete_file(spreadsheet.spreadsheet_id)
-    end
-
-    def validate_section
-      raise "OOPS, expecting a section object" unless section && section.is_a?(Section)
     end
 
   end

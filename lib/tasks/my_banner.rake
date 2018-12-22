@@ -64,23 +64,32 @@ require_relative "../my_banner"
   task :create_spreadsheets do
     page = MyBanner::Schedule.new
     sections = page.sections
+
     puts "-----------------------"
     puts "SECTIONS: #{sections.count}"
     puts "-----------------------"
+
     sections.each do |section|
-      puts "\nSECTION: #{section.abbreviation} (#{section.title.upcase})"
 
-      service = MyBanner::SpreadsheetService.new(section)
+      puts "\nSECTION: #{section.abbreviation} (#{section.title.upcase})\n"
+      course = section.course
+      start_month = section.term_start.strftime("%Y%m")
+      spreadsheet_title = "Gradebook - #{course} (#{start_month})"
 
+      service = MyBanner::SpreadsheetService.new(spreadsheet_title)
       spreadsheet = service.spreadsheet
-      puts "SPREADSHEET TITLE: #{spreadsheet.properties.title.upcase}"
-      puts "SPREADSHEET ID: #{spreadsheet.spreadsheet_id}"
-      #puts "SHEETS:"
-      #spreadsheet.sheets.each do |sheet|
-      #  cols = sheet.properties.grid_properties.column_count
-      #  rows = sheet.properties.grid_properties.row_count
-      #  puts "  + #{sheet.properties.title} (#{cols} cols x #{rows} rows)"
-      #end
+      puts "SPREADSHEET: #{spreadsheet.properties.title.upcase} (#{spreadsheet.spreadsheet_id})"
+      puts "SHEETS:"
+      spreadsheet.sheets.each do |sheet|
+        grid_props = sheet.properties.grid_properties
+        puts "  + #{sheet.properties.title.upcase} (#{grid_props.row_count} rows x #{grid_props.column_count} cols)"
+      end
+
+
+
+
+
+
 
       #puts "DATA:"
       #setter_response = service.update_values

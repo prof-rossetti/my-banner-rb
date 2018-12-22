@@ -1,28 +1,21 @@
 module MyBanner
   RSpec.describe SpreadsheetService do
-    let(:section){ create(:section) }
-    let(:service){ described_class.new(section) }
+    let(:spreadsheet_title) { "Gradebook - INFO 101 (201810)" }
+    let(:service){ described_class.new(spreadsheet_title) }
 
     let(:file_list) {
       Google::Apis::DriveV3::FileList.new(files: [
         Google::Apis::DriveV3::File.new(id: "mock-doc-1", kind: "drive#file", name: "My Spreadshet Document 1", mime_type: "application/vnd.google-apps.spreadsheet"),
         Google::Apis::DriveV3::File.new(id: "mock-doc-2", kind: "drive#file", name: "My Spreadshet Document 2", mime_type: "application/vnd.google-apps.spreadsheet"),
-        Google::Apis::DriveV3::File.new(id: "mock-doc-3", kind: "drive#file", name: service.spreadsheet_title, mime_type: "application/vnd.google-apps.spreadsheet")
+        Google::Apis::DriveV3::File.new(id: "mock-doc-3", kind: "drive#file", name: spreadsheet_title, mime_type: "application/vnd.google-apps.spreadsheet")
       ] )
     }
     let(:file) { file_list.files.last }
+
     let(:new_spreadsheet_attrs) { { properties: {title: file.name } } } # sheets: [roster_sheet]
     let(:new_spreadsheet) { Google::Apis::SheetsV4::Spreadsheet.new(new_spreadsheet_attrs) }
     let(:spreadsheet_attrs) { { properties: {title: file.name }, spreadsheet_id: file.id } } # sheets: [roster_sheet]
     let(:spreadsheet) { Google::Apis::SheetsV4::Spreadsheet.new(spreadsheet_attrs) }
-
-    describe "@spreadsheet_title" do
-      let(:title) { "Gradebook - INFO 101 (201810)" }
-
-      it "compiles a gradebook document title from section metadata " do
-        expect(service.spreadsheet_title).to eql(title)
-      end
-    end
 
     describe "#spreadsheet" do
       context "file exists" do
@@ -64,16 +57,16 @@ module MyBanner
       end
     end
 
-    describe "#new_spreadsheet" do
-      it "initializes a new spreadsheet" do
-        expect(service.new_spreadsheet).to be_kind_of(Google::Apis::SheetsV4::Spreadsheet)
-        expect(service.new_spreadsheet.properties).to eql({ title: service.spreadsheet_title })
-      end
-    end
-
     describe "#client" do
       it "makes requests to the google sheets api" do
         expect(service.client).to be_kind_of(SpreadsheetClient)
+      end
+    end
+
+    describe "#new_spreadsheet" do
+      it "initializes a new spreadsheet" do
+        expect(service.new_spreadsheet).to be_kind_of(Google::Apis::SheetsV4::Spreadsheet)
+        expect(service.new_spreadsheet.properties).to eql({ title: spreadsheet_title })
       end
     end
 
@@ -90,7 +83,7 @@ module MyBanner
       it "finds a file with matching title" do
         expect(file_list.files).to respond_to(:find)
         file_names = file_list.files.map{ |f| f.name }
-        expect(file_names).to include(service.spreadsheet_title)
+        expect(file_names).to include(spreadsheet_title)
       end
     end
 
