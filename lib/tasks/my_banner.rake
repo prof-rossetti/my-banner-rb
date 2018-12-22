@@ -63,26 +63,29 @@ require_relative "../my_banner"
   # @example bundle exec rake create_spreadsheets
   task :create_spreadsheets do
     page = MyBanner::Schedule.new
-    sections = page.sections
+    courses_with_sections = page.sections.group_by(&:course)
 
     puts "-----------------------"
-    puts "SECTIONS: #{sections.count}"
+    puts "COURSES: #{courses_with_sections.count}"
     puts "-----------------------"
 
-    sections.each do |section|
+    courses_with_sections.each do |course_name, sections|
+      section = sections.first
+      course_title = section.title.upcase
 
-      puts "\nSECTION: #{section.abbreviation} (#{section.title.upcase})\n"
-      course = section.course
+      puts "\nCOURSE: #{course_name} #{course_title}"
+      puts "SECTIONS: #{sections.map(&:section)} (#{})\n"
+
       start_month = section.term_start.strftime("%Y%m")
-      spreadsheet_title = "Gradebook - #{course} (#{start_month})"
+      spreadsheet_title = "Gradebook - #{course_name} (#{start_month})" # will group multiple sections of the same course into the same gradebook, but doesn't yet avoid unnecessary requests.
 
       service = MyBanner::SpreadsheetService.new(spreadsheet_title)
       spreadsheet = service.spreadsheet
-      puts "SPREADSHEET: #{spreadsheet.properties.title.upcase} (#{spreadsheet.spreadsheet_id})"
+      puts "SPREADSHEET: '#{spreadsheet.properties.title.upcase}' (#{spreadsheet.spreadsheet_id})"
       puts "SHEETS:"
       spreadsheet.sheets.each do |sheet|
         grid_props = sheet.properties.grid_properties
-        puts "  + #{sheet.properties.title.upcase} (#{grid_props.row_count} rows x #{grid_props.column_count} cols)"
+        puts "  + #{sheet.properties.title.upcase} (#{grid_props.row_count} x #{grid_props.column_count})"
       end
 
 
