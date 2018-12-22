@@ -47,7 +47,7 @@ module MyBanner
         before(:each) do
           allow(service).to receive(:spreadsheet_file).and_return(nil)
           allow(service).to receive(:new_spreadsheet).and_return(new_spreadsheet)
-          allow(service.client).to receive(:create_spreadsheet).with(new_spreadsheet).and_return(spreadsheet) # not operating on the same object so...
+          allow(service.client).to receive(:create_spreadsheet).with(new_spreadsheet).and_return(spreadsheet)
         end
 
         it "creates a new spreadsheet document" do
@@ -61,6 +61,19 @@ module MyBanner
           expect(service.spreadsheet).to be_kind_of(Google::Apis::SheetsV4::Spreadsheet)
           expect(service.spreadsheet.spreadsheet_id).to eql(file.id)
         end
+      end
+    end
+
+    describe "#new_spreadsheet" do
+      it "initializes a new spreadsheet" do
+        expect(service.new_spreadsheet).to be_kind_of(Google::Apis::SheetsV4::Spreadsheet)
+        expect(service.new_spreadsheet.properties).to eql({ title: service.spreadsheet_title })
+      end
+    end
+
+    describe "#client" do
+      it "makes requests to the google sheets api" do
+        expect(service.client).to be_kind_of(SpreadsheetClient)
       end
     end
 
@@ -95,12 +108,6 @@ module MyBanner
 
       it "lists all spreadsheet files" do
         expect(service.file_list).to eql(file_list)
-      end
-    end
-
-    describe "#client" do
-      it "makes requests to the google sheets api" do
-        expect(service.client).to be_kind_of(SpreadsheetClient)
       end
     end
 

@@ -14,10 +14,10 @@ module MyBanner
       #@sheet_values = [["email", "registration_number", "net_id"]] + 27.times.map { |i| ["student#{i+1}@todo.edu", i+1, "student#{i+1}"] } # todo: get from roster
     end
 
-    def execute
-      spreadsheet
-      #update_values
-    end
+    #def execute
+    #  spreadsheet
+    #  #update_values
+    #end
 
     # # @return Google::Apis::SheetsV4::UpdateValuesResponse
     # def update_values
