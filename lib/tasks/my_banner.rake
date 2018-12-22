@@ -68,13 +68,13 @@ require_relative "../my_banner"
     puts "SECTIONS: #{sections.count}"
     puts "-----------------------"
     sections.each do |section|
-      puts "\nSECTION: #{section.abbreviation} (#{section.title})"
+      puts "\nSECTION: #{section.abbreviation} (#{section.title.upcase})"
 
       service = MyBanner::SpreadsheetService.new(section)
 
       spreadsheet = service.spreadsheet
-      puts "SPREADSHEET: #{spreadsheet.properties.title.upcase}"
-      puts "ID: #{spreadsheet.spreadsheet_id}"
+      puts "SPREADSHEET TITLE: #{spreadsheet.properties.title.upcase}"
+      puts "SPREADSHEET ID: #{spreadsheet.spreadsheet_id}"
       #puts "SHEETS:"
       #spreadsheet.sheets.each do |sheet|
       #  cols = sheet.properties.grid_properties.column_count
@@ -82,15 +82,15 @@ require_relative "../my_banner"
       #  puts "  + #{sheet.properties.title} (#{cols} cols x #{rows} rows)"
       #end
 
-      setter_response = service.execute
+      #puts "DATA:"
+      #setter_response = service.update_values
+      #getter_response = service.client.get_spreadsheet_values(spreadsheet.spreadsheet_id, setter_response.updated_range)
+      #getter_response.values.each do |row|
+      #  puts "  #{row.join(" | ")}"
+      #end
 
-      puts "DATA:"
-      getter_response = service.client.get_spreadsheet_values(spreadsheet.spreadsheet_id, setter_response.updated_range)
-      getter_response.values.each do |row|
-        puts "  #{row.join(" | ")}"
-      end
-
-      #service.drive_client.delete_file(spreadsheet.spreadsheet_id) # temporary, helps to test file creation
+      #puts "DELETING..."
+      #service.send(:delete_spreadsheet) # temporary, helps to test file creation
     end
   end
 
