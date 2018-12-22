@@ -35,10 +35,11 @@ module MyBanner
     # @return Google::Apis::SheetsV4::Spreadsheet
     def spreadsheet
       @spreadsheet ||= begin
-        doc = docs.files.find { |f| f.name == spreadsheet_title } #> Google::Apis::DriveV3::File:0x007f8585e67cd0
-        if doc
-          client.get_spreadsheet(doc.id)
+        if spreadsheet_file
+          puts "DOCUMENT FOUND"
+          client.get_spreadsheet(spreadsheet_file.id)
         else
+          puts "DOCUMENT NOT FOUND"
           #binding.pry
           #grid_properties = Google::Apis::SheetsV4::GridProperties.new(column_count: 5, row_count: 19)
           roster_sheet = Google::Apis::SheetsV4::Sheet.new(properties: {title: sheet_name, sheet_type: "GRID"})
@@ -49,8 +50,12 @@ module MyBanner
       end
     end
 
+    def spreadsheet_file
+      docs.files.find { |f| f.name == spreadsheet_title } #> Google::Apis::DriveV3::File:0x007f8585e67cd0
+    end
+
     # @return Google::Apis::DriveV3::FileList
-    def docs
+    def docs # consider file_list
       @docs ||= begin
         request_options = {q: "mimeType='application/vnd.google-apps.spreadsheet'", order_by: "createdTime desc", page_size: 25}
         drive_client.list_files(request_options)
