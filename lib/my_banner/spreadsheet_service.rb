@@ -4,12 +4,7 @@ require "google/apis/sheets_v4"
 
 module MyBanner
   class SpreadsheetService
-
     attr_reader :section, :spreadsheet_title #, :sheet_name #, :sheet_values
-
-    alias_attribute :title, :spreadsheet_title
-    alias_attribute :doc_title, :spreadsheet_title
-    alias_attribute :document_title, :spreadsheet_title
 
     def initialize(section)
       @section = section
@@ -47,8 +42,6 @@ module MyBanner
     def new_spreadsheet
       #roster_sheet = Google::Apis::SheetsV4::Sheet.new(properties: {title: sheet_name, sheet_type: "GRID"})
       #new_spreadsheet_attrs = { properties: {title: spreadsheet_title}, sheets: [roster_sheet] }
-      #Google::Apis::SheetsV4::Spreadsheet.new(new_spreadsheet_attrs)
-
       new_spreadsheet_attrs = { properties: { title: spreadsheet_title } }
       Google::Apis::SheetsV4::Spreadsheet.new(new_spreadsheet_attrs)
     end
@@ -59,12 +52,12 @@ module MyBanner
 
     # @return Google::Apis::DriveV3::File
     def spreadsheet_file
-      docs.files.find { |f| f.name == spreadsheet_title }
+      file_list.files.find { |f| f.name == spreadsheet_title }
     end
 
     # @return Google::Apis::DriveV3::FileList
-    def docs # consider file_list
-      @docs ||= begin
+    def file_list
+      @file_list ||= begin
         request_options = {q: "mimeType='application/vnd.google-apps.spreadsheet'", order_by: "createdTime desc", page_size: 25}
         drive_client.list_files(request_options)
       end

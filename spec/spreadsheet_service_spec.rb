@@ -28,13 +28,10 @@ module MyBanner
     #  allow(file).to receive(:name).and_return(file.name) # allow any instance of Google::Apis::DriveV3::File to respond to #name
     #end
 
-    describe "#title" do
+    describe "@spreadsheet_title" do
       let(:title) { "Gradebook - INFO 101 (201810)" }
 
       it "compiles a gradebook document title from section metadata " do
-        expect(service.title).to eql(title)
-        expect(service.doc_title).to eql(title)
-        expect(service.document_title).to eql(title)
         expect(service.spreadsheet_title).to eql(title)
       end
     end
@@ -87,11 +84,11 @@ module MyBanner
 
     #describe "#spreadsheet_file" do
     #  before(:each) do
-    #    allow(service).to receive(:docs).and_return(file_list)
+    #    allow(service).to receive(:file_list).and_return(file_list)
     #  end
 #
     #  it "requests all files" do
-    #    expect(service).to receive(:docs).and_return(file_list)
+    #    expect(service).to receive(:file_list).and_return(file_list)
     #    service.spreadsheet_file
     #  end
 #
@@ -99,7 +96,7 @@ module MyBanner
     #  end
     #end
 
-    describe "#docs" do
+    describe "#file_list" do
       let(:request_options) { {q: "mimeType='application/vnd.google-apps.spreadsheet'", order_by: "createdTime desc", page_size: 25} }
 
       before(:each) do
@@ -108,11 +105,11 @@ module MyBanner
 
       it "makes a request to the google drive api" do
         expect(service.drive_client).to receive(:list_files).with(request_options).and_return(file_list)
-        service.docs
+        service.file_list
       end
 
       it "lists all spreadsheet files" do
-        expect(service.docs).to eql(file_list)
+        expect(service.file_list).to eql(file_list)
       end
     end
 
