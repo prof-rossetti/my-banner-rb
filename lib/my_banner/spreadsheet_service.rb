@@ -42,13 +42,19 @@ module MyBanner
           puts "DOCUMENT NOT FOUND"
           #binding.pry
           #grid_properties = Google::Apis::SheetsV4::GridProperties.new(column_count: 5, row_count: 19)
-          roster_sheet = Google::Apis::SheetsV4::Sheet.new(properties: {title: sheet_name, sheet_type: "GRID"})
-          new_spreadsheet_attrs = { properties: {title: spreadsheet_title}, sheets: [roster_sheet] }
+          #roster_sheet = Google::Apis::SheetsV4::Sheet.new(properties: {title: sheet_name, sheet_type: "GRID"})
+          #new_spreadsheet_attrs = { properties: {title: spreadsheet_title}, sheets: [roster_sheet] }
+          new_spreadsheet_attrs = { properties: {title: spreadsheet_title} }
           new_spreadsheet = Google::Apis::SheetsV4::Spreadsheet.new(new_spreadsheet_attrs)
           client.create_spreadsheet(new_spreadsheet)
         end
       end
     end
+
+    #def new_spreadsheet
+    #  new_spreadsheet_attrs = { properties: {title: spreadsheet_title} }
+    #  Google::Apis::SheetsV4::Spreadsheet.new(new_spreadsheet_attrs)
+    #end
 
     def spreadsheet_file
       docs.files.find { |f| f.name == spreadsheet_title } #> Google::Apis::DriveV3::File:0x007f8585e67cd0
