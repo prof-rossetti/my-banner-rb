@@ -46,8 +46,8 @@ module MyBanner
       context "file doesn't exist" do
         before(:each) do
           allow(service).to receive(:spreadsheet_file).and_return(nil)
-          #allow(service.client).to receive(:create_spreadsheet).with(new_spreadsheet).and_return(spreadsheet) # not operating on the same object so...
-          allow(service.client).to receive(:create_spreadsheet).with(kind_of(Google::Apis::SheetsV4::Spreadsheet)).and_return(spreadsheet)
+          allow(service).to receive(:new_spreadsheet).and_return(new_spreadsheet)
+          allow(service.client).to receive(:create_spreadsheet).with(new_spreadsheet).and_return(spreadsheet) # not operating on the same object so...
         end
 
         it "creates a new spreadsheet document" do
