@@ -1,7 +1,13 @@
 module MyBanner
   RSpec.describe SpreadsheetService do
+    include_context "mock spreadsheet client"
+
     let(:spreadsheet_title) { "Gradebook - INFO 101 (201810)" }
     let(:service){ described_class.new(spreadsheet_title) }
+
+    before(:each) do
+      allow(service).to receive(:client).and_return(mock_spreadsheet_client)
+    end
 
     let(:file_list) {
       Google::Apis::DriveV3::FileList.new(files: [
