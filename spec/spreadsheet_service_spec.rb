@@ -20,7 +20,7 @@ module MyBanner
     let(:file) { file_list.files.last }
     let(:new_spreadsheet_attrs) { { properties: {title: file.name } } } # sheets: [roster_sheet]
     let(:new_spreadsheet) { Google::Apis::SheetsV4::Spreadsheet.new(new_spreadsheet_attrs) }
-    let(:spreadsheet_attrs) { { properties: {title: file.name, id: file.id } } } # sheets: [roster_sheet]
+    let(:spreadsheet_attrs) { { properties: {title: file.name }, spreadsheet_id: file.id } } # sheets: [roster_sheet]
     let(:spreadsheet) { Google::Apis::SheetsV4::Spreadsheet.new(spreadsheet_attrs) }
 
     #before(:each) do
@@ -60,7 +60,7 @@ module MyBanner
         it "returns the existing spreadsheet" do
           expect(service.spreadsheet).to eql(spreadsheet)
           expect(service.spreadsheet).to be_kind_of(Google::Apis::SheetsV4::Spreadsheet)
-          #expect(service.spreadsheet.spreadsheet_id).to eql(file.id)
+          expect(service.spreadsheet.spreadsheet_id).to eql(file.id)
         end
       end
 
@@ -80,7 +80,7 @@ module MyBanner
         it "returns the created spreadsheet" do
           expect(service.spreadsheet).to eql(spreadsheet)
           expect(service.spreadsheet).to be_kind_of(Google::Apis::SheetsV4::Spreadsheet)
-          #expect(service.spreadsheet.spreadsheet_id).to eql(file.id)
+          expect(service.spreadsheet.spreadsheet_id).to eql(file.id)
         end
       end
     end
