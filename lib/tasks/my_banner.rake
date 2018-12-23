@@ -85,12 +85,6 @@ require_relative "../my_banner"
         puts "  + #{sheet.properties.title.upcase} (#{grid_props.row_count} rows x #{grid_props.column_count} cols)"
       end
 
-
-
-
-
-
-
       #puts "DATA:"
       #setter_response = service.update_values
       #getter_response = service.client.get_spreadsheet_values(spreadsheet.spreadsheet_id, setter_response.updated_range)

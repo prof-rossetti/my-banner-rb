@@ -7,7 +7,8 @@ module MyBanner
       super()
       self.client_options.application_name = "MyBanner Calendar Client"
       self.client_options.application_version = VERSION
-      self.authorization = authorization || CalendarAuthorization.new.stored_credentials
+      auth = CalendarAuthorization.new
+      self.authorization = authorization || auth.stored_credentials || auth.user_supplied_credentials
     end
 
     def calendars
