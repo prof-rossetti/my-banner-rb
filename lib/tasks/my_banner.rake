@@ -91,9 +91,29 @@ require_relative "../my_banner"
       #getter_response.values.each do |row|
       #  puts "  #{row.join(" | ")}"
       #end
+    end
+  end
 
-      #puts "DELETING..."
-      #service.send(:delete_spreadsheet) # temporary, helps to test file creation
+  # @example bundle exec rake delete_spreadsheets
+  task :delete_spreadsheets do
+    page = MyBanner::Schedule.new
+    sections = page.sections
+
+    puts "-----------------------"
+    puts "SECTIONS: #{sections.count}"
+    puts "-----------------------"
+
+    sections.each do |section|
+      puts "\nSECTION: #{section.abbreviation} (#{section.title.upcase})\n"
+      course = section.course
+      start_month = section.term_start.strftime("%Y%m")
+      spreadsheet_title = "Gradebook - #{course} (#{start_month})"
+      service = MyBanner::SpreadsheetService.new(spreadsheet_title)
+
+      spreadsheet = service.spreadsheet
+      puts "SPREADSHEET: #{spreadsheet.properties.title.upcase} (#{spreadsheet.spreadsheet_id})"
+      puts "DELETING..."
+      service.send(:delete_spreadsheet) # temporary, helps to test file creation
     end
   end
 
