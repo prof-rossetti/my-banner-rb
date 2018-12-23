@@ -1,7 +1,13 @@
 module MyBanner
   RSpec.describe CalendarService do
+    include_context "mock calendar client"
 
     let(:section) { create(:section) }
+    let(:service) { described_class.new(section) }
+
+    before(:each) do
+      allow(service).to receive(:client).and_return(mock_calendar_client)
+    end
 
     let(:calendar_name) { section.abbreviation }
     let(:calendar_list_item) { Google::Apis::CalendarV3::CalendarListEntry.new(
@@ -21,14 +27,6 @@ module MyBanner
 
     let(:events) { [ create(:event), create(:all_day_event) ] }
     let(:event_list) { Google::Apis::CalendarV3::Events.new(items: events) }
-
-    let(:client) { instance_double(CalendarClient, list_calendar_lists: nil, insert_calendar: nil, list_events: nil, calendars: nil, upcoming_events: nil) }
-
-    let(:service) { described_class.new(section) }
-
-    before(:each) do
-      allow(service).to receive(:client).and_return(client)
-    end
 
     describe "#execute" do
       describe "for each meeting" do
@@ -73,19 +71,19 @@ module MyBanner
       end
 
       it "fetches upcoming events" do
-        expect(client).to receive(:upcoming_events).with(calendar)
+        expect(service.client).to receive(:upcoming_events).with(calendar)
         service.events
       end
     end
 
     describe "#calendar" do
-      let(:calendar_names) { client.calendars.map(&:summary) }
+      let(:calendar_names) { service.client.calendars.map(&:summary) }
 
       let(:cal) { service.calendar }
 
       context "calendar exists" do
         before(:each) do
-          allow(client).to receive(:calendars).and_return([calendar_list_item])
+          allow(service.client).to receive(:calendars).and_return([calendar_list_item])
         end
 
         it "finds a calendar with the given name" do
@@ -105,9 +103,9 @@ module MyBanner
         let(:insertion_response) { calendar }
 
         before(:each) do
-          allow(client).to receive(:calendars).and_return([])
+          allow(service.client).to receive(:calendars).and_return([])
           allow(service).to receive(:new_calendar).and_return(new_calendar)
-          allow(client).to receive(:insert_calendar).with(new_calendar).and_return(insertion_response)
+          allow(service.client).to receive(:insert_calendar).with(new_calendar).and_return(insertion_response)
         end
 
         it "creates a calendar with the given name" do
