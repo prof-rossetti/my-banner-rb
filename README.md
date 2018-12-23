@@ -1,14 +1,14 @@
 # MyBanner - Ruby
 
-Use this program to generate Google Calendar events and/or Google Sheet gradebook files for all your scheduled classes. Uses schedule info from your school's [Ellucian Banner](https://www.ellucian.com/solutions/ellucian-banner) information system.
-
 [![Build Status](https://travis-ci.com/prof-rossetti/my-banner-rb.svg?branch=master)](https://travis-ci.com/prof-rossetti/my-banner-rb)
 [![Maintainability](https://api.codeclimate.com/v1/badges/41968ec227c9b165cd82/maintainability)](https://codeclimate.com/github/prof-rossetti/my-banner-rb/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/41968ec227c9b165cd82/test_coverage)](https://codeclimate.com/github/prof-rossetti/my-banner-rb/test_coverage)
 
+Use this program to generate Google Calendar events and/or Google Sheet gradebook files for all your scheduled classes. Uses schedule info from your school's [Ellucian Banner](https://www.ellucian.com/solutions/ellucian-banner) information system.
+
 ## Prerequisites
 
-This is a Ruby program which requires Ruby (version 2.5) and Bundler (version 1.16) as dependencies.
+This program requires Ruby (version 2.5) and Bundler (version 1.16) as dependencies.
 
 ## Installation
 
@@ -38,9 +38,9 @@ Before the program can generate Google Calendar events and/or Google Sheet grade
 
 ### Download Schedule Page from Banner
 
-To access your schedule of classes for some specified term, login to banner site (e.g. https://myaccess.georgetown.edu/), and navigate to: **Home > Faculty Services > Faculty Detail Schedule**.
+To access your schedule of classes for some specified term, login to your school's banner site (e.g. https://myaccess.georgetown.edu/), and navigate to either **Home > Faculty Services > Faculty Detail Schedule**  or **Home > Student Services > Student Detail Schedule**, depending on your role.
 
-Then download your schedule page as an HTML file and move it into this repo at: **pages/faculty-detail-schedule.html**.
+Download your schedule page as an HTML file and move it into this repo at: **pages/my-detail-schedule.html**.
 
 To check the program's ability to parse that HTML content, run the schedule parser script and inspect its results:
 
@@ -48,7 +48,37 @@ To check the program's ability to parse that HTML content, run the schedule pars
 bundle exec rake parse_schedule
 ```
 
-As long as the schedule data looks like it reflects the contents you saw on your schedule page, you are ready to use this program to [Generate Google Calendar Events](#Generate-Google-Calendar-Events) and/or [Generate Google Sheet Gradebook Files](#Generate-Google-Sheet-Gradebook-Files).
+Example results:
+
+```rb
+{
+  "title": "Intro to Programming",
+  "crn": 123456,
+  "course": "INFO 101",
+  "section": 20,
+  "status": "OPEN",
+  "registration": "May 01, 2018 - Nov 02, 2018",
+  "college": "School of Business and Technology",
+  "department": "Information Systems",
+  "part_of_term": "C04",
+  "credits": 1.5,
+  "levels": ["Graduate", "Juris Doctor", "Undergraduate"],
+  "campus": "Main Campus",
+  "override": "No",
+  "enrollment_counts": {"maximum": 50, "actual": 45, "remaining": 5},
+  "scheduled_meeting_times": {
+    "type": "Lecture",
+    "time": "11:00 am - 12:20 pm",
+    "days": "TR",
+    "where": "Science Building 111",
+    "date_range": "Oct 29, 2018 - Dec 18, 2018",
+    "schedule_type": "Lecture",
+    "instructors": ["Polly Professor"]
+  }
+}
+```
+
+As long as the schedule data resembles the structure above and reflects the contents of your schedule page, you are ready to use this program to [Generate Google Calendar Events](#Generate-Google-Calendar-Events) and/or [Generate Google Sheet Gradebook Files](#Generate-Google-Sheet-Gradebook-Files).
 
 ### Generate Google Calendar Events
 

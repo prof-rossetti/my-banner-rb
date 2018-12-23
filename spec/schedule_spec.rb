@@ -1,7 +1,7 @@
 module MyBanner
   RSpec.describe Schedule do
 
-    let(:filepath) { "spec/mocks/pages/faculty-detail-schedule.html" }
+    let(:filepath) { "spec/mocks/pages/my-detail-schedule.html" }
     let(:schedule) { described_class.new(filepath) }
 
     let(:info_table_summary) { "This layout table is used to present instructional assignments for the selected Term.." }
