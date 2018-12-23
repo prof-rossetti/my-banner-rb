@@ -1,0 +1,2 @@
+---
+default: '{"client_id":"mock-spreadsheet-client-id.apps.googleusercontent.com","access_token":"mock-spreadsheet-access-token","refresh_token":"mock-spreadsheet-refresh-token","scope":["https://www.googleapis.com/auth/spreadsheets"],"expiration_time_millis":1544032192000}'

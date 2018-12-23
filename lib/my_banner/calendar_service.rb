@@ -5,7 +5,8 @@ module MyBanner
 
     def initialize(section)
       @section = section
-      @calendar_name = section.calendar_name
+      validate_section
+      @calendar_name = section.abbreviation
       @time_zone = section.time_zone
       @location = section.location
       @meetings = section.meetings
@@ -103,6 +104,12 @@ module MyBanner
 
     def calendar_attributes
       { summary: calendar_name, time_zone: time_zone }
+    end
+
+    private
+
+    def validate_section
+      raise "OOPS, expecting a section object" unless section && section.is_a?(Section)
     end
 
   end

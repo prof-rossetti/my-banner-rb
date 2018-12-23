@@ -60,4 +60,61 @@ require_relative "../my_banner"
     end
   end
 
+  # @example bundle exec rake create_spreadsheets
+  task :create_spreadsheets do
+    page = MyBanner::Schedule.new
+    sections = page.sections
+
+    puts "-----------------------"
+    puts "SECTIONS: #{sections.count}"
+    puts "-----------------------"
+
+    sections.each do |section|
+
+      puts "\nSECTION: #{section.abbreviation} (#{section.title.upcase})\n"
+      course = section.course
+      start_month = section.term_start.strftime("%Y%m")
+      spreadsheet_title = "Gradebook - #{course} (#{start_month})"
+
+      service = MyBanner::SpreadsheetService.new(spreadsheet_title)
+      spreadsheet = service.spreadsheet
+      puts "SPREADSHEET: #{spreadsheet.properties.title.upcase} (#{spreadsheet.spreadsheet_id})"
+      puts "SHEETS:"
+      spreadsheet.sheets.each do |sheet|
+        grid_props = sheet.properties.grid_properties
+        puts "  + #{sheet.properties.title.upcase} (#{grid_props.row_count} rows x #{grid_props.column_count} cols)"
+      end
+
+      #puts "DATA:"
+      #setter_response = service.update_values
+      #getter_response = service.client.get_spreadsheet_values(spreadsheet.spreadsheet_id, setter_response.updated_range)
+      #getter_response.values.each do |row|
+      #  puts "  #{row.join(" | ")}"
+      #end
+    end
+  end
+
+  # @example bundle exec rake delete_spreadsheets
+  task :delete_spreadsheets do
+    page = MyBanner::Schedule.new
+    sections = page.sections
+
+    puts "-----------------------"
+    puts "SECTIONS: #{sections.count}"
+    puts "-----------------------"
+
+    sections.each do |section|
+      puts "\nSECTION: #{section.abbreviation} (#{section.title.upcase})\n"
+      course = section.course
+      start_month = section.term_start.strftime("%Y%m")
+      spreadsheet_title = "Gradebook - #{course} (#{start_month})"
+      service = MyBanner::SpreadsheetService.new(spreadsheet_title)
+
+      spreadsheet = service.spreadsheet
+      puts "SPREADSHEET: #{spreadsheet.properties.title.upcase} (#{spreadsheet.spreadsheet_id})"
+      puts "DELETING..."
+      service.send(:delete_spreadsheet) # temporary, helps to test file creation
+    end
+  end
+
 #end

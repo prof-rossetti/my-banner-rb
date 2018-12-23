@@ -21,6 +21,10 @@ Dir[File.expand_path('support/shared_contexts/*.rb', File.dirname(__FILE__))].ea
   require file
 end
 
+Dir[File.expand_path('support/shared_examples/*.rb', File.dirname(__FILE__))].each do |file|
+  require file
+end
+
 RSpec.configure do |config|
 
   # Enable flags like --only-failures and --next-failure

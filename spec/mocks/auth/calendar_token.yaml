@@ -1,0 +1,2 @@
+---
+default: '{"client_id":"mock-calendar-client-id.apps.googleusercontent.com","access_token":"mock-calendar-access-token","refresh_token":"mock-calendar-refresh-token","scope":["https://www.googleapis.com/auth/calendar"],"expiration_time_millis":1544032192000}'

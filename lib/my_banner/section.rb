@@ -1,12 +1,13 @@
 module MyBanner
   class Section
 
-    attr_accessor :metadata, :abbreviation, :title, :instructor, :location, :time_zone, :weekdays,
-                  :term_start, :term_end, :start_time, :end_time
+    attr_accessor :metadata, :course, :section, :title, :instructor, :weekdays, :location, :time_zone, :term_start, :term_end, :start_time, :end_time
 
     def initialize(metadata={})
       @metadata = metadata
-      @abbreviation = "#{metadata.try(:[], :course)}-#{metadata.try(:[], :section)}"
+
+      @course = metadata.try(:[], :course)
+      @section = metadata.try(:[], :section)
       @title = metadata.try(:[], :title)
 
       schedule_info = metadata.try(:[], :scheduled_meeting_times)
@@ -24,9 +25,10 @@ module MyBanner
       @end_time = time_info.try(:split, " - ").try(:last)
     end
 
-    def calendar_name
-      abbreviation
+    def abbreviation
+      "#{course}-#{section}" if course && section
     end
+    alias_method :abbrev, :abbreviation
 
     # @note does not exclude meetings cancelled due to holidays
     # @todo cross-reference the "Holidays in the United States" calendar events to make a best guess at which classes to exclude

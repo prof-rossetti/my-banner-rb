@@ -7,7 +7,7 @@ module MyBanner
     attr_reader :filepath
 
     def initialize(filepath=nil)
-      @filepath = filepath || "pages/faculty-detail-schedule.html"
+      @filepath = filepath || "pages/my-detail-schedule.html"
       validate_file_exists
     end
 

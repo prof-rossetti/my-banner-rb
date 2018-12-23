@@ -40,6 +40,25 @@
   + So many events. They don't get deleted, they go into "cancelled" [status](https://developers.google.com/calendar/v3/reference/events#status)
   + https://developers.google.com/calendar/v3/reference/events/list
 
+## Google Sheets and Drive APIs
+
+  + https://developers.google.com/sheets/api/quickstart/ruby
+  + https://developers.google.com/sheets/api/guides/migration#list_spreadsheets_for_the_authenticated_user
+  + https://developers.google.com/drive/api/v3/reference/files/list
+  + https://developers.google.com/drive/api/v3/quickstart/ruby
+  + https://stackoverflow.com/questions/37876423/get-the-list-of-all-spreadsheets-associated-with-google-account-using-sheets-api
+  + https://github.com/googleapis/google-api-ruby-client/blob/711dfb83b33c03535076917726956584d5c8bf9a/generated/google/apis/drive_v3/service.rb#L795-L847
+  + https://github.com/googleapis/google-api-ruby-client/blob/711dfb83b33c03535076917726956584d5c8bf9a/generated/google/apis/sheets_v4/service.rb#L481-L518
+  + https://developers.google.com/sheets/api/reference/rest/v4/spreadsheets/create
+  + https://developers.google.com/sheets/api/reference/rest/v4/spreadsheets#Spreadsheet
+  + https://developers.google.com/sheets/api/reference/rest/v4/spreadsheets/sheets
+  + https://stackoverflow.com/questions/43207765/how-do-i-add-data-to-a-google-sheet-from-ruby
+  + https://github.com/googleapis/google-api-ruby-client/blob/711dfb83b33c03535076917726956584d5c8bf9a/generated/google/apis/sheets_v4/service.rb#L338-L406
+  + https://developers.google.com/sheets/api/reference/rest/v4/spreadsheets.values/append
+  + https://github.com/googleapis/google-api-ruby-client/blob/711dfb83b33c03535076917726956584d5c8bf9a/generated/google/apis/drive_v3/service.rb#L604-L639
+  + https://developers.google.com/drive/api/v2/reference/files/delete
+  + https://stackoverflow.com/questions/46836393/how-do-i-delete-a-spreadsheet-file-using-google-spreadsheets-api
+
 ## Parsing HTML with Nokogiri
 
   + https://www.nokogiri.org/tutorials/searching_a_xml_html_document.html

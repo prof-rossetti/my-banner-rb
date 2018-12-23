@@ -16,7 +16,7 @@ coverage
 # roster pages and schedule pages, which can contain PII
 pages/*.html
 
-# google calendar credentials
+# google auth credentials
 .env
-calendar_auth/credentials.json
-calendar_auth/token.yaml
+auth/*.json
+auth/*.yaml
