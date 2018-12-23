@@ -3,12 +3,13 @@ require "google/apis/calendar_v3"
 module MyBanner
   class CalendarClient < Google::Apis::CalendarV3::CalendarService
 
+    # @param authorization [CalendarAuthorization]
     def initialize(authorization=nil)
       super()
       self.client_options.application_name = "MyBanner Calendar Client"
       self.client_options.application_version = VERSION
-      auth = CalendarAuthorization.new
-      self.authorization = authorization || auth.stored_credentials || auth.user_supplied_credentials
+      authorization ||= CalendarAuthorization.new
+      self.authorization = authorization.stored_credentials || authorization.user_provided_credentials
     end
 
     def calendars

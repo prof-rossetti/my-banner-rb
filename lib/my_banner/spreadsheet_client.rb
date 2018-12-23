@@ -1,14 +1,15 @@
-require "google/apis/calendar_v3"
+require "google/apis/sheets_v4"
 
 module MyBanner
   class SpreadsheetClient < Google::Apis::SheetsV4::SheetsService
 
+    # @param authorization [SpreadsheetAuthorization]
     def initialize(authorization=nil)
       super()
       self.client_options.application_name = "MyBanner Spreadsheet Client"
       self.client_options.application_version = VERSION
-      auth = SpreadsheetAuthorization.new
-      self.authorization = authorization || auth.stored_credentials || auth.user_provided_credentials
+      authorization ||= SpreadsheetAuthorization.new
+      self.authorization = authorization.stored_credentials || authorization.user_provided_credentials
     end
 
   end
