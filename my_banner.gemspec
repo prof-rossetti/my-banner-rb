@@ -9,7 +9,7 @@ Gem::Specification.new do |spec|
   spec.authors       = ["MJ Rossetti"]
   spec.email         = ["prof.mj.rossetti@gmail.com", "mjr300@georgetown.edu"]
 
-  spec.summary       = %q{Generates Google Calendar schedules and Google Sheet rosters for all your classes.}
+  spec.summary       = %q{Use this program to generate Google Calendar events and/or Google Sheet gradebook files for all your scheduled classes. Gets schedule info from your school's Ellucian Banner information system.}
   #spec.description   = %q{TODO: Write a longer description or delete this line.}
   spec.homepage      = "https://github.com/prof-rossetti/my-banner-rb"
   spec.license       = "MIT"
