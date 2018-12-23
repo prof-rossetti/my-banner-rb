@@ -1,10 +1,8 @@
 module MyBanner
   RSpec.describe CalendarClient do
+    include_context "mock calendar authorization"
 
-    let(:credentials_filepath) { "spec/mocks/auth/calendar_credentials.json" }
-    let(:token_filepath) { "spec/mocks/auth/calendar_token.yaml" }
-    let(:authorization) { CalendarAuthorization.new(credentials_filepath: credentials_filepath, token_filepath: token_filepath) }
-    let(:client) { described_class.new(authorization) }
+    let(:client) { described_class.new(mock_calendar_authorization) }
 
     it "has client options" do
       opts = client.client_options

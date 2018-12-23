@@ -1,10 +1,8 @@
 module MyBanner
   RSpec.describe SpreadsheetClient do
+    include_context "mock spreadsheet authorization"
 
-    let(:credentials_filepath) { "spec/mocks/auth/spreadsheet_credentials.json" }
-    let(:token_filepath) { "spec/mocks/auth/spreadsheet_token.yaml" }
-    let(:authorization) { SpreadsheetAuthorization.new(credentials_filepath: credentials_filepath, token_filepath: token_filepath) }
-    let(:client) { described_class.new(authorization) }
+    let(:client) { described_class.new(mock_spreadsheet_authorization) }
 
     it "has client options" do
       opts = client.client_options
