@@ -1,10 +1,8 @@
 module MyBanner
   RSpec.describe DriveClient do
+    include_context "mock drive authorization"
 
-    let(:credentials_filepath) { "spec/mocks/auth/drive_credentials.json" }
-    let(:token_filepath) { "spec/mocks/auth/drive_token.yaml" }
-    let(:authorization) { DriveAuthorization.new(credentials_filepath: credentials_filepath, token_filepath: token_filepath) }
-    let(:client) { described_class.new(authorization.stored_credentials) }
+    let(:client) { described_class.new(mock_drive_authorization) }
 
     it "has client options" do
       opts = client.client_options

@@ -4,7 +4,7 @@ module MyBanner
     let(:credentials_filepath) { "spec/mocks/auth/calendar_credentials.json" }
     let(:token_filepath) { "spec/mocks/auth/calendar_token.yaml" }
     let(:authorization) { CalendarAuthorization.new(credentials_filepath: credentials_filepath, token_filepath: token_filepath) }
-    let(:client) { described_class.new(authorization.stored_credentials) }
+    let(:client) { described_class.new(authorization) }
 
     it "has client options" do
       opts = client.client_options
