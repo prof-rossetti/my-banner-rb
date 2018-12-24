@@ -34,7 +34,7 @@ bin/setup
 
 ## Usage
 
-Before the program can generate Google Calendar events and/or Google Sheet gradebook files for all your scheduled classes, it needs access to your schedule. So follow the section below to [Download Schedule Page from Banner](#download-schedule-page-from-banner) before performing any of the other functionality.
+Before the program can generate Google Calendar events and/or Google Sheet gradebook files for all your scheduled classes, it needs access to your schedule. So follow the section below to [Download Schedule Page from Banner](#downloading-schedule-page-from-banner) before performing any of the other functionality.
 
 ### Downloading Schedule Page from Banner
 
