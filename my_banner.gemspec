@@ -9,19 +9,10 @@ Gem::Specification.new do |spec|
   spec.authors       = ["MJ Rossetti"]
   spec.email         = ["prof.mj.rossetti@gmail.com", "mjr300@georgetown.edu"]
 
-  spec.summary       = %q{Use this program to generate Google Calendar events and/or Google Sheet gradebook files for all your scheduled classes. Gets schedule info from your school's Ellucian Banner information system.}
+  spec.summary       = "This program processes detailed schedule information from your school's Ellucian Banner information system to generate Google Calendar events and/or Google Sheets gradebook files for each of your scheduled classes."
   #spec.description   = %q{TODO: Write a longer description or delete this line.}
   spec.homepage      = "https://github.com/prof-rossetti/my-banner-rb"
   spec.license       = "MIT"
-
-  # Prevent pushing this gem to RubyGems.org. To allow pushes either set the 'allowed_push_host'
-  # to allow pushing to a single host or delete this section to allow pushing to any host.
-  if spec.respond_to?(:metadata)
-    spec.metadata["allowed_push_host"] = "TODO: Set to 'http://mygemserver.com'"
-  else
-    raise "RubyGems 2.0 or newer is required to protect against " \
-      "public gem pushes."
-  end
 
   spec.files         = `git ls-files -z`.split("\x0").reject do |f|
     f.match(%r{^(test|spec|features)/})
@@ -33,7 +24,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency "activesupport", "~> 5.2"
   spec.add_dependency "google-api-client", "~> 0.27"
   spec.add_dependency "nokogiri", '~> 1.9'
-  spec.add_dependency "pry"
+  spec.add_dependency "pry" # really just for development purposes
 
   spec.add_development_dependency "bundler", "~> 1.16"
   spec.add_development_dependency "factory_bot", "~> 4.11"

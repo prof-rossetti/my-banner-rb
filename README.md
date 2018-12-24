@@ -4,11 +4,13 @@
 [![Maintainability](https://api.codeclimate.com/v1/badges/41968ec227c9b165cd82/maintainability)](https://codeclimate.com/github/prof-rossetti/my-banner-rb/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/41968ec227c9b165cd82/test_coverage)](https://codeclimate.com/github/prof-rossetti/my-banner-rb/test_coverage)
 
-Use this program to generate Google Calendar events and/or Google Sheet gradebook files for all your scheduled classes. Gets schedule info from your school's [Ellucian Banner](https://www.ellucian.com/solutions/ellucian-banner) information system.
+This program processes detailed schedule information from your school's [Ellucian Banner](https://www.ellucian.com/solutions/ellucian-banner) information system to generate [Google Calendar](https://calendar.google.com) events and/or [Google Sheets](https://docs.google.com/spreadsheets) gradebook files for each of your scheduled classes.
+
+## Dependencies
+
+This program requires Ruby (version 2.5) and Bundler (version 1.16).
 
 ## Installation
-
-This program requires Ruby (version 2.5) and Bundler (version 1.16) as dependencies.
 
 To install the program, download or clone it [from GitHub](https://github.com/prof-rossetti/my-banner-rb):
 
