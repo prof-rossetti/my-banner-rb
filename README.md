@@ -36,12 +36,12 @@ bin/setup
 
 Before the program can generate Google Calendar events and/or Google Sheet gradebook files for all your scheduled classes, it needs access to your schedule. So follow the section below to [Download Schedule Page from Banner](#download-schedule-page-from-banner) before performing any of the other functionality.
 
-### Download Schedule Page from Banner
+### Downloading Schedule Page from Banner
 
 To access your schedule of classes for some specified term, login to your school's banner site (e.g. https://myaccess.georgetown.edu/), and navigate to one of the following schedule pages, depending on your role:
 
-  + **Home > Faculty Services > Faculty Detail Schedule**
-  + **Home > Student Services > Student Detail Schedule**
+  + *Home > Faculty Services > Faculty Detail Schedule*
+  + *Home > Student Services > Student Detail Schedule*
 
 Download your schedule page as an HTML file and move it into this repo at: **pages/my-detail-schedule.html**.
 
@@ -81,9 +81,9 @@ Example results:
 }
 ```
 
-As long as your schedule data resembles the structure above and reflects the contents of your schedule page, you are ready to use this program to [Generate Google Calendar Events](#Generate-Google-Calendar-Events) and/or [Generate Google Sheet Gradebook Files](#Generate-Google-Sheet-Gradebook-Files).
+As long as your schedule data resembles the structure above and reflects the contents of your schedule page, you are ready to use this program to [Generate Google Calendar Events](#Generating-Google-Calendar-Events) and/or [Generate Google Sheet Gradebook Files](#Generating-Google-Sheet-Gradebook-Files).
 
-### Generate Google Calendar Events
+### Generating Google Calendar Events
 
 For the program to issue requests to the Google Calendar API, it needs the credentials of a Google APIs client application that has access to the Google Calendar API. From the [Google Calendar API quickstart guide](https://developers.google.com/calendar/quickstart/ruby), click "Enable the Calendar API" and follow the instructions to create a new app and generate new credentials. Download the resulting credentials file and move it into this repo at: **auth/calendar_credentials.json**.
 
@@ -95,7 +95,7 @@ bundle exec rake create_calendars
 
 > NOTE: When running this command for the first time, you will be prompted to login to Google to get an authorization code. After supplying that code to this program, the program will store an access token which will be used to authorize subsequent requests on your behalf, so you don't need to login again.
 
-### Generate Google Sheet Gradebook Files
+### Generating Google Sheet Gradebook Files
 
 For the program to manage your gradebook files, it needs access to both the Google Sheets and Google Drive APIs.
 
