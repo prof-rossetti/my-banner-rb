@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    my_banner (0.1.0)
+    my_banner (1.0.0)
       activesupport (~> 5.2)
       google-api-client (~> 0.27)
       nokogiri (~> 1.9)

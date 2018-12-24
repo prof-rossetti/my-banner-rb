@@ -8,7 +8,7 @@ module MyBanner
       opts = client.client_options
       expect(opts).to be_kind_of(Struct)
       expect(opts.application_name).to eql("MyBanner Calendar Client")
-      expect(opts.application_version).to eql("0.1.0")
+      expect(opts.application_version).to eql(MyBanner::VERSION)
     end
 
     it "has client credentials and user refresh token" do
