@@ -12,6 +12,7 @@
   + http://data-creative.info/reference-docs/2015/07/03/how-to-make-a-ruby-gem/
   + https://guides.rubygems.org/make-your-own-gem/#adding-an-executable
   + https://github.com/rubygems/rubygems/issues/1267#issuecomment-196180872
+  + http://data-creative.info/reference-docs/2015/07/03/how-to-make-a-ruby-gem/
 
 ### Rake Tasks
 

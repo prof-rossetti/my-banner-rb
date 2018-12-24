@@ -17,3 +17,9 @@ bundle exec rspec spec/
 ```sh
 COVERAGE=true bundle exec rspec spec
 ```
+
+## Releasing
+
+```sh
+bundle exec rake release
+```
