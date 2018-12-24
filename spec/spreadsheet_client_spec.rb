@@ -1,26 +1,19 @@
 module MyBanner
   RSpec.describe SpreadsheetClient do
+
+    it_behaves_like "a google api client" do
+      include_context "mock spreadsheet authorization"
+      let(:client) { described_class.new(mock_spreadsheet_authorization) }
+      let(:client_name) { "MyBanner Spreadsheet Client" }
+      let(:client_id) { "mock-spreadsheet-client-id.apps.googleusercontent.com" }
+      let(:client_secret) { "mock-spreadsheet-client-secret" }
+      let(:auth_scope) { "https://www.googleapis.com/auth/spreadsheets" }
+      let(:refresh_token) { "mock-spreadsheet-refresh-token" }
+    end
+
     include_context "mock spreadsheet authorization"
 
     let(:client) { described_class.new(mock_spreadsheet_authorization) }
-
-    it "has client options" do
-      opts = client.client_options
-      expect(opts).to be_kind_of(Struct)
-      expect(opts.application_name).to eql("MyBanner Spreadsheet Client")
-      expect(opts.application_version).to eql(MyBanner::VERSION)
-    end
-
-    it "has client credentials and user refresh token" do
-      creds = client.authorization
-      expect(creds).to be_kind_of(Google::Auth::UserRefreshCredentials)
-      expect(creds.client_id).to eql("mock-spreadsheet-client-id.apps.googleusercontent.com")
-      expect(creds.client_secret).to eql("mock-spreadsheet-client-secret")
-      expect(creds.scope).to eql(["https://www.googleapis.com/auth/spreadsheets"])
-      expect(creds.refresh_token).to eql("mock-spreadsheet-refresh-token")
-      expect(creds.expires_at).to be_kind_of(Time)
-      expect(creds.expiry).to eql(60)
-    end
 
     it "makes requests on behalf of the user" do
       expect(client).to respond_to(:get_spreadsheet)
